@@ -1,0 +1,25 @@
+{
+  "name": "23_jan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fb_server_promises.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tushar",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.186.0",
+    "body-parser": "*",
+    "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "cor": "0.0.0",
+    "cors": "^2.8.4",
+    "express": "*",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.0",
+    "passport": "*",
+    "passport-facebook": "*",
+    "request": "^2.83.0"
+  }
+}
