@@ -17,21 +17,21 @@ accounts and gives you authenticated user directly.
 
 * Open project folder in terminal and change to server directory using below command 
 
-    `$ cd glm/server`
+    $ cd glm/server
 
 * Install dependencies by executing command 
 
-    `$ npm install` 
+    $ npm install
 
 * Run server with following command 
 
-    `$ node server.js`
+    $ node server.js
 
 ###3. Running Client ###
 
 * Open project folder in terminal and change to client directory using below command 
 
-    `$ cd glm/client` 
+    $ cd glm/client
 
 * Open client.html inside your browser 
 
