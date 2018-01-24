@@ -7,22 +7,34 @@ application and more than it maintaining users in the application is critical.
 So instead of creating new users in your application and maintaining its security, 
 this library helps you to authenticate users from their existing Google/Facebook/Amazon
 accounts and gives you authenticated user directly.
-
-
-## Follow the steps to run the project inside your computer. ##
-
-* Clone this repository in your computer.
-
-* Installing Dependencies
     
-    Open the project using terminal and `cd` to the `/glm/server` folder and run the following command.
 
-    `$ npm install`
+## Follow below steps to run the project on your system ##
 
-    `$ node server.js`
+### 1. Clone this repository on your system ###
 
-* Open the project and go to the `/glm/client` folder and open client.html inside your browser.
-    
-    Now click `Login with Facebook` button and enter your login details on the facebook page that will popup.
-    The `Result Text` below login button will be replaced by your `name` `email` and `Facebook_Token` on successful login.
-    
+### 2. Running Server ###
+
+    a) Open project folder in terminal and change to server directory using below command 
+
+        `$ cd glm/server`
+
+    b) Install dependencies by executing command 
+
+        `$ npm install` 
+
+    c) Run server with following command 
+
+        `$ node server.js` 
+
+### 3. Running Client ###
+
+    a) Open project folder in terminal and change to client directory using below command 
+
+        `$ cd glm/client` 
+
+    b) Open client.html inside your browser 
+
+    c) Click on "Login with Facebook" button and enter your login details on the facebook login page 
+       that will popup. The "Result Text" below login button will be replaced by your UserName, Email and 
+       Facebook_Token on successful login.
