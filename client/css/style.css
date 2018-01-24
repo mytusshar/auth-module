@@ -21,6 +21,11 @@ button {
     align-self: auto;
 }
 
+h2 {
+	color: white;
+    text-align: center;
+}
+
 button:hover {
     opacity: 0.8;
 }
@@ -30,10 +35,14 @@ button:hover {
     justify-content: center;
 }
 
-h2 {
-	color: white;
+.header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background-color: #27bc9c;
     text-align: center;
-}
+ }
 
 .middle {
 	background-color: rgb(255, 255, 255);
@@ -56,14 +65,7 @@ h2 {
    text-align: center;
 }
 
-.header {
-   position: fixed;
-   left: 0;
-   top: 0;
-   width: 100%;
-   background-color: #27bc9c;
-   text-align: center;
-}
+
 
 
 
