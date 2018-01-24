@@ -15,13 +15,13 @@ accounts and gives you authenticated user directly.
 
 * Installing Dependencies
     
-    Open the project using terminal and `cd` to the /glm/server folder and run the following command.
+    Open the project using terminal and `cd` to the `/glm/server` folder and run the following command.
 
     `$ npm install`
 
     `$ node server.js`
 
-* Open the project and go to the /glm/client folder and open client.html inside your browser.
+* Open the project and go to the `/glm/client` folder and open client.html inside your browser.
     
     Now click `Login with Facebook` button and enter your login details on the facebook page that will popup.
     The `Result Text` below login button will be replaced by your `name` `email` and `Facebook_Token` on successful login.
