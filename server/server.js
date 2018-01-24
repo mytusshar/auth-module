@@ -1,4 +1,5 @@
 
+var fs = require("fs");
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
@@ -22,6 +23,7 @@ var USER_EMAIL;
 var USER_ID;
 var IS_LOGGED_IN = false;
 
+// getting user details from facebook
 var fbUserDetails = function(accessToken, refreshToken, profile, cb) {
     console.log("inside: fbUserDetails");
     console.log(profile.emails[0].value, profile.displayName, profile.id);
@@ -33,20 +35,22 @@ var fbUserDetails = function(accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
 }
 
-/////////////////////////////////////////////
-///
+
+// inserting user data in DynamoDB
 var writeUserData = function(name, email, id){
   writeDB.insertData(name, email, id);
 }
-///
-/////////////////////////////////////////////
 
+// getting developer details from facebook_developer.json file
+var facebookDeveloper = fs.readFileSync("facebook_developer.json");
+var fbDev = JSON.parse(facebookDeveloper);
+console.log("facebook Developer: " + fbDev.profileFields);
 
 var fbDeveloperDetails = {
-  clientID: '158449238124791',
-  clientSecret: 'd66db07cfd121522b6e3e6a7cd7e224a',
-  callbackURL: 'http://localhost:3000/auth/facebook/callback',
-  profileFields : ['emails', 'displayName', 'id']
+  clientID : fbDev.clientID,  
+  clientSecret : fbDev.clientSecret,  
+  callbackURL : fbDev.callbackURL,  
+  profileFields : fbDev.profileFields 
 }
 
 passport.use(new Strategy(fbDeveloperDetails, fbUserDetails));
@@ -61,23 +65,27 @@ passport.deserializeUser(function(obj, cb) {
   cb(null, obj);
 });
 
+// route auth/facebook 
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
-var fbCallback = function(req, res) {
-  console.log("inside: fbCallback");
+// route auth/facebook/callback
+app.get('/auth/facebook/callback', passport.authenticate('facebook',  
+                { successRedirect: '/success', failureRedirect: '/auth/facebook' }));
+
+// route success
+var successResponse = function(req, res) {
   res.send("<html><body><h2>Successfully Logged in as " + USER_NAME + 
           "</h2><br><p>Close tab to continue visiting.</p></body></html>");
-  console.log("inside: fbCallback => response send");          
-}
-app.get('/auth/facebook/callback', passport.authenticate('facebook'), fbCallback);
+}                        
+app.get('/success', successResponse);
 
-//added to handle error
+// error handler for promises
 var errHandler = function(err) {
   console.log("errorHandler:" + err);
 }
 
+// route profile
 var sendUserData = function(req, res){
-
   if (require('connect-ensure-login').ensureLoggedIn()) {
     // var promise = readDB.readData(USER_EMAIL);
     // promise
@@ -103,10 +111,11 @@ var sendUserData = function(req, res){
   }
 
 }
-
 app.get('/profile', sendUserData);
 
+// server starts here
 app.listen(3000);
+console.log('***Server started on PORT number 3000.***')
 
 
 
