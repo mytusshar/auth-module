@@ -1,30 +1,28 @@
 <!DOCTYPE html>
+
 <html>
+
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Generalized Login Module</title>
         <link rel="stylesheet" href="css/style.css">
         <script src="js/main.js"></script>	
-
     </head>
 
     <body>
-        <div class="header">
-            <h2>Generalized Login Module</h2>
-        </div>
-        
-        <div class="middle">
-            <center>
-                <button type="button" onclick="openInNewTab()">Login with Facebook</button>                 
 
-                <div class="result">
-                    <p id="output">Response from server</p>
-                </div>            
-            </center>   
-        </div>
+            <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+            <div class="logo">Generalized Login Module</div>
+            <div class="login-block">
+                <h1>Login</h1>  
+                <button id="facebook" onclick="openInNewTab()">Login with Facebook</button>
+                <button id="google">Login with Google</button>
+                <button id="amazon">Login with Amazon</button>
+            </div>
 
-        <div class="footer">
-            <p>Footer</p>
-        </div>        
+            <div class="result-block">
+                <p id="output">Response from server</p>                  
+            </div>
+
     </body>
 
 </html>
