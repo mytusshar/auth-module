@@ -1,29 +1,23 @@
-# README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+#Generalized Login Module 
 
-### What is this repository for? ###
+    Nowadays, security of any application has become very important role in developing application and more than it maintaining users in the application is critical. 
+    So instead of creating new users in your application and
+    maintaining its security, this library helps you to authenticate users from their existing Google/Facebook/Amazon
+    accounts and gives you authenticated user directly.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
-### How do I get set up? ###
+## Follow the steps to run the project inside your computer.
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Clone this repository in your computer.
 
-### Contribution guidelines ###
+### Installing Dependencies
+    Open the project using terminal and `cd` to the /glm/server folder and run the following command.
 
-* Writing tests
-* Code review
-* Other guidelines
+    $ npm install
+    $ node server.js
 
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+### Open the project and go to the /glm/client folder and open client.html inside your browser.
+    Now click `Login with Facebook` button and enter your login details on the facebook page that will popup.
+    The `Result Text` below login button will be replaced by your `name` `email` and `Facebook_Token` on successful login.
+    
