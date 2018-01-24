@@ -10,31 +10,32 @@ accounts and gives you authenticated user directly.
     
 
 ## Follow below steps to run the project on your system ##
+## ==================================================== ##
 
-### 1. Clone this repository on your system ###
+###1. Clone this repository on your system ###
 
-### 2. Running Server ###
+###2. Running Server ###
 
-    a) Open project folder in terminal and change to server directory using below command 
+  a) Open project folder in terminal and change to server directory using below command 
 
-        `$ cd glm/server`
+     $ cd glm/server
 
-    b) Install dependencies by executing command 
+  b) Install dependencies by executing command 
 
-        `$ npm install` 
+     $ npm install 
 
-    c) Run server with following command 
+  c) Run server with following command 
 
-        `$ node server.js` 
+     $ node server.js 
 
-### 3. Running Client ###
+###3. Running Client ###
 
-    a) Open project folder in terminal and change to client directory using below command 
+  a) Open project folder in terminal and change to client directory using below command 
 
-        `$ cd glm/client` 
+     $ cd glm/client 
 
-    b) Open client.html inside your browser 
+  b) Open client.html inside your browser 
 
-    c) Click on "Login with Facebook" button and enter your login details on the facebook login page 
-       that will popup. The "Result Text" below login button will be replaced by your UserName, Email and 
-       Facebook_Token on successful login.
+  c) Click on "Login with Facebook" button and enter your login details on the facebook login page 
+     that will popup. The "Result Text" below login button will be replaced by your UserName, Email and 
+     Facebook_Token on successful login.
