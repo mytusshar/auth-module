@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-
 <html>
 
     <head>
         <title>Generalized Login Module</title>
         <link rel="stylesheet" href="css/style.css">
         <script src="js/main.js"></script>	
+        <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     </head>
 
     <body>
+            
+        <div class="logo">Generalized Login Module</div>
+        
+        <div class="block" id="login-block">
+            <h1>Login</h1>  
+            <button class="button" id="facebook" onclick="openInNewTab()"> Login with Facebook </button>
+            <button class="button" id="google"> Login with Google </button>
+            <button class="button" id="amazon"> Login with Amazon </button>
+        </div>
 
-            <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-            <div class="logo">Generalized Login Module</div>
-            <div class="login-block">
-                <h1>Login</h1>  
-                <button id="facebook" onclick="openInNewTab()">Login with Facebook</button>
-                <button id="google">Login with Google</button>
-                <button id="amazon">Login with Amazon</button>
-            </div>
-
-            <div class="result-block">
-                <p id="output">Response from server</p>                  
-            </div>
+        <div class="block" id="result-block">
+            <p id="output"> Response from server </p>                  
+        </div>
 
     </body>
 
