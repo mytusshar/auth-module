@@ -1,5 +1,5 @@
 body {
-    background: url('http://i.imgur.com/Eor57Ae.jpg') no-repeat fixed center center;
+    background: url('/client/img/Eor57Ae.jpg') no-repeat fixed center center;
     background-size: cover;
     font-family: Montserrat;
 }
@@ -14,28 +14,28 @@ body {
     color: rgba(245, 247, 244, 0.466);
 }
 
-.login-block {
-    width: 320px;
-    padding: 20px;
+#login-block {
     background: rgba(228, 228, 228, 0.548);
     border-radius: 5px;
     border-top: 5px solid #0000007c;
     margin: 0 auto;
-    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.041), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
-.result-block {
+.block {
     width: 320px;
     padding: 20px;
+    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.582), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+#result-block {
     background: rgba(34, 33, 33, 0.486);
     border-radius: 5px;
     margin: 0 auto;
     color: #ffffffab;    
     margin-top: 70px;
-    box-shadow: 0 0 20px 0 rgba(179, 179, 179, 0.719), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
-.login-block h1 {
+.block h1 {
     text-align: center;
     color: rgba(0, 0, 0, 0.712);
     font-size: 25px;
@@ -53,13 +53,11 @@ body {
     margin-bottom: 20px;
 }
 
-#facebook {
+.button {
     width: 95%;
     height: 40px;
-    background: #1154b8cb;
     box-sizing: border-box;
     border-radius: 5px;
-    border: 1px solid #1154b8b9;
     color: #fff;
     margin : 10px;
     text-transform: uppercase;
@@ -67,36 +65,19 @@ body {
     font-family: Montserrat;
     outline: none;
     cursor: pointer;
+}
+
+#facebook {
+    background: #1154b8cb;
+    border: 1px solid #1154b8b9;
 }
 
 #google {
-    width: 95%;
-    height: 40px;
     background: #b81111ce;
-    box-sizing: border-box;
-    border-radius: 5px;
     border: 1px solid #b81111d0;
-    color: #fff;
-    margin : 10px;    
-    text-transform: uppercase;
-    font-size: 14px;
-    font-family: Montserrat;
-    outline: none;
-    cursor: pointer;
 }
 
 #amazon {
-    width: 95%;
-    height: 40px;
     background: #fc9003da;
-    box-sizing: border-box;
-    border-radius: 5px;
     border: 1px solid #ff9100d0;
-    color: #fff;
-    margin : 10px;
-    text-transform: uppercase;
-    font-size: 14px;
-    font-family: Montserrat;
-    outline: none;
-    cursor: pointer;
 }
