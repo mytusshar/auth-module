@@ -1,5 +1,5 @@
 body {
-    background: url('/client/img/Eor57Ae.jpg') no-repeat fixed center center;
+    background: url("../img/background.jpg") no-repeat fixed center center;
     background-size: cover;
     font-family: Montserrat;
 }
