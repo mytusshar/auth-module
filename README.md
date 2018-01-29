@@ -40,7 +40,7 @@ accounts and gives you authenticated user directly.
   Facebook_Token on successful login.
 
 
-###4. Runnig Client application using Tomcat server [OPTIONAl] ###
+###4. Runnig Client application using Tomcat server [ OPTIONAL ] ###
 
 * Install Tomcat using following link.
 
@@ -48,9 +48,9 @@ accounts and gives you authenticated user directly.
 
 * Then go to /opt/tomcat/webapps folder and paste your client application folder in it.
   Make sure that index.html page should remain in your client application folder.
-
-  You can refer this link for deploying web app in Tomcat server.
-  https://stackoverflow.com/questions/3954621/deploying-just-html-css-webpage-to-tomcat
+    You can refer this link for deploying web app in Tomcat server.
+    
+    https://stackoverflow.com/questions/3954621/deploying-just-html-css-webpage-to-tomcat
 
 * The open http://localhost:8080/client in your browser.
 
