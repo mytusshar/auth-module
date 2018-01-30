@@ -1,4 +1,9 @@
 
+window.onload = function(){
+    var fb = document.getElementById("facebook");
+    fb.addEventListener("click", openIdentityProvider);
+}
+
 function getUserData() {
     const url = "http://localhost:3000/profile";
     console.log("inside getUserData");
@@ -6,11 +11,12 @@ function getUserData() {
     fetch(url)
     .then((response) => response.json())
     .then(recievedDataOperation)
-    .catch(errorHandler);
+    .catch(handleError);
 }
 
-var errorHandler = function(error) {
-        log('Request failed', error)
+var handleError = function(error) {
+    log('Request failed', error);
+    stopTimer();
 }
 
 var recievedDataOperation = function(data) {    
@@ -19,12 +25,14 @@ var recievedDataOperation = function(data) {
         var result = "Name: " + data.name + "<br>" + 
                     "Email: " + data.email + "<br>" +
                     "ID: " + data.id + "<br>" + 
+                    "CognitoID: " + data.cognitoId + "<br>" + 
                     "LoggedInStatus: " + data.isLoggedIn;
 
         document.getElementById("output").innerHTML = result;
-        stopTimer()
+        stopTimer();
     }
     console.log("recieved: " + data);
+    
 }
 
 var timer;
@@ -36,9 +44,9 @@ function stopTimer() {
     clearInterval(timer);
 }
 
-function openInNewTab() {
+function openIdentityProvider() {
     let params = `scrollbars=no, resizable=no, status=no, location=no,
-                toolbar=no, menubar=no, width=600, height=300, left=100, top=100`;
+                toolbar=no, menubar=no, width=600, height=500, left=100, top=100`;
 
     var url = "http://localhost:3000/facebook";
     var win = window.open(url, '_blank', params);

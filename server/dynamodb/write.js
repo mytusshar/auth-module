@@ -3,8 +3,8 @@ var exports = module.exports = {};
 
 var aws = require('aws-sdk');
 let awsConfig = {
-    "region"            : "us-east-2",
-    "endpoint"          : "https://dynamodb.us-east-2.amazonaws.com",
+    "region"            : "us-east-1",
+    "endpoint"          : "https://dynamodb.us-east-1.amazonaws.com",
     "accessKeyId"       : "AKIAIGBRTSI3TQ6THKLA",
     "secretAccessKey"   : "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"
 };

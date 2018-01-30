@@ -1,44 +1,97 @@
+//Required modules and libraries
+var express = require('express');
+var session = require('express-session');
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
+var controller = require('./facebook/controller.js');
+var services = require('./aws/services.js');
+var cors = require('cors');
 
-var fs          = require("fs");
-var express     = require('express');
-var passport    = require('passport');
-var Strategy    = require('passport-facebook').Strategy;
-var bodyParser  = require('body-parser');
-var cors        = require('cors');
-var writeDB     = require("./dynamodb/write.js");
-var readDB      = require("./dynamodb/read.js");
-var controller  = require('./facebook/controller.js');
+var AWS = require('aws-sdk');
 
+// set AWS region
+AWS.config.region = services.awsConfig.awsRegion;
+
+//Initialize express
 var app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(require('cookie-parser')());
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+// set session
+app.use(session({
+    secret: 'foo',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {expires: false}
+}));
+
+//Initialization of passport
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
 
-// ********** facebook authentication ***********//
+//Passport serialization
+passport.serializeUser(controller.serializeParam);
+passport.deserializeUser(controller.deserializeParam);
 
-passport.use(new Strategy(controller.developerDetails, controller.userDetails));
+//Using the facebook strategy to "Login with facebook"
+passport.use(new FacebookStrategy(controller.developerDetails, controller.getUserDetails));
 
-var serializeFunction = function(user, cb) { cb(null, user);  }
-passport.serializeUser(serializeFunction);
-
-var deserializeFunction = function(obj, cb) { cb(null, obj);  }
-passport.deserializeUser(deserializeFunction);
-
+/* GET facebook page for authentication. */
 app.get('/facebook', passport.authenticate('facebook'));
 
-var callbackParam = passport.authenticate('facebook', { successRedirect: '/success', failureRedirect: '/facebook' })
-app.get('/facebook/callback', callbackParam);
+/* GET facebook callback page. */
+var passportAuth = passport.authenticate('facebook', {
+    failureRedirect: '/facebook'
+});
+app.get('/facebook/callback', passportAuth, controller.successRedirect);
 
-app.get('/success', controller.successResponse);
+//This page initialize the CognitoId and the Cognito client
+var cognitoOperation = function(req, res) {
+    var config = services.awsConfig;
+    var params = {
+        AccountId: config.awsAccountId, 
+        RoleArn: config.iamRoleArn, 
+        IdentityPoolId: config.cognitoIdentityPoolId, 
+        Logins: {
+            'graph.facebook.com': req.user.token
+        }
+    };
 
+    //initialize the Credentials object
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials(params);
+    // Get the credentials for our user
+    AWS.config.credentials.get(function(err) {
+        if (!err) {
+            // getting CognitoToken
+            COGNITO_TOKEN  = AWS.config.credentials.identityId;
+            // setting login status
+            IS_LOGGED_IN = true;
+            var data = {
+                userName: req.user.displayName,
+                userId: req.user.id,
+                userEmail: req.user.emails[0].value,
+                cognitoId: COGNITO_TOKEN,
+                isLogin: IS_LOGGED_IN
+            }
+            // setting user data
+            controller.setUserData(data);
+            console.log("*** COGNITO_TOKEN : " + COGNITO_TOKEN);
+            //console.log(data);
+        } else {
+            console.log("*** getCognitoData:ERROR: " + err);
+        }
+    });
+    // send response
+    controller.sendResponse(req, res);
+}
+//GET success page
+app.get('/success', controller.ensureAuthenticated, cognitoOperation);
+
+// send profile data to client
 app.get('/profile', controller.sendUserData);
 
-
-// *********** Sserver listening on port 3000 *************//
-app.listen(3000);
-console.log('server started on 3000 port');
+// *********** Server listening on port 3000 *************//
+app.set('port', 3000);
+var terminalMSG =  function() {
+    console.log('Express server listening on port ' + server.address().port);
+}
+var server = app.listen(app.get('port'), terminalMSG);

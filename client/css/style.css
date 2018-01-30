@@ -16,21 +16,19 @@ body {
 
 #login-block {
     background: rgba(228, 228, 228, 0.548);
-    border-radius: 5px;
     border-top: 5px solid #0000007c;
-    margin: 0 auto;
 }
 
 .block {
     width: 320px;
     padding: 20px;
+    border-radius: 5px;
+    margin: 0 auto;
     box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.582), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
 #result-block {
     background: rgba(34, 33, 33, 0.486);
-    border-radius: 5px;
-    margin: 0 auto;
     color: #ffffffab;    
     margin-top: 70px;
 }
@@ -39,7 +37,6 @@ body {
     text-align: center;
     color: rgba(0, 0, 0, 0.712);
     font-size: 25px;
-    margin-top: 0;
     margin-bottom: 20px;
 }
 
@@ -50,7 +47,6 @@ body {
     -ms-text-autospace: ideograph-space;
     font-style: italic;
     font-family: Courier New, Courier, monospace;      
-    margin-bottom: 20px;
 }
 
 .button {
@@ -63,7 +59,6 @@ body {
     text-transform: uppercase;
     font-size: 14px;
     font-family: Montserrat;
-    outline: none;
     cursor: pointer;
 }
 

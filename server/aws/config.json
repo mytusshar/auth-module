@@ -1,0 +1,6 @@
+{
+    "accountId": "719697336829",
+    "awsRegion":  "us-east-1",
+    "cognitoIdentityPoolId": "us-east-1:a2f076db-c654-4a18-87b1-6baec2752c4b",
+    "iamRoleArn": "arn:aws:iam::719697336829:role/Cognito_aws_cognitoAuth_Role"
+}

@@ -1,72 +1,86 @@
 var exports = module.exports = {};
 
-var fs          = require("fs");
-var path        = require('path');
-var express     = require('express')
-var writeDB     = require("../dynamodb/write.js");
-var readDB      = require("../dynamodb/read.js");
-var bodyParser  = require('body-parser');
-var cors        = require('cors');
-
-var app = express();
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-app.use(cors());
+var fs = require("fs");
+var path = require('path');
+var express = require('express');
 
 var USER_NAME;
 var USER_EMAIL;
 var USER_ID;
-var IS_LOGGED_IN;
+var IS_LOGGED_IN = false;
+var COGNITO_TOKEN;
 
 // reading developer details from JSON file
 var facebookDeveloper = fs.readFileSync(path.join(__dirname, 'developer.json'), 'utf8');
 var fbDev = JSON.parse(facebookDeveloper);
 exports.developerDetails = {
-    clientID        : fbDev.clientID,  
-    clientSecret    : fbDev.clientSecret,  
-    callbackURL     : fbDev.callbackURL,  
-    profileFields   : fbDev.profileFields 
+    clientID: fbDev.clientID,  
+    clientSecret: fbDev.clientSecret,  
+    callbackURL: fbDev.callbackURL,  
+    profileFields: fbDev.profileFields 
 }
 
-exports.userDetails = function(accessToken, refreshToken, profile, cb) {
-    USER_NAME       = profile.displayName;
-    USER_EMAIL      = profile.emails[0].value;
-    USER_ID         = profile.id;
-    IS_LOGGED_IN    = true;
-    writeDB.insertData(USER_NAME, USER_EMAIL, USER_ID);
-    return cb(null, profile);
+exports.getUserDetails = function(accessToken, refreshToken, profile, done) {
+    //console.log("**** getUserDetails function");
+    profile.token = accessToken;
+    var user = profile;
+    done(null, profile);
 }
 
-exports.successResponse = function(req, res) {
-    res.send("<html><body><h2>Successfully Logged in as "
-            + USER_NAME + 
-            "</h2><br><p>Close tab to continue visiting.</p></body></html>");
-} 
+exports.successRedirect = function(req, res) {
+    res.redirect('/success');
+}
 
-// error handler for promises
-// var errHandler = function(err) {
-//     console.log("errorHandler:" + err);
-// }
+exports.deserializeParam = function(obj, done) {
+    //console.log("****Inside deserializeuser");
+    done(null, obj);
+}
 
-// route profile
-var clientResponse;
+exports.serializeParam = function(user, done) {
+    //console.log("****Inside serializeuser");
+    done(null, user);
+}
+
+exports.sendResponse = function(req, res) {
+    var html1 = "<html><body><h2>Successfully Logged in as ";
+    var html2 = "</h2><br><p>Close tab to continue visiting.</p></body></html>";    
+    res.send(html1 + USER_NAME + html2);
+    //writeDB.insertData(USER_NAME, USER_EMAIL, COGNITO_TOKEN);
+}
+
+exports.ensureAuthenticated = function(req, res, next) {
+    if(req.isAuthenticated()) {
+        return next(); 
+    }
+    res.redirect('/facebook');
+}
+
+exports.setUserData = function(data) {
+    USER_EMAIL = data.userName;
+    USER_NAME = data.userEmail;
+    USER_ID = data.userId;
+    COGNITO_TOKEN = data.cognitoId;
+    IS_LOGGED_IN = data.isLogin;
+}
+
+var getUserData = function() {
+    var data = {
+        isLoggedIn: IS_LOGGED_IN,
+        name: USER_NAME,
+        email: USER_EMAIL,
+        id: USER_ID,
+        cognitoId: COGNITO_TOKEN
+    }
+    return data;
+}
+
 exports.sendUserData = function(req, res){
-    if (require('connect-ensure-login').ensureLoggedIn()) {
-        // var promise = readDB.readData(USER_EMAIL);
-        // promise.then(function(Item) {
-        //     res.json({ isLoggedIn : IS_LOGGED_IN,name : Item.name, email : Item.email_id, id : Item.id});          
-        // }, errHandler);
-        clientResponse = {  isLoggedIn  : IS_LOGGED_IN,
-                            name        : USER_NAME, 
-                            email       : USER_EMAIL, 
-                            id          : USER_ID
-                        };
-        res.json(clientResponse);
-
+    var clientResponse;
+    if (IS_LOGGED_IN) {
+        clientResponse = getUserData();
     } else {
         clientResponse = { isLoggedIn : IS_LOGGED_IN };
-        res.json(clientResponse);
     }
+
+    res.json(clientResponse);
 }
