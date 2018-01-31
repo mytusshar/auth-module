@@ -26,6 +26,8 @@ var recievedDataOperation = function(data) {
                     "Email: " + data.email + "<br>" +
                     "ID: " + data.id + "<br>" + 
                     "CognitoID: " + data.cognitoId + "<br>" + 
+                    "accessKey: " + data.accessKey + "<br>" + 
+                    "secretKey: " + data.secretKey + "<br>" + 
                     "LoggedInStatus: " + data.isLoggedIn;
 
         document.getElementById("output").innerHTML = result;
