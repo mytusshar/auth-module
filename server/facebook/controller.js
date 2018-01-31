@@ -4,19 +4,22 @@ var fs = require("fs");
 var path = require('path');
 var express = require('express');
 var services = require('../aws/services.js');
+var routes = require('../routes.js')
 
-var PROVIDER = "facebook";
-var USER_NAME;
-var USER_EMAIL;
-var USER_ID;
-var IS_LOGGED_IN = false;
-var COGNITO_TOKEN;
-var ACCESS_KEY;
-var SECRET_KEY;
+const PROVIDER = "facebook";
+var userName;
+var userEmail;
+var userId;
+var isLogin = false;
+var cognitoToken;
+var accessKey;
+var secretKey;
 
+const CONFIG_FILE = 'developer.json';
 // reading developer details from JSON file
-var facebookDeveloper = fs.readFileSync(path.join(__dirname, 'developer.json'), 'utf8');
+var facebookDeveloper = fs.readFileSync(path.join(__dirname, CONFIG_FILE), 'utf8');
 var fbDev = JSON.parse(facebookDeveloper);
+
 exports.developerDetails = {
     clientID: fbDev.clientID,  
     clientSecret: fbDev.clientSecret,  
@@ -25,24 +28,20 @@ exports.developerDetails = {
 }
 
 exports.getUserDetails = function(accessToken, refreshToken, profile, done) {
-    //console.log("**** getUserDetails function");
     profile.token = accessToken;
-    var user = profile;
-    console.log(profile);
+    // console.log(profile);
     done(null, profile);
 }
 
 exports.successRedirect = function(req, res) {
-    res.redirect('/success');
+    res.redirect(routes.SUCCESS);
 }
 
 exports.deserializeParam = function(obj, done) {
-    //console.log("****Inside deserializeuser");
     done(null, obj);
 }
 
 exports.serializeParam = function(user, done) {
-    //console.log("****Inside serializeuser");
     done(null, user);
 }
 
@@ -50,51 +49,47 @@ exports.ensureAuthenticated = function(req, res, next) {
     if(req.isAuthenticated()) {
         return next(); 
     }
-    res.redirect('/facebook');
+    res.redirect(routes.FACEBOOK_LOGIN);
 }
 
 var getUserData = function() {
     var data = {
         provider: PROVIDER,
-        isLoggedIn: IS_LOGGED_IN,
-        name: USER_NAME,
-        email: USER_EMAIL,
-        id: USER_ID,
-        cognitoId: COGNITO_TOKEN,
-        accessKey: ACCESS_KEY,
-        secretKey: SECRET_KEY
+        isLoggedIn: isLogin,
+        name: userName,
+        email: userEmail,
+        id: userId,
+        cognitoId: cognitoToken,
+        accessKey: accessKey,
+        secretKey: secretKey
     }
     return data;
 }
 
 exports.sendUserData = function(req, res){
     var clientResponse;
-    if (IS_LOGGED_IN) {
+    if (isLogin) {
         clientResponse = getUserData();
     } else {
-        clientResponse = { isLoggedIn : IS_LOGGED_IN };
+        clientResponse = { isLoggedIn : isLogin };
     }
-
     res.json(clientResponse);
 }
-
-
 
 var sendResponse = function(req, res) {
     var html1 = "<html><body><h2>Successfully Logged in as ";
     var html2 = "</h2><br><p>Close tab to continue visiting.</p></body></html>";    
-    res.send(html1 + USER_NAME + html2);
-    //writeDB.insertData(USER_NAME, USER_EMAIL, COGNITO_TOKEN);
+    res.send(html1 + userName + html2);
 }
 
 var setUserData = function(data) {
-    USER_EMAIL = data.userEmail;
-    USER_NAME = data.userName;
-    USER_ID = data.userId;
-    COGNITO_TOKEN = data.cognitoId;
-    ACCESS_KEY = data.accessKey;
-    SECRET_KEY = data.secretKey;
-    IS_LOGGED_IN = data.isLogin;
+    userEmail = data.userEmail;
+    userName = data.userName;
+    userId = data.userId;
+    cognitoToken = data.cognitoId;
+    accessKey = data.accessKey;
+    secretKey = data.secretKey;
+    isLogin = data.isLogin;
 }
 
 // error handler for promises
@@ -106,7 +101,6 @@ var handleError = function(err) {
 exports.cognitoOperation = function(req, res) {    
     var promise = services.getCognitoIdentity(req.user.token, PROVIDER, req, res);
     promise.then(function(data) {
-        // console.log("RETURNED PROMISE:" + JSON.stringify(data));
         setUserData(data);
         sendResponse(req, res);     
     }, handleError);

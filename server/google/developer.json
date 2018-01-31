@@ -1,0 +1,6 @@
+{
+    "clientID" : "413568901928-nev8pc0s56rdf0j4p44qjn0t0gn236la.apps.googleusercontent.com",
+    "clientSecret" : "xIjyMPTHQfhFJfYs7O9WPIWm",
+    "callbackURL" : "http://localhost:3000/google/callback",
+    "profileFields" : ["displayName", "email", "id"]
+}
