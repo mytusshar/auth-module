@@ -1,0 +1,21 @@
+{
+  "name": "aws-project",
+  "version": "1.0.0",
+  "description": "This module lets you use third party identity providers directly into AWS DynamoDB tables and gives you AWS services access credentials.",
+  "main": "server.js",
+  "dependencies": {
+    "aws-sdk": "^2.188.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Tushar Bochare",
+  "license": "ISC"
+}
