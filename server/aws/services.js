@@ -81,11 +81,13 @@ var insertData = function(data) {
         Item: inputData
     };
 
-    docClient.put(params, function(err, data) {
+    var insertOperation = function(err, data) {
         if(err) {
             console.log("sarvaha_users::insertData::error - " + JSON.stringify(err, null, 2));
         } else {
             console.log("sarvaha_users::insertData::success - ");
         }
-    });
+    }
+
+    docClient.put(params, insertOperation);
 }

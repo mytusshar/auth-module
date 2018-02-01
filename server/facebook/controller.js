@@ -96,12 +96,14 @@ var setUserData = function(data) {
 var handleError = function(err) {
     console.log("errorHandler:" + err);
 }
+// data handler for promises
 
 // This page initialize the CognitoId and the Cognito client
 exports.cognitoOperation = function(req, res) {    
     var promise = services.getCognitoIdentity(req.user.token, PROVIDER, req, res);
-    promise.then(function(data) {
+    var handleData = function(data) {
         setUserData(data);
         sendResponse(req, res);     
-    }, handleError);
+    }
+    promise.then(handleData, handleError);
 }
