@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title> Response </title>
+    </head>
+
+    <body>
+        <h2> Login Status</h2>
+        <br>
+        <h3 id="output"></h3>
+    </body>
+
+    <script>
+        const SERVER_ADDRESS = "http://localhost:3000";
+        const PROFILE = SERVER_ADDRESS + "/profile";
+
+        var recievedDataOperation = function(data) {            
+            if(data.isLoggedIn) {
+                window.opener.postMessage(data, '*');
+                window.close();
+                document.getElementById("output").innerHTML = "Logged in as " + data.name;
+            } else {
+                document.getElementById("output").innerHTML = "Unable to login!";
+            }
+        }
+
+        var handleError = function(error) {
+            log('Request failed', error);
+        }
+
+        function getUserData() {
+            fetch(PROFILE)
+            .then((response) => response.json())
+            .then(recievedDataOperation)
+            .catch(handleError);
+        }
+
+        window.onload = function(){
+            getUserData();
+        }
+    </script>
+
+</html>

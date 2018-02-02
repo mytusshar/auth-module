@@ -2,7 +2,6 @@ var exports = module.exports = {};
 
 var fs = require("fs");
 var path = require('path');
-var express = require('express');
 var services = require('../aws/services.js');
 var routes = require('../routes.js')
 
@@ -52,7 +51,7 @@ exports.ensureAuthenticated = function(req, res, next) {
     res.redirect(routes.FACEBOOK_LOGIN);
 }
 
-var getUserData = function() {
+var getUserData= function() {
     var data = {
         provider: PROVIDER,
         isLoggedIn: isLogin,
@@ -77,9 +76,7 @@ exports.sendUserData = function(req, res){
 }
 
 var sendResponse = function(req, res) {
-    var html1 = "<html><body><h2>Successfully Logged in as ";
-    var html2 = "</h2><br><p>Close tab to continue visiting.</p></body></html>";    
-    res.send(html1 + userName + html2);
+    res.sendFile('response.html', {root: __dirname });
 }
 
 var setUserData = function(data) {
@@ -103,7 +100,7 @@ exports.cognitoOperation = function(req, res) {
     var promise = services.getCognitoIdentity(req.user.token, PROVIDER, req, res);
     var handleData = function(data) {
         setUserData(data);
-        sendResponse(req, res);     
+        sendResponse(req, res);
     }
     promise.then(handleData, handleError);
 }

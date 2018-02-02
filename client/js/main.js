@@ -3,26 +3,15 @@ const SERVER_ADDRESS = "http://localhost:3000";
 const FACEBOOK_LOGIN = SERVER_ADDRESS + "/auth/facebook";
 const PROFILE = SERVER_ADDRESS + "/profile";
 
+var win;
+
 window.onload = function(){
     var fb = document.getElementById("facebook");
     fb.addEventListener("click", openIdentityProvider);
 }
 
-function getUserData() {
-    console.log("inside getUserData");
-    fetch(PROFILE)
-    .then((response) => response.json())
-    .then(recievedDataOperation)
-    .catch(handleError);
-}
-
-var handleError = function(error) {
-    log('Request failed', error);
-    stopTimer();
-}
-
-var recievedDataOperation = function(data) {    
-    console.log(data);                        
+var recievedDataOperation = function(e) { 
+    var data = e.data;                    
     if(data.isLoggedIn) {
         var result = "Name: " + data.name + "<br>" + 
                     "Email: " + data.email + "<br>" +
@@ -33,27 +22,27 @@ var recievedDataOperation = function(data) {
                     "LoggedInStatus: " + data.isLoggedIn;
 
         document.getElementById("output").innerHTML = result;
-        stopTimer();
+    } else {
+        document.getElementById("output").innerHTML = "Not logged In";
     }
     console.log("recieved: " + data);
-    
 }
 
-var timer;
-function startRequestingData() {
-    timer = setInterval(getUserData, 5000);
-}
-
-function stopTimer() {
-    clearInterval(timer);
-}
 
 function openIdentityProvider() {
     let params = `scrollbars=no, resizable=no, status=no, location=no,
                 toolbar=no, menubar=no, width=600, height=500, left=100, top=100`;
 
     var url = FACEBOOK_LOGIN;
-    var win = window.open(url, '_blank', params);
+    win = window.open(url, '_blank', params);
+    
     win.focus();
-    startRequestingData();                
+
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+    // Listen to message from child window
+    eventer(messageEvent, recievedDataOperation, false);
 }
+
+

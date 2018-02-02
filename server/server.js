@@ -40,13 +40,11 @@ var passportAuth = passport.authenticate('facebook', {
 app.get(routes.FACEBOOK_CALLBACK, passportAuth, controller.successRedirect);
 /*************** Facebook strategy END *************/
 
-
 // GET success page
 app.get(routes.SUCCESS, controller.ensureAuthenticated, controller.cognitoOperation);
 
 // GET send profile data to client
 app.get(routes.PROFILE, controller.sendUserData);
-
 
 
 // *********** Server listening on port 3000 *************//
