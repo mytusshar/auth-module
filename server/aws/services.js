@@ -8,7 +8,7 @@ var path = require('path');
 var aws = require('aws-sdk');
 
 const CONFIG_FILE = 'config.json';
-const TABLE_NAME = "sarvaha_users";
+const TABLE_NAME = "users";
 
 var awsAccountDetails = fs.readFileSync(path.join(__dirname, CONFIG_FILE), 'utf8');
 var awsParam = JSON.parse(awsAccountDetails);
@@ -91,3 +91,4 @@ var insertData = function(data) {
 
     docClient.put(params, insertOperation);
 }
+

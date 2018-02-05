@@ -75,3 +75,10 @@ body {
     background: #fc9003da;
     border: 1px solid #ff9100d0;
 }
+
+.register {
+    width: 320px;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 0 auto;
+}

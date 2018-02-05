@@ -11,6 +11,7 @@ window.onload = function(){
 }
 
 var recievedDataOperation = function(e) { 
+    var output =  document.getElementById("output");
     var data = e.data;                    
     if(data.isLoggedIn) {
         var result = "Name: " + data.name + "<br>" + 
@@ -20,10 +21,9 @@ var recievedDataOperation = function(e) {
                     "accessKey: " + data.accessKey + "<br>" + 
                     "secretKey: " + data.secretKey + "<br>" + 
                     "LoggedInStatus: " + data.isLoggedIn;
-
-        document.getElementById("output").innerHTML = result;
+        output.innerHTML = result;
     } else {
-        document.getElementById("output").innerHTML = "Not logged In";
+        output.innerHTML = "Not logged In";
     }
     console.log("recieved: " + data);
 }
