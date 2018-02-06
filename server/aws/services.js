@@ -9,7 +9,7 @@ var aws = require('aws-sdk');
 
 const CONFIG_FILE = 'config.json';
 const TABLE_NAME = "users";
-
+var docClient;
 var awsAccountDetails = fs.readFileSync(path.join(__dirname, CONFIG_FILE), 'utf8');
 var awsParam = JSON.parse(awsAccountDetails);
  
@@ -44,6 +44,11 @@ exports.getCognitoIdentity = function(authToken, provider, req, res) {
                     secretKey: aws.config.credentials.secretAccessKey,
                     isLogin: true
                 }
+
+                /********************************************************/
+                docClient = new aws.DynamoDB.DocumentClient();
+                /*********************************************************/
+                
                 console.log("***********************");
                 console.log(data);
                 console.log("***********************");
@@ -65,7 +70,6 @@ exports.getCognitoIdentity = function(authToken, provider, req, res) {
 }
 
 
-let docClient = new aws.DynamoDB.DocumentClient();
 var insertData = function(data) {
     var inputData = {
         "provider": data.authProvider,
