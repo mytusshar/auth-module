@@ -14,17 +14,16 @@ body {
     color: rgba(245, 247, 244, 0.466);
 }
 
-#login-block {
-    background: rgba(228, 228, 228, 0.548);
-    border-top: 5px solid #0000007c;
-}
-
 .block {
     width: 320px;
     padding: 20px;
     border-radius: 5px;
     margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
     box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.582), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    background: rgba(100, 99, 99, 0.356);
+    border-top: 5px solid #0000007c;
 }
 
 #result-block {
@@ -61,24 +60,68 @@ body {
     cursor: pointer;
 }
 
-#facebook {
+.input {
+    width: 95%;
+    height: 40px;
+    padding-left: 13px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    margin : 10px;
+    background-color: rgb(0, 0, 0);
+    font-size: 16px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    cursor: text;
+}
+
+
+#facebook, #reg_facebook {
     background: #1154b8cb;
     border: 1px solid #1154b8b9;
 }
 
-#google {
+#google, #reg_google {
     background: #b81111ce;
     border: 1px solid #b81111d0;
 }
 
-#amazon {
+#amazon, #reg_amazon {
     background: #fc9003da;
     border: 1px solid #ff9100d0;
 }
 
-.register {
-    width: 320px;
-    padding: 20px;
+.reg_buttons {
+    width: 248px;
+    height: 40px;
+    padding: 5px;
+    color: rgba(239, 247, 247, 0.568);
+    font-size: 20px;
+    border-color: rgba(1, 2, 24, 0);
+    background-color: #14142591;
+}
+
+.box {
+    width: 501px;
     border-radius: 5px;
+    padding-bottom: 30px;
     margin: 0 auto;
+    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.582), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    background: rgba(51, 100, 22, 0.459);
+}
+
+#register-block {
+    display: none;
+}
+
+#login-block {
+    display: block;
+}
+
+.error {
+    color: rgb(185, 8, 8);
+    margin-left: 15px;
+    font-weight: bold;
+    font-style: italic;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: none;
 }

@@ -3,9 +3,14 @@ var express = require('express');
 var session = require('express-session');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var controller = require('./facebook/controller.js');
-var routes = require('./routes.js')
 var cors = require('cors');
+
+var controller = require('./facebook/controller.js');
+var routes = require('./routes.js');
+var model = require('./facebook/data_model.js')
+
+/********* initializing parameter keys ********* */
+model.setParamKeys();
 
 // Initialize express
 var app = express();
@@ -26,6 +31,9 @@ app.use(cors());
 // Passport serialization
 passport.serializeUser(controller.serializeParam);
 passport.deserializeUser(controller.deserializeParam);
+
+/********* registration route *********/
+app.get(routes.FACEBOOK_REG, controller.getURLParam);
 
 /*************** Facebook strategy *************/
 passport.use(new FacebookStrategy(controller.developerDetails, controller.getUserDetails));

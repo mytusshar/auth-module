@@ -13,14 +13,10 @@
         const SERVER_ADDRESS = "http://localhost:3000";
         const PROFILE = SERVER_ADDRESS + "/profile";
 
-        var recievedDataOperation = function(data) {            
-            if(data.isLoggedIn) {
-                window.opener.postMessage(data, '*');
-                window.close();
-                document.getElementById("output").innerHTML = "Logged in as " + data.name;
-            } else {
-                document.getElementById("output").innerHTML = "Unable to login!";
-            }
+        var recievedDataOperation = function(data) {      
+            window.opener.postMessage(data, '*');
+            window.close();
+            document.getElementById("output").innerHTML = "Logged in as " + data.name;
         }
 
         var handleError = function(error) {

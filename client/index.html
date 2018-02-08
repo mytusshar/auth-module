@@ -10,27 +10,46 @@
 
     <body>            
         <div class="logo">Generalized Login Module</div>
-        <div class="register">
-            <button id="b_login">Login</button>
-            <button id="b_register">Register</button>
-        </div>
-        <div class="block" id="login-block">
-            <h1>Login</h1>  
-            <button class="button" id="facebook"> Login with Facebook </button>
-            <button class="button" id="google"> Login with Google </button>
-            <button class="button" id="amazon"> Login with Amazon </button>
-        </div>
+        
+        <div class="box">
+            <div class="register">
+                <button class="reg_buttons" id="b_login">Login</button>
+                <button class="reg_buttons" id="b_register">Register</button>
+            </div>
 
-        <!-- <div class="block" id="register-block">
-            <h1>Register</h1>  
-            <button class="button" id="facebook"> Login with Facebook </button>
-            <button class="button" id="google"> Login with Google </button>
-            <button class="button" id="amazon"> Login with Amazon </button>
-        </div> -->
+            <div class="block" id="login-block">
+                <h1>Login</h1>
+
+                <button class="button" id="facebook"> Login with Facebook </button>
+                <button class="button" id="google"> Login with Google </button>
+                <button class="button" id="amazon"> Login with Amazon </button>
+            </div>
+    
+            <div class="block" id="register-block">
+                <h1>Register</h1>  
+
+                <input class="input" id="username" placeholder="User name*">
+                <span id="errorname" class="error">error</span>
+
+                <input class="input" id="email" placeholder="Email ID*">
+                <span id="erroremail" class="error"></span>
+
+                <input class="input" id="city" placeholder="City*">
+                <span id="errorcity" class="error"></span>
+
+                <button class="button" id="reg_facebook"> Register using Facebook </button>
+                <button class="button" id="reg_google"> Register using Google </button>
+                <button class="button" id="reg_amazon"> Register using Amazon </button>
+            </div>
+    
+            
+        </div>
 
         <div class="block" id="result-block">
             <p id="output"> Response from server </p>            
         </div>
+
+
     </body>
 
 </html>
