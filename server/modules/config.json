@@ -1,5 +1,5 @@
 {
-    "fields": ["provider", "isLogin", "id", "cognito_id", "accessKey", "secretKey", "name", "city", "email"],
+    "fields": ["provider", "id", "cognito_id", "accessKey", "secretKey", "name", "city", "email"],
 
     "server_address": "http://localhost:3000",
 

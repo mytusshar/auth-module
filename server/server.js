@@ -18,7 +18,7 @@ var app = express();
 
 // set session
 app.use(session({
-    secret: 'foo',
+    secret: 'secret',
     resave: true,
     saveUninitialized: true,
     cookie: {expires: false}
@@ -34,20 +34,18 @@ passport.serializeUser(controller.serializeParam);
 passport.deserializeUser(controller.deserializeParam);
 
 
-
 /********* registration route *********/
 app.get(constants.FACEBOOK_REG, controller.getURLParam);
-
 
 
 /*************** Facebook strategy *************/
 passport.use(new FacebookStrategy(controller.facebookDeveloperDetails, controller.getUserDetails));
 
 // GET facebook page for authentication
-app.get(constants.FACEBOOK_LOGIN, passport.authenticate('facebook', { scope: ['email'] }));
+app.get(constants.FACEBOOK_LOGIN, passport.authenticate(constants.FACEBOOK, { scope: ['email'] }));
 
 // GET facebook callback page
-var passportAuth = passport.authenticate('facebook', {
+var passportAuth = passport.authenticate(constants.FACEBOOK, {
     failureRedirect: constants.FACEBOOK_LOGIN
 });
 app.get(constants.FACEBOOK_CALLBACK, passportAuth, controller.successRedirect);

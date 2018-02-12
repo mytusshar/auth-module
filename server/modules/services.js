@@ -1,4 +1,3 @@
-
 var exports = module.exports = {};
 
 var fs = require("fs");
@@ -18,13 +17,12 @@ aws.config.region = configData.aws.awsRegion;
 /*********** document client for dynamoDB operation *********/
 var docClient;
 
-/***********************************************************************************************/
+/*******************************************************/
 var loginOperation = function(data) {
     var result;
     if(!data) {
         result = {
             name: "NOT REGISTERED USER",
-            isLogin: true
         }
         /****** setting login status in data_model for not registered user*****/
         model.registrationStatus(constants.NOT_REGISTERED);
@@ -36,7 +34,6 @@ var loginOperation = function(data) {
         var accessKey = cognitoData.accessKey;
         var secretKey = cognitoData.secretKey;
 
-        data['isLogin'] = true;
         data['accessKey'] = accessKey;
         data['secretKey'] = secretKey;
 
@@ -55,7 +52,6 @@ var registerOperation = function(data) {
         model.registrationStatus(constants.ALREADY_REGISTERED);
         result = data;                  
     } else {
-
         var provider = model.providerName();
         var auth = model.authProviderData();
         var authID = auth.id;
@@ -71,7 +67,7 @@ var registerOperation = function(data) {
             cognito_id: cognitoID,
             accessKey: accessKey,
             secretKey: secretKey,
-            isLogin: true
+            created_on: new Date().toString()
         }
 
         /****** setting login status in data_model *****/
@@ -81,11 +77,12 @@ var registerOperation = function(data) {
         var keys = model.paramKeys();
         var reg_data = model.registrationData();
 
-        for(var i=6; i<keys.length; i++) {
+        for(var i=0; i<keys.length; i++) {
             var index = keys[i];
-            result[index] = reg_data[index];
+            if(reg_data.hasOwnProperty(index)) {
+                result[index] = reg_data[index];
+            }
         }
-
         console.log("registerOperation: DATA: " + JSON.stringify(result));
 
         // inserting data into DynamoDB
@@ -103,11 +100,11 @@ var getAwsParams = function() {
     var authToken = authData.token;
 
     switch(provider) {
-        case "facebook": logins = {'graph.facebook.com': authToken};
+        case constants.FACEBOOK: logins = {'graph.facebook.com': authToken};
         break;
-        case "google": logins = {'accounts.google.com': authToken};
+        case constants.GOOGLE: logins = {'accounts.google.com': authToken};
         break;
-        case "amazon": logins = {'www.amazon.com': authToken};
+        case constants.AMAZON: logins = {'www.amazon.com': authToken};
         break;
     }
 
@@ -133,21 +130,19 @@ var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
     var cognito_credentials = aws.config.credentials;
   
     var getCognitoCredenials = function(err) {
-        if (!err) {
-               
+        if (!err) {               
             /********** Database object must be initialize in here********/
             docClient = new aws.DynamoDB.DocumentClient();
 
             var udata = {};
-           
             var cognitoID = cognito_credentials.identityId;
             var accessKey = cognito_credentials.accessKeyId;
             var secretKey = cognito_credentials.secretAccessKey;
 
             cognitoData = {
-                "cognito_id": cognitoID,
-                "accessKey": accessKey,
-                "secretKey": secretKey
+                cognito_id: cognitoID,
+                accessKey: accessKey,
+                secretKey: secretKey
             };
             /********* setting CognitoData *********/
             model.cognitoData(cognitoData);
@@ -161,14 +156,14 @@ var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
             }
 
             var handleData = function(data) {
-                if(requestType == "login") {
+                if(requestType == constants.REQ_LOGIN) {
                     /***** calling loginOperation ****/
-                    this.udata = loginOperation(data);
+                    udata = loginOperation(data);
                 } else {
                     /***** calling registerOperation ****/
-                    this.udata = registerOperation(data);
+                    udata = registerOperation(data);
                 }                            
-                resolveCognito(this.udata);
+                resolveCognito(udata);
             }
 
             promise.then(handleData, handleError);
@@ -192,21 +187,9 @@ exports.getCognitoIdentity = function(req, res) {
 
 /********** DynamoDB: insert data operation ************/
 var insertData = function(data) {
-    var inputData = {
-        "created_on": new Date().toString()
-    };
-
-    /****** reading keys from data_model*****/
-    var keys = model.paramKeys();
-
-    for(var i=0; i<keys.length; i++) {
-        var index = keys[i];
-        inputData[index] = data[index];
-    }
-
     var params = {
         TableName: constants.TABLE_NAME,
-        Item: inputData
+        Item: data
     };
 
     var insertOperation = function(err, data) {
@@ -225,12 +208,11 @@ var readData = function(cognito_id) {
     var params = {
         TableName: constants.TABLE_NAME,
         Key: {
-            "cognito_id": cognito_id,
+            cognito_id: cognito_id,
         }
     };
 
     var readAsyncOperation = function(resolveReadDB, rejectReadDB) {
-
         var readOperation = function(err, data) {
             if(err) {
                 console.log("table:users::readData::error - " + JSON.stringify(err, null, 2));
@@ -242,6 +224,6 @@ var readData = function(cognito_id) {
         }
         docClient.get(params, readOperation);        
     }
-    // Return new promise 
+
     return new Promise(readAsyncOperation);
 }

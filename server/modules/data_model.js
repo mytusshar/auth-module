@@ -1,29 +1,28 @@
-
 var exports = module.exports = {};
 
 var fs = require("fs");
 var path = require('path');
+var constants = require('./constants.js');
 
 var param_keys = {};
 var user_data = {};
 var reg_data = {};
-
-var loginStatus = 0;  // code:=> {LoginSuccess: 1,, Loginfailure: 0,, }
-var registerStatus = 0; // code:=> {AlreadyRegistered: 2,, NotRegistered: 3,, RegistrationFailure: 4,, }
-var requestType = "login";
-
+var cognito_data = {};
+var auth_data = {};
 var provider;
-var cognitoData = {};
-var authProviderData = {};
+
+var login_status = constants.LOGIN_FAILURE;  // code:=> {LoginSuccess: 1,, Loginfailure: 0,, }
+var register_status = constants.REGISTER_FAILURE; // code:=> {AlreadyRegistered: 2,, NotRegistered: 3,, RegistrationFailure: 4,, }
+var request_type = constants.REQ_LOGIN;
 
 
 /******** setter/getter for ID obtained from auth provider*******/
 exports.authProviderData = function(data) {
     if(data) {
-        authProviderData = data;
-        console.log("DataModel: AuthProviderData: " + JSON.stringify(authProviderData));
+        auth_data = data;
+        console.log("DataModel: AuthProviderData: " + JSON.stringify(auth_data));
     } else {
-        return authProviderData;
+        return auth_data;
     }
 }
 
@@ -31,13 +30,12 @@ exports.authProviderData = function(data) {
 /******** setter/getter for cognito data*******/
 exports.cognitoData = function(data) {
     if(data) {
-        cognitoData = data;
-        console.log("DataModel: CognitoData: " + JSON.stringify(cognitoData));
+        cognito_data = data;
+        console.log("DataModel: CognitoData: " + JSON.stringify(cognito_data));
     } else {
-        return cognitoData;
+        return cognito_data;
     }
 }
-
 
 
 /******** setter/getter for auth provider name *******/
@@ -51,26 +49,24 @@ exports.providerName = function(data) {
 }
 
 
-
 /******** setter/getter for request type *******/
 exports.requestType = function(data) {
     if(data) {
-        requestType = data;
-    console.log("DataModel: ReqType: " + requestType);
+        request_type = data;
+    console.log("DataModel: ReqType: " + request_type);
     } else {
-        return requestType;
+        return request_type;
     }
 }
-
 
 
 /******** setter/getter for login status *******/
 exports.loginStatus = function(data) {
     if(data) {
-        loginStatus = data;
-        console.log("DataModel: loginStatus: " + loginStatus);
+        login_status = data;
+        console.log("DataModel: loginStatus: " + login_status);
     } else {
-        return loginStatus;
+        return login_status;
     }
 }
 
@@ -78,10 +74,10 @@ exports.loginStatus = function(data) {
 /******** setter/getter for registration status *******/
 exports.registrationStatus = function(status) {
     if(status) {
-        registerStatus = status;
-        console.log("*** registerStatus: " + registerStatus);
+        register_status = status;
+        console.log("*** registerStatus: " + register_status);
     } else {
-        return registerStatus;
+        return register_status;
     }
 }
 
@@ -108,7 +104,6 @@ exports.paramKeys = function(file_name) {
         return param_keys;
     }
 }
-
 
 
 /******** setter/getter for user data *******/

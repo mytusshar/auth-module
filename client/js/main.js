@@ -62,7 +62,7 @@ function hideOrShowBlock(b_type) {
 var recievedDataOperation = function(e) { 
     var output =  document.getElementById("output");
     var data = e.data;                    
-    if(data.isLogin) {
+    if(data.status == 1) {
         var result = "Name: " + data.name + "<br>" + 
                     "Email: " + data.email + "<br>" +
                     "CognitoID: " + data.cognito_id + "<br>";
