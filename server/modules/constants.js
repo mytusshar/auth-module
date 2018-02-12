@@ -8,7 +8,18 @@ exports.ALREADY_REGISTERED = 2;
 exports.LOGIN_SUCCESS = 1;
 exports.LOGIN_FAILURE = 0;
 
+/***** configuration file name ****/
+exports.CONFIG_FILE_NAME = "config.json";
+
+/********* table params **********/
 exports.TABLE_NAME = "users";
+exports.TABLE_KEY = "cognito_id";
+
+
+/********* request type ********/
+exports.REQ_REGISTER = "register";
+exports.REQ_LOGIN = "login";
+
 
 exports.SERVER_ADDRESS = "http://localhost:3000";
 
@@ -24,10 +35,14 @@ exports.FACEBOOK_LOGIN = "/auth/facebook";
 exports.FACEBOOK_REG = "/reg/facebook"; 
 exports.FACEBOOK_CALLBACK = "/auth/facebook/callback";
 
+
 /*********** google routes *************/
 exports.GOOGLE_LOGIN = "/auth/google";
+exports.GOOGLE_REG = "/reg/google"; 
 exports.GOOGLE_CALLBACK = "/auth/google/callback";
+
 
 /*********** amazon routes *************/
 exports.AMAZON_LOGIN = "/auth/amazon";
+exports.AMAZON_REG = "/reg/amazon"; 
 exports.AMAZON_CALLBACK = "/auth/amazon/callback";

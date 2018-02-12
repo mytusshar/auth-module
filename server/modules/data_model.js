@@ -1,0 +1,126 @@
+
+var exports = module.exports = {};
+
+var fs = require("fs");
+var path = require('path');
+
+var param_keys = {};
+var user_data = {};
+var reg_data = {};
+
+var loginStatus = 0;  // code:=> {LoginSuccess: 1,, Loginfailure: 0,, }
+var registerStatus = 0; // code:=> {AlreadyRegistered: 2,, NotRegistered: 3,, RegistrationFailure: 4,, }
+var requestType = "login";
+
+var provider;
+var cognitoData = {};
+var authProviderData = {};
+
+
+/******** setter/getter for ID obtained from auth provider*******/
+exports.authProviderData = function(data) {
+    if(data) {
+        authProviderData = data;
+        console.log("DataModel: AuthProviderData: " + JSON.stringify(authProviderData));
+    } else {
+        return authProviderData;
+    }
+}
+
+
+/******** setter/getter for cognito data*******/
+exports.cognitoData = function(data) {
+    if(data) {
+        cognitoData = data;
+        console.log("DataModel: CognitoData: " + JSON.stringify(cognitoData));
+    } else {
+        return cognitoData;
+    }
+}
+
+
+
+/******** setter/getter for auth provider name *******/
+exports.providerName = function(data) {
+    if(data) {
+        provider = data;
+        console.log("DataModel: Provider: " + provider);
+    } else {
+        return provider;
+    }
+}
+
+
+
+/******** setter/getter for request type *******/
+exports.requestType = function(data) {
+    if(data) {
+        requestType = data;
+    console.log("DataModel: ReqType: " + requestType);
+    } else {
+        return requestType;
+    }
+}
+
+
+
+/******** setter/getter for login status *******/
+exports.loginStatus = function(data) {
+    if(data) {
+        loginStatus = data;
+        console.log("DataModel: loginStatus: " + loginStatus);
+    } else {
+        return loginStatus;
+    }
+}
+
+
+/******** setter/getter for registration status *******/
+exports.registrationStatus = function(status) {
+    if(status) {
+        registerStatus = status;
+        console.log("*** registerStatus: " + registerStatus);
+    } else {
+        return registerStatus;
+    }
+}
+
+
+/******** setter/getter for registration data *******/
+exports.registrationData = function(data) {
+    if(data) {
+        reg_data = data;
+        console.log("*** Data_model: REG DATA: " + JSON.stringify(reg_data));
+    } else {
+        return reg_data;
+    }
+}
+
+
+/******** setter/getter for parameter keys *******/
+exports.paramKeys = function(file_name) {
+    if(file_name) {
+        var configFile = fs.readFileSync(path.join(__dirname, file_name), 'utf8');
+        var configData = JSON.parse(configFile);
+        param_keys = configData.fields;
+        console.log("Param Key:" + param_keys);
+    } else {
+        return param_keys;
+    }
+}
+
+
+
+/******** setter/getter for user data *******/
+exports.userData = function(data) {
+    if(data) {
+        for(var i=0; i<param_keys.length; i++) {
+            var key = param_keys[i];
+            var value = data[key];
+            user_data[key] = value;
+        }
+        console.log("Data_model: userData" + JSON.stringify(user_data));
+    } else {
+        return user_data;
+    }
+}

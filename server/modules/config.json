@@ -1,0 +1,33 @@
+{
+    "fields": ["provider", "isLogin", "id", "cognito_id", "accessKey", "secretKey", "name", "city", "email"],
+
+    "server_address": "http://localhost:3000",
+
+    "aws": {
+        "accountId": "719697336829",
+        "awsRegion":  "us-east-1",
+        "cognitoIdentityPoolId": "us-east-1:a2f076db-c654-4a18-87b1-6baec2752c4b",
+        "iamRoleArn": "arn:aws:iam::719697336829:role/Cognito_aws_cognitoAuth_Role"
+    },
+
+    "facebook": {
+        "clientID" : "158449238124791",
+        "clientSecret" : "d66db07cfd121522b6e3e6a7cd7e224a",
+        "callbackURL" : "http://localhost:3000/auth/facebook/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    },
+
+    "google": {
+        "clientID" : "413568901928-nev8pc0s56rdf0j4p44qjn0t0gn236la.apps.googleusercontent.com",
+        "clientSecret" : "xIjyMPTHQfhFJfYs7O9WPIWm",
+        "callbackURL" : "http://localhost:3000/auth/google/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    },
+
+    "amazon": {
+        "clientID" : "amzn1.application-oa2-client.6063794065544e85ba55b33502031401",
+        "clientSecret" : "e7171ad81c66b96f6f1332f93155f523dee5251c240b3e2b3581fe674673bf02",
+        "callbackURL" : "http://localhost:3000/auth/amazon/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    }
+}

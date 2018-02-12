@@ -1,3 +1,0 @@
-{
-    "fields": ["provider", "isLogin", "id", "cognito_id", "accessKey", "secretKey", "name", "city", "email"]
-}
