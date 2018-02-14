@@ -5,6 +5,7 @@ var path = require('path');
 var services = require('./services.js');
 var constants = require('./constants.js');
 var model = require('./data_model.js');
+var User = require('./user.js');
 
 /*********** reading developer details from config file*********I*/
 var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
@@ -49,16 +50,22 @@ exports.getUserDetails = function(accessToken, refreshToken, profile, done) {
     };
     /*********** setting authProviderData**********/  
     model.authProviderData(authProviderData);
+
+    console.log("\ndata: " + JSON.stringify(profile));
+
     done(null, profile);
 }
+
 
 exports.successRedirect = function(req, res) {
     res.redirect(constants.SUCCESS);
 }
 
+
 exports.deserializeParam = function(obj, done) {
     done(null, obj);
 }
+
 
 exports.serializeParam = function(user, done) {
     done(null, user);
@@ -81,21 +88,22 @@ exports.ensureAuthenticated = function(req, res, next) {
     }    
 }
 
-
 /************* getting params from url ************/
-exports.getURLParam = function(req, res) {
+exports.getURLParam = function(req) {
     var param = req.query;
-    var reg_data = {};
+    var data = {};
+
     var keys = model.paramKeys();
 
     for(var i=0; i<keys.length; i++) {
         var key = keys[i];
         if(param.hasOwnProperty(key)) {
             var value = param[key];
-            reg_data[key] = value;
+            data[key] = value;
         }
     }
 
+    return data;
     /********* setting registration data **********/
     model.registrationData(reg_data);
     /******** setting request type ***********/
@@ -168,7 +176,7 @@ exports.sendUserData = function(req, res){
 }
 
 
-var sendResponse = function(req, res) {
+exports.sendResponse = function(req, res) {
     res.sendFile(constants.RESPONSE_FILE, {root: __dirname });
 }
 

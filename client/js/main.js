@@ -2,6 +2,9 @@
 const SERVER_ADDRESS = "http://localhost:3000";
 const FACEBOOK_LOGIN = SERVER_ADDRESS + "/auth/facebook";
 const FACEBOOK_REG = SERVER_ADDRESS + "/reg/facebook";
+
+const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
+
 const PROFILE = SERVER_ADDRESS + "/profile";
 
 // buttons 
@@ -15,11 +18,11 @@ const REGISTER = "register";
 
 
 var b_reg_facebookFunction = function(){ 
-    openIdentityProvider(REGISTER);
+    openIdentityProvider(REGISTER, "facebook");
 }
 
 var b_facebookFunction = function(){ 
-    openIdentityProvider(LOGIN);
+    openIdentityProvider(LOGIN, "facebook");
 }
 
 var b_loginFunction = function(){ 
@@ -109,6 +112,7 @@ function getFormData() {
             isValid: true,
             name: name,
             city: city,
+            request: REGISTER,
             email: email
         }
         handleErrorStyles(1, err_city, err_email, err_name);
@@ -117,25 +121,37 @@ function getFormData() {
 }
 
 function appendURL(data, url) {
-    url = url + "?" + "name=" + data.name + "&" + "city=" + data.city + "&" + "email=" + data.email;
+    if(data.request == REGISTER) {
+        url = url + "?" + "provider=" + data.provider + "&" + "request=" + data.request + "&" + "name=" + data.name + "&" + "city=" + data.city + "&" + "email=" + data.email;
+    } else {
+        url = url + "?" + "provider=" + data.provider + "&" + "request=" + data.request;
+    }
     return url;
 }
 
-function openIdentityProvider(req_type) {
+function openIdentityProvider(req_type, authProvider) {
     let params = `scrollbars=no, resizable=no, status=no, location=no,
                 toolbar=no, menubar=no, width=700, height=600, left=100, top=100`;
                     
-    var url = FACEBOOK_LOGIN;
+    var url = URL_AUTHENTICATION;
 
     if(req_type == REGISTER) {
         var user_data = getFormData();
+        user_data.provider = authProvider;
+
         // return if not isValid data
         if(!user_data.isValid) {
             return; 
         }
-        
-        url = FACEBOOK_REG;
         url = appendURL(user_data, url);
+        console.log("REG:URL: " + url);
+    } else {
+        var data = {
+            request: LOGIN,
+            provider: authProvider
+        }
+        url = appendURL(data, url);
+        console.log("LOG:URL: " + url);
     }
     
     var win = window.open(url, '_blank', params);

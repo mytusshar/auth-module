@@ -1,5 +1,7 @@
 {
-    "fields": ["provider", "id", "cognito_id", "accessKey", "secretKey", "name", "city", "email"],
+    "fields": ["provider", "request", "id", "cognito_id", "accessKey", "secretKey", "name", "city", "email"],
+
+    "reg_fields": ["provider", "request", "name", "city", "email"],
 
     "server_address": "http://localhost:3000",
 

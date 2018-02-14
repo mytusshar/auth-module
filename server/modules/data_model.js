@@ -5,6 +5,7 @@ var path = require('path');
 var constants = require('./constants.js');
 
 var param_keys = {};
+var reg_fields = {};
 var user_data = {};
 var reg_data = {};
 var cognito_data = {};
@@ -92,20 +93,6 @@ exports.registrationData = function(data) {
     }
 }
 
-
-/******** setter/getter for parameter keys *******/
-exports.paramKeys = function(file_name) {
-    if(file_name) {
-        var configFile = fs.readFileSync(path.join(__dirname, file_name), 'utf8');
-        var configData = JSON.parse(configFile);
-        param_keys = configData.fields;
-        console.log("Param Key:" + param_keys);
-    } else {
-        return param_keys;
-    }
-}
-
-
 /******** setter/getter for user data *******/
 exports.userData = function(data) {
     if(data) {
@@ -118,4 +105,24 @@ exports.userData = function(data) {
     } else {
         return user_data;
     }
+}
+
+
+/******** setter/getter for parameter keys *******/
+exports.paramKeys = function(file_name) {
+    if(file_name) {
+        var configFile = fs.readFileSync(path.join(__dirname, file_name), 'utf8');
+        var configData = JSON.parse(configFile);
+        param_keys = configData.fields;
+        reg_fields = configData.reg_fields;
+        console.log("Param Key:" + param_keys);
+    } else {
+        return param_keys;
+    }
+}
+
+
+/******** setter/getter for registration fields keys *******/
+exports.getRegistrationFields = function() {
+    return reg_fields;
 }
