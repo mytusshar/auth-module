@@ -1,0 +1,62 @@
+<html>
+
+<body>
+
+    <a href="http://localhost:3000/">Click Here</a>
+    <br><br><br>
+
+    <button onclick="getSlash()">Slash</button>
+    <br><br><br>
+
+    <button onclick="getViews()">Views</button>
+    <br><br><br>
+
+    <button onclick="getUserData()">User Data</button>
+    <br><br><br>
+
+    <h3 id="output">result:</h3>
+    <br><br><br>
+
+    <h3 id="cookie">cookie</h3>
+    <br><br><br>
+
+
+</body>
+
+    <script>
+
+        var recievedDataOperation = function(data) {      
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+        }
+
+        var handleError = function(error) {
+            document.getElementById("output").innerHTML = error;
+        }
+
+
+        function getSlash() {
+            fetch("http://localhost:3000")
+            .then((response) => response.json())
+            .then(recievedDataOperation)
+            .catch(handleError);
+        }
+        
+        var profile = "http://localhost:3000/profile";
+        function getUserData() {
+            fetch(profile)
+            .then((response) => response.json())
+            .then(recievedDataOperation)
+            .catch(handleError);
+        }
+
+        var views = "http://localhost:3000/views";
+        function getViews() {
+            fetch(views)
+            .then((response) => response.json())
+            .then(recievedDataOperation)
+            .catch(handleError);
+        }
+
+    </script>
+
+</html>
