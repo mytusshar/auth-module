@@ -13,7 +13,13 @@
         const SERVER_ADDRESS = "http://localhost:3000";
         const PROFILE = SERVER_ADDRESS + "/profile";
 
-        var recievedDataOperation = function(data) {      
+        function getCookieValue(key) {
+            var values = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)');
+            return values ? values.pop() : '';
+        }
+
+        var recievedDataOperation = function(data) {
+            data.cookie = getCookieValue("userId");
             window.opener.postMessage(data, '*');
             window.close();
             document.getElementById("output").innerHTML = "Logged in as " + data.name;
@@ -23,15 +29,20 @@
             log('Request failed', error);
         }
 
-        function getUserData() {
-            fetch(PROFILE)
+        function getUserData(id) {
+            var url = PROFILE + "?id=" + id;
+            fetch(url)
             .then((response) => response.json())
             .then(recievedDataOperation)
             .catch(handleError);
         }
 
         window.onload = function(){
-            getUserData();
+            var id = getCookieValue("userId");
+            //console.log("cookies", JSON.stringify(document.cookie));
+            // var request = new XMLHttpRequest();
+            // console.log("cookies", JSON.stringify(request.getAllResponseHeaders));
+            getUserData(id);
         }
     </script>
 

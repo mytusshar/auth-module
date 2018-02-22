@@ -18,86 +18,69 @@ aws.config.region = configData.aws.awsRegion;
 var docClient;
 
 /*******************************************************/
-var loginOperation = function(data) {
-    var result;
+var loginOperation = function(data, sess_data) {
     if(!data) {
-        result = {
-            name: "NOT REGISTERED USER",
-        }
         /****** setting login status in data_model for not registered user*****/
-        model.registrationStatus(constants.NOT_REGISTERED);
+        sess_data.status = constants.NOT_REGISTERED;
     } else {
         /****** setting login status in data_model*****/
-        model.loginStatus(constants.LOGIN_SUCCESS);
+        sess_data.status = constants.LOGIN_SUCCESS;
 
-        var cognitoData = model.cognitoData();
-        var accessKey = cognitoData.accessKey;
-        var secretKey = cognitoData.secretKey;
+        var keys = model.getRegistrationFields();
 
-        data['accessKey'] = accessKey;
-        data['secretKey'] = secretKey;
-
-        result = data;                      
+        for(var i=0; i<keys.length; i++) {
+            var index = keys[i];
+            if(data.hasOwnProperty(index)) {
+                sess_data[index] = data[index];
+            }
+        }
     }
-    console.log("LoginOperation DATA: " + JSON.stringify(result));
-    return result;
+    console.log("**********************");
+    console.log("LoginOperation DATA: " + JSON.stringify(sess_data));
+    console.log("**********************");
 }
 
 
-var registerOperation = function(data) {
+var registerOperation = function(data, sess_data) {
     var result;
-    if(data) {
-        console.log("**** registerOperation: Already registered: " + JSON.stringify(data));                           
+    if(data) {                         
         /****** setting reg status in data_model for already registered user*****/
-        model.registrationStatus(constants.ALREADY_REGISTERED);
-        result = data;                  
+        sess_data.status = constants.ALREADY_REGISTERED;                
     } else {
-        var provider = model.providerName();
-        var auth = model.authProviderData();
-        var authID = auth.id;
-
-        var cognitoData = model.cognitoData();
-        var cognitoID = cognitoData.cognito_id;
-        var accessKey = cognitoData.accessKey;
-        var secretKey = cognitoData.secretKey;
 
         result = {
-            id: authID,
-            provider: provider,
-            cognito_id: cognitoID,
-            accessKey: accessKey,
-            secretKey: secretKey,
+            auth_id: sess_data.auth_id,
+            provider: sess_data.provider,
+            cognito_id: sess_data.cognito_id,
             created_on: new Date().toString()
         }
 
         /****** setting login status in data_model *****/
-        model.loginStatus(constants.LOGIN_SUCCESS);
+        sess_data.status = constants.LOGIN_SUCCESS;
 
         /****** reading keys from data_model*****/
-        var keys = model.paramKeys();
-        var reg_data = model.registrationData();
+        var keys = model.getRegistrationFields();
 
         for(var i=0; i<keys.length; i++) {
             var index = keys[i];
-            if(reg_data.hasOwnProperty(index)) {
-                result[index] = reg_data[index];
+            if(sess_data.hasOwnProperty(index)) {
+                result[index] = sess_data[index];
             }
         }
+        console.log("**********************");
         console.log("registerOperation: DATA: " + JSON.stringify(result));
+        console.log("**********************");
 
-        // inserting data into DynamoDB
+        /******* inserting data into DynamoDB *******/
         insertData(result);        
     }
-    return result;
 }
 
 
-var getAwsParams = function() {
+var getAwsParams = function(sess_data) {
     var logins = {};
-    var provider = model.providerName();
-
-    var authData = model.authProviderData();
-    var authToken = authData.token;
+    var provider = sess_data.provider;
+    var authToken = sess_data.auth_token;
 
     switch(provider) {
         case constants.FACEBOOK: logins = {'graph.facebook.com': authToken};
@@ -119,68 +102,68 @@ var getAwsParams = function() {
 }
 
 
-var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
 
-    var requestType = model.requestType();
-    var params = getAwsParams();
 
-    /******* initialize the Credentials object *********/
-    aws.config.credentials = new aws.CognitoIdentityCredentials(params);
-    /***** assigning creadentials object to another variable *****/
-    var cognito_credentials = aws.config.credentials;
-  
-    var getCognitoCredenials = function(err) {
-        if (!err) {               
-            /********** Database object must be initialize in here********/
-            docClient = new aws.DynamoDB.DocumentClient();
+/********** Cognito: initialize cognito operation ************/
+exports.getCognitoIdentity = function(req, res) {
 
-            var udata = {};
-            var cognitoID = cognito_credentials.identityId;
-            var accessKey = cognito_credentials.accessKeyId;
-            var secretKey = cognito_credentials.secretAccessKey;
+    var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
 
-            cognitoData = {
-                cognito_id: cognitoID,
-                accessKey: accessKey,
-                secretKey: secretKey
-            };
-            /********* setting CognitoData *********/
-            model.cognitoData(cognitoData);
-            
-            /********* checking user already registered or not ********/
-            var promise = readData(cognitoID);
+        var requestType = req.session.data.request;
+        var params = getAwsParams(req.session.data);
+    
+        /******* initialize the Credentials object *********/
+        aws.config.credentials = new aws.CognitoIdentityCredentials(params);
 
-            var handleError = function(err) {
-                console.log(requestType + ": ReadData:ERROR:: " + err);
+        /***** assigning creadentials object to another variable *****/
+        var cognito_credentials = aws.config.credentials;
+      
+        var getCognitoCredenials = function(err) {
+            if (!err) {               
+                /********** Database object must be initialize in here********/
+                docClient = new aws.DynamoDB.DocumentClient();
+    
+                var udata = {};
+                var cognitoID = cognito_credentials.identityId;
+                var accessKey = cognito_credentials.accessKeyId;
+                var secretKey = cognito_credentials.secretAccessKey;
+
+                /************* setting cognito data into request **********/
+                req.session.data.cognito_id = cognitoID;
+                req.session.data.accessKey = accessKey;
+                req.session.data.secretKey = secretKey;
+
+                /********* checking user already registered or not ********/
+                var promise = readData(cognitoID);
+    
+                var handleError = function(err) {
+                    console.log(requestType + ": ReadData:ERROR:: " + err);
+                    rejectCognito(err);
+                }
+    
+                var handleData = function(data) {
+                    if(requestType == constants.REQ_LOGIN) {
+                        /***** calling loginOperation ****/
+                        loginOperation(data, req.session.data);
+                    } else {
+                        /***** calling registerOperation ****/
+                        registerOperation(data, req.session.data);
+                    }                            
+                    resolveCognito(req.session.data);
+                }
+    
+                promise.then(handleData, handleError);
+    
+            } else {
+                console.log("*** getCognitoData:ERROR: " + err);
+                // Returns error
                 rejectCognito(err);
             }
-
-            var handleData = function(data) {
-                if(requestType == constants.REQ_LOGIN) {
-                    /***** calling loginOperation ****/
-                    udata = loginOperation(data);
-                } else {
-                    /***** calling registerOperation ****/
-                    udata = registerOperation(data);
-                }                            
-                resolveCognito(udata);
-            }
-
-            promise.then(handleData, handleError);
-
-        } else {
-            console.log("*** getCognitoData:ERROR: " + err);
-            // Returns error
-            rejectCognito(err);
         }
+        /********* Get the credentials for authenticated users *********/
+        aws.config.credentials.get(getCognitoCredenials);        
     }
-    /********* Get the credentials for authenticated users *********/
-    aws.config.credentials.get(getCognitoCredenials);        
-}
 
-
-/********** Cognito: initaites cognito operation ************/
-exports.getCognitoIdentity = function(req, res) {
     return new Promise(cognitoAsyncOperation);
 }
 
@@ -194,9 +177,9 @@ var insertData = function(data) {
 
     var insertOperation = function(err, data) {
         if(err) {
-            console.log("table:users::insertData::error - " + JSON.stringify(err, null, 2));
+            console.log("\ntable:users::insertData::error - " + JSON.stringify(err, null, 2) + "\n");
         } else {
-            console.log("table:users::insertData::success");
+            console.log("\ntable:users::insertData::success\n");
         }
     }
     docClient.put(params, insertOperation);
@@ -215,10 +198,10 @@ var readData = function(cognito_id) {
     var readAsyncOperation = function(resolveReadDB, rejectReadDB) {
         var readOperation = function(err, data) {
             if(err) {
-                console.log("table:users::readData::error - " + JSON.stringify(err, null, 2));
+                console.log("\ntable:users::readData::error - " + JSON.stringify(err, null, 2) + "\n");
                 rejectReadDB(err);
             } else {
-                console.log("table:users::readData::success" + JSON.stringify(data, null, 2));
+                console.log("\ntable:users::readData::success" + JSON.stringify(data, null, 2) + "\n");
                 resolveReadDB(data.Item);
             }
         }

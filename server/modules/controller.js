@@ -5,7 +5,7 @@ var path = require('path');
 var services = require('./services.js');
 var constants = require('./constants.js');
 var model = require('./data_model.js');
-var User = require('./user.js');
+var CognitoOperation = require('./services2.js');
 
 /*********** reading developer details from config file*********I*/
 var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
@@ -41,51 +41,20 @@ exports.facebookDeveloperDetails = {
 /************ getting user details from auth provider *************/
 exports.getUserDetails = function(accessToken, refreshToken, profile, done) {
     profile.token = accessToken;
-    /********* setting provider *********/
-    model.providerName(constants.FACEBOOK);
-
-    var authProviderData = {
-        id: profile.id,
-        token: profile.token
-    };
-    /*********** setting authProviderData**********/  
-    model.authProviderData(authProviderData);
-
-    console.log("\ndata: " + JSON.stringify(profile));
-
     done(null, profile);
 }
 
-
 exports.successRedirect = function(req, res) {
+    // console.log("\n%%%%%% SUCCESS REDIRECT: " + JSON.stringify(req.session) + "\n");
     res.redirect(constants.SUCCESS);
 }
-
 
 exports.deserializeParam = function(obj, done) {
     done(null, obj);
 }
 
-
 exports.serializeParam = function(user, done) {
     done(null, user);
-}
-
-
-exports.ensureAuthenticated = function(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next(); 
-    }
-
-    var provider = model.providerName();
-    switch(provider) {
-        case constants.FACEBOOK: res.redirect(constants.FACEBOOK_LOGIN);
-        break;
-        case constants.GOOGLE: res.redirect(constants.GOOGLE_LOGIN);
-        break;
-        case constants.AMAZON: res.redirect(constants.AMAZON_LOGIN);
-        break;
-    }    
 }
 
 /************* getting params from url ************/
@@ -102,30 +71,57 @@ exports.getURLParam = function(req) {
             data[key] = value;
         }
     }
-
     return data;
-    /********* setting registration data **********/
-    model.registrationData(reg_data);
-    /******** setting request type ***********/
-    model.requestType(constants.REQ_REGISTER);
-    /******** opening specified passport strategy ***********/
-    res.redirect(constants.FACEBOOK_LOGIN);
+}
+
+exports.ensureAuthenticated = function(req, res, next) {
+
+    /*********** setting data from auth provider in request session ***********/
+    var auth_token = req.session.passport.user.token;
+    var auth_data = req.session.passport.user._json;
+    var sess_data = req.session.data;
+
+    sess_data.auth_token = auth_token;
+    sess_data.auth_id = auth_data.id;
+    sess_data.auth_name = auth_data.name;
+    sess_data.auth_email = auth_data.email;
+    // console.log("\n%%%%%% ensureAuthenticated: " + JSON.stringify(req.session.data) + "\n");
+
+    if(req.isAuthenticated()) {
+        return next(); 
+    }
+
+    var provider = model.providerName();
+    switch(provider) {
+        case constants.FACEBOOK: res.redirect(constants.FACEBOOK_LOGIN);
+        break;
+        case constants.GOOGLE: res.redirect(constants.GOOGLE_LOGIN);
+        break;
+        case constants.AMAZON: res.redirect(constants.AMAZON_LOGIN);
+        break;
+    }    
 }
 
 
 exports.sendUserData = function(req, res){
-    console.log("******** Sending Response ********")
-    var requestType = model.requestType();
-    var reg_status = model.registrationStatus();
-    var login_status = model.loginStatus();
+    var global_data = model.globalData();
+    var user_data = global_data[req.query.id];
+
+    console.log("******** Sending Response ********");
+    console.log("ID: " + req.query.id + "=> " + JSON.stringify(user_data) + "\n");
+
+    var requestType = user_data.request;
+    var reg_status = user_data.status;
+    var login_status = user_data.status;
     var clientResponse;
 
     switch(requestType) {
         case constants.REQ_LOGIN: {
             if(login_status == constants.LOGIN_SUCCESS) {
                 /****** send user data*****/
-                clientResponse = model.userData();
+                clientResponse = user_data;
                 clientResponse.status = constants.LOGIN_SUCCESS;
+                message: "LOGIN SUCCESS"
                 console.log("**** RESPONSE: Login Success and send User data: Message.");
             } 
             else if(reg_status == constants.NOT_REGISTERED){
@@ -155,8 +151,9 @@ exports.sendUserData = function(req, res){
             } 
             else if(login_status == constants.LOGIN_SUCCESS) {
                 /****** send user data*****/
-                clientResponse = model.userData();
+                clientResponse = user_data;
                 clientResponse.status = constants.LOGIN_SUCCESS;
+                message: "REGISTER SUCCESS"
                 console.log("**** RESPONSE: Register Success and send User data: Message.");
             } 
             else if(reg_status == constants.REGISTER_FAILURE){
@@ -173,28 +170,38 @@ exports.sendUserData = function(req, res){
     }
 
     res.json(clientResponse);
+    console.log("******** ######### ********\n\n");
 }
 
 
-exports.sendResponse = function(req, res) {
-    res.sendFile(constants.RESPONSE_FILE, {root: __dirname });
+var sendResponse = function(req, res) {
+    /********** setting authId in cookie to access the data of user having same id **********/
+    // console.log("\n%%%%%% sendResponse: " + JSON.stringify(req.session.data) + "\n");
+    res.cookie('userId', req.session.data.idd).sendFile(constants.RESPONSE_FILE, {root: __dirname });
 }
 
 
 /************* error handler for promises ****************/
 var handleError = function(err) {
-    console.log("CognitoOperation: errorHandler:" + err);
+    console.log("CognitoOperation: errorHandler: " + err);
 }
 
 
 /******************* cognito operation *****************/
-exports.cognitoOperation = function(req, res) {    
-    var promise = services.getCognitoIdentity(req, res);
-    var handleData = function(data) {
-        /********* setting userdata in data model*********/
-        model.userData(data);
-        /********* sending response *********/
-        sendResponse(req, res);
-    }
-    promise.then(handleData, handleError);
+exports.cognitoOperation = function(req, res) {
+
+    // console.log("\n%%%%%% cognitoOperation: " + JSON.stringify(req.session.data) + "\n");
+    
+    // var promise = services.getCognitoIdentity(req, res);
+    // var handleData = function(data) {
+    //     /********* setting req session data in data model*********/
+    //     model.globalData(data);
+    //     /********* sending response *********/
+    //     sendResponse(req, res);
+    // }
+    // promise.then(handleData, handleError);
+
+    var op = new CognitoOperation(req, res);
 }
+
+

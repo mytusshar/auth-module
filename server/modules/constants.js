@@ -29,6 +29,9 @@ exports.REQ_LOGIN = "login";
 
 exports.SERVER_ADDRESS = "http://localhost:3000";
 
+/********** Auth request URL *********/
+exports.AUTH_REQUEST_URL = "/auth";
+
 // GET redirect to successful login page
 exports.SUCCESS = "/success";
 
@@ -38,17 +41,14 @@ exports.PROFILE = "/profile";
 
 /*********** facebook routes *************/
 exports.FACEBOOK_LOGIN = "/auth/facebook";
-exports.FACEBOOK_REG = "/reg/facebook"; 
 exports.FACEBOOK_CALLBACK = "/auth/facebook/callback";
 
 
 /*********** google routes *************/
 exports.GOOGLE_LOGIN = "/auth/google";
-exports.GOOGLE_REG = "/reg/google"; 
 exports.GOOGLE_CALLBACK = "/auth/google/callback";
 
 
 /*********** amazon routes *************/
-exports.AMAZON_LOGIN = "/auth/amazon";
-exports.AMAZON_REG = "/reg/amazon"; 
+exports.AMAZON_LOGIN = "/auth/amazon"; 
 exports.AMAZON_CALLBACK = "/auth/amazon/callback";
