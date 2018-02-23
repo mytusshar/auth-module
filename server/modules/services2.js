@@ -1,5 +1,6 @@
 var fs = require("fs");
 var path = require('path');
+var Cookie = require('js-cookie');
 // var aws = require('aws-sdk');
 
 var constants = require('./constants.js');
@@ -47,7 +48,73 @@ module.exports = class CognitoOperation {
         var sendResponse = function(req, res) {
             /********** setting authId in cookie to access the data of user having same id **********/
             console.log("\n%%%%%% sendResponse: ", JSON.stringify(req.session.data) + "\n");
-            res.cookie('userId', req.session.data.idd).sendFile(constants.RESPONSE_FILE, {root: __dirname });
+            // res.cookie('userId', data);
+            // res.sendFile(constants.RESPONSE_FILE, {root: __dirname });
+
+
+            var user_data = req.session.data;
+            var requestType = user_data.request;
+            var reg_status = user_data.status;
+            var login_status = user_data.status;
+            var clientResponse;
+
+            switch(requestType) {
+                case constants.REQ_LOGIN: {
+                    if(login_status == constants.LOGIN_SUCCESS) {
+                        /****** send user data*****/
+                        clientResponse = user_data;
+                        clientResponse.message= "LOGIN SUCCESS"
+                        console.log("**** RESPONSE: Login Success and send User data: Message.");
+                    } 
+                    else if(reg_status == constants.NOT_REGISTERED){
+                        clientResponse = {
+                            status: constants.NOT_REGISTERED,
+                            message: "NOT_REGISTERED user"
+                        };
+                        console.log("**** RESPONSE: Not Registered User: Message.");
+                    } 
+                    else if(login_status == constants.LOGIN_FAILURE){
+                        clientResponse = {
+                            status: constants.LOGIN_FAILURE,
+                            message: "LOGIN FAILURE, try again"
+                        };
+                        console.log("**** RESPONSE: Login Failure: Message.");
+                    }
+                }
+                break;
+
+                case constants.REQ_REGISTER: {
+                    if(reg_status == constants.ALREADY_REGISTERED) {
+                        clientResponse = {
+                            status: constants.ALREADY_REGISTERED,
+                            message: "ALREADY_REGISTERED user"
+                        };
+                        console.log("**** RESPONSE: Already Registered Please Login: Message.");
+                    } 
+                    else if(login_status == constants.LOGIN_SUCCESS) {
+                        /****** send user data*****/
+                        clientResponse = user_data;
+                        clientResponse.message = "REGISTER SUCCESS"
+                        console.log("**** RESPONSE: Register Success and send User data: Message.");
+                    } 
+                    else if(reg_status == constants.REGISTER_FAILURE){
+                        clientResponse = {
+                            status: constants.REGISTER_FAILURE,
+                            message: "REGISTER_FAILURE try again"
+                        };
+                        console.log("**** RESPONSE: Register Failure: Message.");
+                    }
+                }
+                break;
+
+                default: console.log("DEFAULT: Undefined Request Type.");
+            }
+
+
+            res.cookie('userId', clientResponse);
+            res.sendFile(constants.RESPONSE_FILE, {root: __dirname });
+
+
         }
 
         var handleData = function(data) {

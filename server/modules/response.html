@@ -10,40 +10,41 @@
     </body>
 
     <script>
-        const SERVER_ADDRESS = "http://localhost:3000";
-        const PROFILE = SERVER_ADDRESS + "/profile";
+
+        const COOKIE_KEY = "userId";
 
         function getCookieValue(key) {
             var values = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)');
             return values ? values.pop() : '';
         }
 
-        var recievedDataOperation = function(data) {
-            data.cookie = getCookieValue("userId");
-            window.opener.postMessage(data, '*');
-            window.close();
-            document.getElementById("output").innerHTML = "Logged in as " + data.name;
-        }
+        function convertToJSON(data) {
+            data = unescape(data);
+            var str = JSON.stringify(data);
+            var sub_data =  str.substr(3, str.length - 4);
+            var result = "";
 
-        var handleError = function(error) {
-            log('Request failed', error);
-        }
+            for(var i=0; i<sub_data.length; i++) {
+                if(sub_data.charAt(i) == "\\" && sub_data.charAt(i+1) == "\"") {
+                    continue;
+                }
+                result += sub_data.charAt(i);
+            }
 
-        function getUserData(id) {
-            var url = PROFILE + "?id=" + id;
-            fetch(url)
-            .then((response) => response.json())
-            .then(recievedDataOperation)
-            .catch(handleError);
+            return JSON.parse(result);
         }
 
         window.onload = function(){
-            var id = getCookieValue("userId");
-            //console.log("cookies", JSON.stringify(document.cookie));
-            // var request = new XMLHttpRequest();
-            // console.log("cookies", JSON.stringify(request.getAllResponseHeaders));
-            getUserData(id);
+            console.log("cookies", JSON.stringify(document.cookie));
+
+            var cookie_data = getCookieValue(COOKIE_KEY);
+            var user_data = convertToJSON(cookie_data);
+
+            window.opener.postMessage(user_data, '*');         
+            document.getElementById("output").innerHTML = "Logged in as " + user_data.message;
+            window.close(); 
         }
+
     </script>
 
 </html>
