@@ -8,8 +8,8 @@ var param_keys = {};
 var reg_fields ={};
 var global_data = {};
 
-var login_status = constants.LOGIN_FAILURE;  // code:=> {LoginSuccess: 1,, Loginfailure: 0,, }
-var register_status = constants.REGISTER_FAILURE; // code:=> {AlreadyRegistered: 2,, NotRegistered: 3,, RegistrationFailure: 4,, }
+var login_status = constants.LOGIN_FAILURE;
+var register_status = constants.REGISTER_FAILURE;
 var request_type = constants.REQ_LOGIN;
 
 exports.globalData = function(data) {
@@ -17,12 +17,12 @@ exports.globalData = function(data) {
         global_data[data.idd] = data;
 
         var keys = Object.keys(global_data);
-        console.log("@@@@@@@@@@@@@  GLOBAL DATA  @@@@@@@@@@@@\n");
+        console.log("@@@@@@@@@@@@@  GLOBAL DATA  @@@@@@@@@@@@");
         for(var i=0; i<keys.length; i++) {
             var index = keys[i];
             console.log(index + ":: " + JSON.stringify(global_data[index]) + "\n");
         }
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
     } else {
         return global_data;
     }
@@ -35,7 +35,7 @@ exports.paramKeys = function(file_name) {
         var configData = JSON.parse(configFile);
         param_keys = configData.fields;
         reg_fields = configData.reg_fields;
-        console.log("Param Key:" + param_keys);
+
     } else {
         return param_keys;
     }
@@ -44,4 +44,12 @@ exports.paramKeys = function(file_name) {
 /******** setter/getter for registration fields keys *******/
 exports.getRegistrationFields = function() {
     return reg_fields;
+}
+
+/********** reading aws config data *********/
+exports.awsConfigData = function() {
+    /********* reading aws configuration from config file */
+    var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
+    var configData = JSON.parse(configFile);
+    return configData;
 }

@@ -39,8 +39,7 @@ var user_count = 0;
 ////////////////////
 
 /*********** Authentication request ***********/
-var handleAuthRequest = function(req, res) {
-     
+var handleAuthRequest = function(req, res) {     
     var user_data = controller.getURLParam(req);
     var requestType = user_data.request;
     var provider = user_data.provider;
@@ -50,40 +49,24 @@ var handleAuthRequest = function(req, res) {
     req.session.data = user_data;
     req.session.data.idd = unique_id;
 
-    // console.log("\n%%%%%% handleAuthRequest: " + JSON.stringify(req.session.data) + "\n");
-    console.log("*************************************");
+    console.log("\n*************************************");
     console.log("****** NEW: " + provider + " " + requestType + " request. ******");
-    console.log("*************************************");
-    switch(requestType) {
-        case constants.REQ_LOGIN: {
-            switch(provider) {
-                case constants.FACEBOOK: {
-                    res.redirect(constants.FACEBOOK_LOGIN);
-                }
-                break;
+    console.log("*************************************\n");
 
-                default: console.log("ERROR: Unknown login request.");
-            }
-
+    switch(provider) {
+        case constants.FACEBOOK: {
+            res.redirect(constants.FACEBOOK_LOGIN);
         }
         break;
 
-        case constants.REQ_REGISTER: {
-            switch(provider) {
-                case constants.FACEBOOK: {
-                    res.redirect(constants.FACEBOOK_LOGIN);
-                }
-                break;
-
-                default: console.log("ERROR: Unknown register request.");
-            }
+        case constants.GOOGLE: {
+            res.redirect(constants.GOOGLE_LOGIN);
         }
         break;
 
-        default: {
-            console.log("\n****ERROR: Unknown request type. Include correct request type in url.");
-        }
+        default: console.log("ERROR: Unknown " + requestType + " request.");
     }
+
 }
 
 app.get(constants.AUTH_REQUEST_URL, handleAuthRequest);
@@ -106,12 +89,7 @@ app.get(constants.FACEBOOK_CALLBACK, passportAuth, controller.successRedirect);
 // GET success page
 app.get(constants.SUCCESS, controller.ensureAuthenticated, controller.cognitoOperation);
 
-// GET send profile data to client
-app.get(constants.PROFILE, controller.sendUserData);
-
-
-
-// *********** Server listening on port 3000 *************//
+/*********** Server listening on port 3000 *************/
 app.set('port', 3000);
 var terminalMSG =  function() {
     console.log('Express server listening on port ' + server.address().port);

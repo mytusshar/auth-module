@@ -1,6 +1,5 @@
 var exports = module.exports = {};
 
-
 /****** Status codes ******/
 exports.REGISTER_FAILURE = 4;
 exports.NOT_REGISTERED = 3;
@@ -21,7 +20,6 @@ exports.RESPONSE_FILE = "response.html";
 
 /********* table params **********/
 exports.TABLE_NAME = "users";
-exports.TABLE_KEY = "cognito_id";
 
 /********* request type ********/
 exports.REQ_REGISTER = "register";
@@ -34,10 +32,6 @@ exports.AUTH_REQUEST_URL = "/auth";
 
 // GET redirect to successful login page
 exports.SUCCESS = "/success";
-
-// GET sends user profile data to client
-exports.PROFILE = "/profile";
-
 
 /*********** facebook routes *************/
 exports.FACEBOOK_LOGIN = "/auth/facebook";
