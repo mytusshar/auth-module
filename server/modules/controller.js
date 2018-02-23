@@ -5,7 +5,7 @@ var path = require('path');
 var services = require('./services.js');
 var constants = require('./constants.js');
 var model = require('./data_model.js');
-var CognitoOperation = require('./services2.js');
+var CognitoOperation = require('./services.js');
 
 /*********** reading developer details from config file*********I*/
 var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
