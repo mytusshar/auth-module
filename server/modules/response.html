@@ -10,7 +10,6 @@
     </body>
 
     <script>
-
         const COOKIE_KEY = "userId";
 
         function getCookieValue(key) {
@@ -36,7 +35,6 @@
 
         window.onload = function(){
             console.log("cookies", JSON.stringify(document.cookie));
-
             var cookie_data = getCookieValue(COOKIE_KEY);
             var user_data = convertToJSON(cookie_data);
 

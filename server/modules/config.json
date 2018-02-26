@@ -18,17 +18,17 @@
         "callbackURL" : "http://localhost:3000/auth/facebook/callback",
         "profileFields" : ["displayName", "email", "id"]
     },
-
+    
     "google": {
-        "clientID" : "413568901928-nev8pc0s56rdf0j4p44qjn0t0gn236la.apps.googleusercontent.com",
-        "clientSecret" : "xIjyMPTHQfhFJfYs7O9WPIWm",
+        "clientID" : "662176785730-pettrjm3iljsr98scng9nc546q684b0f.apps.googleusercontent.com",
+        "clientSecret" : "Ce3zfAEbMYZBoEk6inLdZm5i",
         "callbackURL" : "http://localhost:3000/auth/google/callback",
         "profileFields" : ["displayName", "email", "id"]
     },
 
     "amazon": {
-        "clientID" : "amzn1.application-oa2-client.6063794065544e85ba55b33502031401",
-        "clientSecret" : "e7171ad81c66b96f6f1332f93155f523dee5251c240b3e2b3581fe674673bf02",
+        "clientID" : "amzn1.application-oa2-client.3e40b491e5154580bca3c9872aef3a8c",
+        "clientSecret" : "01ed7fafdd55c0c10e2ffd1d283d11a7cf74efa4a60f54ed19da1b34b4de75b9",
         "callbackURL" : "http://localhost:3000/auth/amazon/callback",
         "profileFields" : ["displayName", "email", "id"]
     }

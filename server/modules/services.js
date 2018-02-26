@@ -208,8 +208,7 @@ module.exports = class CognitoOperation {
                 var result = {
                     auth_id: sess_data.auth_id,
                     provider: sess_data.provider,
-                    cognito_id: sess_data.cognito_id,
-                    created_on: new Date().toString()
+                    cognito_id: sess_data.cognito_id
                 }        
                 /****** setting login status in req session *****/
                 sess_data.status = constants.LOGIN_SUCCESS;        
@@ -276,19 +275,3 @@ module.exports = class CognitoOperation {
     }
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

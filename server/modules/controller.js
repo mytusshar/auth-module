@@ -39,12 +39,19 @@ exports.facebookDeveloperDetails = {
 
 
 /************ getting user details from auth provider *************/
-exports.getUserDetails = function(accessToken, refreshToken, profile, done) {
-    profile.token = accessToken;
+exports.getUserDetails = function(accessToken, refreshToken, params, profile, done) {
+    
+    if(profile.provider == "google") {
+        profile.token = params.id_token
+    } else {
+        profile.token = accessToken;
+    }
+    // console.log("\n Auth Provider Data: PARAMS: ", profile);
     done(null, profile);
 }
 
 exports.successRedirect = function(req, res) {
+    // console.log("\n OUTPUT: ", req.session);
     res.redirect(constants.SUCCESS);
 }
 
@@ -74,20 +81,27 @@ exports.getURLParam = function(req) {
 
 exports.ensureAuthenticated = function(req, res, next) {
     /*********** setting data from auth provider in request session ***********/
-    var auth_token = req.session.passport.user.token;
-    var auth_data = req.session.passport.user._json;
+    var auth_data;
     var sess_data = req.session.data;
-
-    sess_data.auth_token = auth_token;
-    sess_data.auth_id = auth_data.id;
+    var auth_data = req.session.passport.user._json;
+    var provider = sess_data.provider;
+    console.log("\nCHECK PROFILE DATA: ", req.session);
+    sess_data.auth_token = req.session.passport.user.token;
     sess_data.auth_name = auth_data.name;
     sess_data.auth_email = auth_data.email;
+
+    /****** since passport-amazon return auth id with key "user_id" ******/
+    switch(provider) {
+        case constants.AMAZON: sess_data.auth_id = auth_data.user_id;
+        break;
+
+        default: sess_data.auth_id = auth_data.id;
+    }
 
     if(req.isAuthenticated()) {
         return next(); 
     }
 
-    var provider = model.providerName();
     switch(provider) {
         case constants.FACEBOOK: res.redirect(constants.FACEBOOK_LOGIN);
         break;
@@ -95,7 +109,7 @@ exports.ensureAuthenticated = function(req, res, next) {
         break;
         case constants.AMAZON: res.redirect(constants.AMAZON_LOGIN);
         break;
-    }    
+    }
 }
 
 

@@ -3,6 +3,8 @@ var express = require('express');
 var session = require('express-session');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var AmazonStrategy = require('passport-amazon').Strategy;
 var cors = require('cors');
 
 var controller = require('./modules/controller.js');
@@ -64,6 +66,11 @@ var handleAuthRequest = function(req, res) {
         }
         break;
 
+        case constants.AMAZON: {
+            res.redirect(constants.AMAZON_LOGIN);
+        }
+        break;
+
         default: console.log("ERROR: Unknown " + requestType + " request.");
     }
 
@@ -75,15 +82,37 @@ app.get(constants.AUTH_REQUEST_URL, handleAuthRequest);
 /*************** Facebook strategy *************/
 passport.use(new FacebookStrategy(controller.facebookDeveloperDetails, controller.getUserDetails));
 
-// GET facebook page for authentication
 app.get(constants.FACEBOOK_LOGIN, passport.authenticate(constants.FACEBOOK, { scope: ['email'] }));
 
-// GET facebook callback page
-var passportAuth = passport.authenticate(constants.FACEBOOK, {
+var authFacebook = passport.authenticate(constants.FACEBOOK, {
     failureRedirect: constants.FACEBOOK_LOGIN
 });
-app.get(constants.FACEBOOK_CALLBACK, passportAuth, controller.successRedirect);
+app.get(constants.FACEBOOK_CALLBACK, authFacebook, controller.successRedirect);
 /*************** Facebook strategy END *************/
+
+
+/************** Google Strategy *****************/
+passport.use(new GoogleStrategy(controller.googleDeveloperDetails, controller.getUserDetails));
+
+app.get(constants.GOOGLE_LOGIN, passport.authenticate(constants.GOOGLE, { scope: ['email'] }));
+
+var authGoogle = passport.authenticate(constants.GOOGLE, {
+    failureRedirect: constants.GOOGLE_LOGIN
+});
+app.get(constants.GOOGLE_CALLBACK, authGoogle, controller.successRedirect);
+/************** Google strategy END *************/
+
+
+/************** Amazon Strategy *****************/
+passport.use(new AmazonStrategy(controller.amazonDeveloperDetails, controller.getUserDetails));
+
+app.get(constants.AMAZON_LOGIN, passport.authenticate(constants.AMAZON, { scope: ['profile'] }));
+
+var authAmazon = passport.authenticate(constants.AMAZON, {
+    failureRedirect: constants.AMAZON_LOGIN  
+});
+app.get(constants.AMAZON_CALLBACK, authAmazon, controller.successRedirect);
+/************** Google strategy END *************/
 
 
 // GET success page

@@ -8,23 +8,43 @@ const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
 const PROFILE = SERVER_ADDRESS + "/profile";
 
 // buttons 
-var b_login_facebook;
 var b_login;
 var b_register;
 var b_reg_facebook;
+var b_login_facebook;
+var b_login_google;
+var b_reg_google;
+var b_login_amazon;
+var b_reg_amazon;
 
 const LOGIN = "login";
 const REGISTER = "register";
 
-
+/********** facebook login/reg functions ********/
 var b_reg_facebookFunction = function(){ 
     openIdentityProvider(REGISTER, "facebook");
 }
-
 var b_facebookFunction = function(){ 
     openIdentityProvider(LOGIN, "facebook");
 }
 
+/********** google login/reg functions ******/
+var b_reg_googleFunction = function(){ 
+    openIdentityProvider(REGISTER, "google");
+}
+var b_googleFunction = function(){ 
+    openIdentityProvider(LOGIN, "google");
+}
+
+/********** amazon login/reg functions ******/
+var b_reg_amazonFunction = function(){ 
+    openIdentityProvider(REGISTER, "amazon");
+}
+var b_amazonFunction = function(){ 
+    openIdentityProvider(LOGIN, "amazon");
+}
+
+/******* login/register functions *******/
 var b_loginFunction = function(){ 
     hideOrShowBlock(LOGIN);
 };
@@ -34,12 +54,32 @@ var b_RegFunction = function(){
 };
 
 window.onload = function(){
-    b_facebook = document.getElementById("facebook");
-    b_facebook.addEventListener("click", b_facebookFunction);
+
+    /******* facebook buttons *******/
+    b_login_facebook = document.getElementById("facebook");
+    b_login_facebook.addEventListener("click", b_facebookFunction);
     
     b_reg_facebook = document.getElementById("reg_facebook");
     b_reg_facebook.addEventListener("click", b_reg_facebookFunction);
 
+
+    /******* google buttons *******/
+    b_login_google = document.getElementById("google");
+    b_login_google.addEventListener("click", b_googleFunction);
+    
+    b_reg_google = document.getElementById("reg_google");
+    b_reg_google.addEventListener("click", b_reg_googleFunction);
+
+    
+    /******* amazon buttons *******/
+    b_login_amazon = document.getElementById("amazon");
+    b_login_amazon.addEventListener("click", b_amazonFunction);
+    
+    b_reg_amazon = document.getElementById("reg_amazon");
+    b_reg_amazon.addEventListener("click", b_reg_amazonFunction);
+
+
+    /******* login/register buttons *******/
     b_login = document.getElementById("b_login");
     b_login.addEventListener("click", b_loginFunction);
 
