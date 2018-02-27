@@ -164,21 +164,19 @@ function appendURL(data, url) {
     if(data.request == REGISTER) {
         url = url + "?" + "provider=" + data.provider + "&" + "request=" + data.request + "&" + "name=" + data.name + "&" + "city=" + data.city + "&" + "email=" + data.email;
     } else {
-        url = url + "?" + "provider=" + data.provider + "&" + "request=" + data.request;
+        url = url + "?" + "provider=" + data.provider + "&" + "request=" + data.request + "&" + "username=" + data.username;
     }
     return url;
 }
 
 function openIdentityProvider(req_type, authProvider) {
     let params = `scrollbars=no, resizable=no, status=no, location=no,
-                toolbar=no, menubar=no, width=700, height=600, left=100, top=100`;
-                    
+                toolbar=no, menubar=no, width=700, height=600, left=100, top=100`;                    
     var url = URL_AUTHENTICATION;
 
     if(req_type == REGISTER) {
         var user_data = getFormData();
         user_data.provider = authProvider;
-
         // return if not isValid data
         if(!user_data.isValid) {
             return; 
@@ -186,7 +184,19 @@ function openIdentityProvider(req_type, authProvider) {
         url = appendURL(user_data, url);
         console.log("REG:URL: " + url);
     } else {
+        // getting user_name
+        var name = document.getElementById("user_name").value.trim();
+        var err_name = document.getElementById("error_name");
+        if(name == "") {
+            err_name.innerHTML = "Enter Name!";
+            err_name.style.display = "block";
+            return;
+        } else {
+            err_name.style.display = "none";
+        }
+        
         var data = {
+            username: name,
             request: LOGIN,
             provider: authProvider
         }

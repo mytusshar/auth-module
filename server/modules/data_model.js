@@ -17,12 +17,12 @@ exports.globalData = function(data) {
         global_data[data.idd] = data;
 
         var keys = Object.keys(global_data);
-        console.log("@@@@@@@@@@@@@  GLOBAL DATA  @@@@@@@@@@@@");
+        console.log("**********  GLOBAL DATA  ***********");
         for(var i=0; i<keys.length; i++) {
             var index = keys[i];
             console.log(index + ":: " + JSON.stringify(global_data[index]) + "\n");
         }
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        console.log("*****************************************\n");
     } else {
         return global_data;
     }
@@ -52,4 +52,11 @@ exports.awsConfigData = function() {
     var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
     var configData = JSON.parse(configFile);
     return configData;
+}
+
+/********* is login username field is provided ********/
+exports.isLoginField = function() {
+    var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
+    var configData = JSON.parse(configFile);
+    return configData.login_fields;
 }

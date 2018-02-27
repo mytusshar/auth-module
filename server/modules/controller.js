@@ -66,9 +66,18 @@ exports.serializeParam = function(user, done) {
 /************* getting params from url ************/
 exports.getURLParam = function(req) {
     var param = req.query;
-    var data = {};
+    var data = {
+        request: param.request,
+        provider: param.provider 
+    };
 
-    var keys = model.paramKeys();
+    /******* for handling username while login request ********/
+    var isLoginField = model.isLoginField();
+    if(param.request == constants.REQ_LOGIN && isLoginField) {
+        data.username = param.username;
+    }
+
+    var keys = model.getRegistrationFields();
     for(var i=0; i<keys.length; i++) {
         var key = keys[i];
         if(param.hasOwnProperty(key)) {
@@ -85,7 +94,7 @@ exports.ensureAuthenticated = function(req, res, next) {
     var sess_data = req.session.data;
     var auth_data = req.session.passport.user._json;
     var provider = sess_data.provider;
-    console.log("\nCHECK PROFILE DATA: ", req.session);
+    // console.log("\nCHECK PROFILE DATA: ", req.session);
     sess_data.auth_token = req.session.passport.user.token;
     sess_data.auth_name = auth_data.name;
     sess_data.auth_email = auth_data.email;
