@@ -1,6 +1,7 @@
 var exports = module.exports = {};
 
 /****** Status codes ******/
+exports.NOT_UNIQUE_USERNAME = 5;
 exports.REGISTER_FAILURE = 4;
 exports.NOT_REGISTERED = 3;
 exports.ALREADY_REGISTERED = 2;
@@ -20,6 +21,7 @@ exports.RESPONSE_FILE = "response.html";
 
 /********* table params **********/
 exports.TABLE_NAME = "users";
+exports.TABLE_NAME_2 = "users2";
 
 /********* request type ********/
 exports.REQ_REGISTER = "register";

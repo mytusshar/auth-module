@@ -4,13 +4,15 @@ var path = require('path');
 var constants = require('./constants.js');
 var model = require('./data_model.js')
 
-var configData = model.awsConfigData();
+var configData;
 
 module.exports = class CognitoOperation {
 
     constructor(req, res) {
         this.aws = require('aws-sdk');
+        configData = model.awsConfigData();
         this.aws.config.region = configData.aws.awsRegion;
+        this.aws.config.endpoint = null;
         this.initOperation(req, res);
     }
 
@@ -73,7 +75,14 @@ module.exports = class CognitoOperation {
                         message: "ALREADY_REGISTERED user"
                     };
                     console.log("**** RESPONSE: Already Registered Please Login: Message.");
-                } 
+                }
+                else if(reg_status == constants.NOT_UNIQUE_USERNAME) {
+                    clientResponse = {
+                        status: constants.NOT_UNIQUE_USERNAME,
+                        message: "USERNAME_ALREADY_EXISTS"
+                    };
+                    console.log("**** RESPONSE: USERNAME_ALREADY_EXISTS, use other username: Message.");
+                }
                 else if(login_status == constants.LOGIN_SUCCESS) {
                     /****** send user data*****/
                     clientResponse = user_data;
@@ -127,19 +136,28 @@ module.exports = class CognitoOperation {
 
     /********** Cognito: initialize cognito operation ************/
     getCognitoIdentity(req, res) {
-        // var _aws = this.getAws();
         var _aws = this.aws;
 
-        var readData = function(cognito_id, aws_creden) {
-            _aws.config.credentials = aws_creden;
- 
-            var params = {
-                TableName: constants.TABLE_NAME,
-                Key: {
-                    cognito_id: cognito_id,
-                }
-            };
-
+        var readData = function(user_sess_data, aws_creden) {
+            _aws.config.credentials = aws_creden; 
+            var params;
+            var isUniqueUsername = model.isUniqueUsername();
+            if(isUniqueUsername) {
+                params = {
+                    TableName: constants.TABLE_NAME_2,
+                    Key: {
+                        username: user_sess_data.username,
+                    }
+                };
+            } else {
+                params = {
+                    TableName: constants.TABLE_NAME,
+                    Key: {
+                        cognito_id: user_sess_data.cognito_id,
+                    }
+                };
+            }
+            
             var readAsyncOperation = function(resolveReadDB, rejectReadDB) {
                 var readOperation = function(err, data) {
                     if(err) {
@@ -150,7 +168,6 @@ module.exports = class CognitoOperation {
                         resolveReadDB(data.Item);
                     }
                 }
-                // console.log("CHECK: ", _aws.config);
                 var db = new _aws.DynamoDB.DocumentClient();
                 db.get(params, readOperation);        
             }
@@ -161,11 +178,19 @@ module.exports = class CognitoOperation {
 
         var insertData = function(data, aws_creden) {
             _aws.config.credentials = aws_creden;
-           
-            var params = {
-                TableName: constants.TABLE_NAME,
-                Item: data
-            };
+            var params;
+            var isUniqueUsername = model.isUniqueUsername();
+            if(isUniqueUsername) {
+                params = {
+                    TableName: constants.TABLE_NAME_2,
+                    Item: data
+                };
+            } else {
+                params = {
+                    TableName: constants.TABLE_NAME,
+                    Item: data
+                };
+            }
 
             var insertOperation = function(err, data) {
                 if(err) {
@@ -184,10 +209,21 @@ module.exports = class CognitoOperation {
             if(!data) {
                 /****** setting login status in data_model for not registered user*****/
                 sess_data.status = constants.NOT_REGISTERED;
-            } else {
-                /****** setting login status in data_model*****/
-                sess_data.status = constants.LOGIN_SUCCESS;
-        
+            } else {              
+                var isUniqueUsername = model.isUniqueUsername();
+                if(isUniqueUsername) {
+                    if(data.cognito_id != sess_data.cognito_id) {
+                        /****** setting login status in data_model for not registered user*****/
+                        sess_data.status = constants.NOT_REGISTERED;
+                    } else {
+                        /****** setting login status in data_model*****/
+                        sess_data.status = constants.LOGIN_SUCCESS;
+                    }
+                } else {
+                    /****** setting login status in data_model*****/
+                    sess_data.status = constants.LOGIN_SUCCESS;                
+                }
+
                 var keys = model.getRegistrationFields();        
                 for(var i=0; i<keys.length; i++) {
                     var index = keys[i];
@@ -202,8 +238,13 @@ module.exports = class CognitoOperation {
 
         var registerOperation = function(data, sess_data) {            
             if(data) {                       
-                /****** setting reg status in data_model for already registered user*****/
-                sess_data.status = constants.ALREADY_REGISTERED;                
+                /****** setting reg status for already registered or username exists condition *****/
+                var isUniqueUsername = model.isUniqueUsername();
+                if(isUniqueUsername) {
+                    sess_data.status = constants.NOT_UNIQUE_USERNAME;
+                } else {
+                    sess_data.status = constants.ALREADY_REGISTERED;
+                }               
             } else {        
                 var result = {
                     auth_id: sess_data.auth_id,
@@ -213,7 +254,7 @@ module.exports = class CognitoOperation {
                 /****** setting login status in req session *****/
                 sess_data.status = constants.LOGIN_SUCCESS;        
 
-                var keys = model.getRegistrationFields();        
+                var keys = model.getRegistrationFields();
                 for(var i=0; i<keys.length; i++) {
                     var index = keys[i];
                     if(sess_data.hasOwnProperty(index)) {
@@ -229,16 +270,15 @@ module.exports = class CognitoOperation {
 
 
         var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
-            var requestType = req.session.data.request;                      
+            var requestType = req.session.data.request;
             var params = CognitoOperation.getAwsParams(req.session.data);
 
             /******* initialize the Credentials object *********/
             _aws.config.credentials = new _aws.CognitoIdentityCredentials(params);
             var cognito_credentials = _aws.config.credentials;
         
-            var getCognitoCredenials = function(err) {                
-                if (!err) {               
-                    /********** Database object must be initialize in here********/        
+            var getCognitoCredenials = function(err) {
+                if (!err) {     
                     var udata = {};
                     var cognitoID = cognito_credentials.identityId;
                     var accessKey = cognito_credentials.accessKeyId;
@@ -261,7 +301,7 @@ module.exports = class CognitoOperation {
                         resolveCognito(req.session.data);
                     }
                     /********* checking user already registered or not ********/
-                    var promise = readData(cognitoID, new _aws.CognitoIdentityCredentials(params));
+                    var promise = readData(req.session.data, new _aws.CognitoIdentityCredentials(params));
                     promise.then(handleData, handleError);        
                 } else {
                     rejectCognito(err);
@@ -270,7 +310,7 @@ module.exports = class CognitoOperation {
             /********* Get the credentials for authenticated users *********/
             _aws.config.credentials.get(getCognitoCredenials);        
         }
-
+        
         return new Promise(cognitoAsyncOperation);
     }
 

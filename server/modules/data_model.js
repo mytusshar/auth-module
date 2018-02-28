@@ -4,6 +4,9 @@ var fs = require("fs");
 var path = require('path');
 var constants = require('./constants.js');
 
+/**** config file data *****/
+var configData;
+
 var param_keys = {};
 var reg_fields ={};
 var global_data = {};
@@ -28,35 +31,33 @@ exports.globalData = function(data) {
     }
 }
 
+/******** reading config file *******/
+exports.readConfiguration = function(file_name) {
+    var configFile = fs.readFileSync(path.join(__dirname, file_name), 'utf8');
+    configData = JSON.parse(configFile);
+}
+
 /******** setter/getter for parameter keys *******/
 exports.paramKeys = function(file_name) {
-    if(file_name) {
-        var configFile = fs.readFileSync(path.join(__dirname, file_name), 'utf8');
-        var configData = JSON.parse(configFile);
-        param_keys = configData.fields;
-        reg_fields = configData.reg_fields;
-
-    } else {
-        return param_keys;
-    }
+    return configData.fields;
 }
 
 /******** setter/getter for registration fields keys *******/
 exports.getRegistrationFields = function() {
-    return reg_fields;
+    return configData.reg_fields;
 }
 
 /********** reading aws config data *********/
 exports.awsConfigData = function() {
-    /********* reading aws configuration from config file */
-    var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
-    var configData = JSON.parse(configFile);
     return configData;
 }
 
 /********* is login username field is provided ********/
-exports.isLoginField = function() {
-    var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
-    var configData = JSON.parse(configFile);
-    return configData.login_fields;
+exports.isUniqueUsername = function() {
+    return configData.unique_username;
+}
+
+/********* is login username field is provided ********/
+exports.awsReadOlnyConfig = function() {
+    return configData.aws_read_config;
 }

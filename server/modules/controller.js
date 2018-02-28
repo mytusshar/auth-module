@@ -40,18 +40,15 @@ exports.facebookDeveloperDetails = {
 
 /************ getting user details from auth provider *************/
 exports.getUserDetails = function(accessToken, refreshToken, params, profile, done) {
-    
     if(profile.provider == "google") {
         profile.token = params.id_token
     } else {
         profile.token = accessToken;
     }
-    // console.log("\n Auth Provider Data: PARAMS: ", profile);
     done(null, profile);
 }
 
 exports.successRedirect = function(req, res) {
-    // console.log("\n OUTPUT: ", req.session);
     res.redirect(constants.SUCCESS);
 }
 
@@ -71,12 +68,6 @@ exports.getURLParam = function(req) {
         provider: param.provider 
     };
 
-    /******* for handling username while login request ********/
-    var isLoginField = model.isLoginField();
-    if(param.request == constants.REQ_LOGIN && isLoginField) {
-        data.username = param.username;
-    }
-
     var keys = model.getRegistrationFields();
     for(var i=0; i<keys.length; i++) {
         var key = keys[i];
@@ -88,13 +79,14 @@ exports.getURLParam = function(req) {
     return data;
 }
 
+
 exports.ensureAuthenticated = function(req, res, next) {
     /*********** setting data from auth provider in request session ***********/
     var auth_data;
     var sess_data = req.session.data;
     var auth_data = req.session.passport.user._json;
     var provider = sess_data.provider;
-    // console.log("\nCHECK PROFILE DATA: ", req.session);
+
     sess_data.auth_token = req.session.passport.user.token;
     sess_data.auth_name = auth_data.name;
     sess_data.auth_email = auth_data.email;

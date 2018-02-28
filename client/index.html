@@ -4,7 +4,8 @@
     <head>
         <title>Generalized Login Module</title>
         <link rel="stylesheet" href="css/style.css">
-        <script src="js/main.js"></script>	
+        <script src="js/main.js"></script>
+        <script src="js/main2.js"></script>	
         <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     </head>
 
@@ -21,7 +22,7 @@
                 <h1>Login</h1>
 
                 <input class="input" id="user_name" placeholder="User name*">
-                <span id="error_name" class="error">error</span>
+                <span id="error_username" class="error">error</span>
 
                 <button class="button" id="facebook"> Login with Facebook </button>
                 <button class="button" id="google"> Login with Google </button>
@@ -32,6 +33,9 @@
                 <h1>Register</h1>  
 
                 <input class="input" id="username" placeholder="User name*">
+                <span id="errorusername" class="error">error</span>
+
+                <input class="input" id="name" placeholder="Full Name*">
                 <span id="errorname" class="error">error</span>
 
                 <input class="input" id="email" placeholder="Email ID*">
@@ -44,14 +48,11 @@
                 <button class="button" id="reg_google"> Register using Google </button>
                 <button class="button" id="reg_amazon"> Register using Amazon </button>
             </div>
-    
-            
         </div>
 
         <div class="block" id="result-block">
             <p id="output"> Response from server </p>            
         </div>
-
 
     </body>
 

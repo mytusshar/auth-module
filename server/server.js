@@ -12,7 +12,8 @@ var constants = require('./modules/constants.js');
 var model = require('./modules/data_model.js')
 
 /********* initializing parameter keys ********* */
-model.paramKeys(constants.CONFIG_FILE_NAME);
+// model.paramKeys(constants.CONFIG_FILE_NAME);
+model.readConfiguration(constants.CONFIG_FILE_NAME);
 
 // Initialize express
 var app = express();
