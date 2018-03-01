@@ -138,59 +138,70 @@ module.exports = class CognitoOperation {
     getCognitoIdentity(req, res) {
         var _aws = this.aws;
 
-        var readData = function(user_sess_data, aws_creden) {
+        var readData = function(user_sess_data, aws_creden, key_type) {
             _aws.config.credentials = aws_creden; 
             var params;
-            var isUniqueUsername = model.isUniqueUsername();
-            if(isUniqueUsername) {
-                params = {
-                    TableName: constants.TABLE_NAME_2,
-                    Key: {
-                        username: user_sess_data.username,
-                    }
-                };
-            } else {
-                params = {
-                    TableName: constants.TABLE_NAME,
-                    Key: {
-                        cognito_id: user_sess_data.cognito_id,
-                    }
-                };
-            }
             
-            var readAsyncOperation = function(resolveReadDB, rejectReadDB) {
-                var readOperation = function(err, data) {
+            // var readAsyncOperation = function(resolveReadDB, rejectReadDB) {
+            //     var readOperation = function(err, data) {
+            //         if(err) {
+            //             console.log("\ntable:users::readData::error - ", JSON.stringify(err, null, 2));
+            //             rejectReadDB(err);
+            //         } else {
+            //             console.log("\ntable:users::readData::success", JSON.stringify(data, null, 2) + "\n");
+            //             resolveReadDB(data.Item);
+            //         }
+            //     }
+            //     var db = new _aws.DynamoDB.DocumentClient();
+            //     db.get(params, readOperation);        
+            // }
+
+            var queryAsyncOperation = function(resolveQueryDB, rejectQueryDB) {
+                var queryOperation = function(err, data) {
+                    // console.log("\nqueryOperation\n");                    
                     if(err) {
-                        console.log("\ntable:users::readData::error - ", JSON.stringify(err, null, 2));
-                        rejectReadDB(err);
+                        console.log("\ntable:users::queryData::error - ", JSON.stringify(err, null, 2));
+                        rejectQueryDB(err);
                     } else {
-                        console.log("\ntable:users::readData::success", JSON.stringify(data, null, 2) + "\n");
-                        resolveReadDB(data.Item);
+                        console.log("\ntable:users::queryData::success", JSON.stringify(data.Items[0], null, 2) + "\n");
+                        resolveQueryDB(data.Items[0]);
                     }
                 }
                 var db = new _aws.DynamoDB.DocumentClient();
-                db.get(params, readOperation);        
+                db.query(params, queryOperation);        
             }
 
-            return new Promise(readAsyncOperation);
+            var isUniqueUsername = model.isUniqueUsername();
+            if(isUniqueUsername && key_type == "username") {
+                // console.log("\nisUniqueUsername && key_type == \"username\"\n");
+                params = {
+                    ExpressionAttributeValues: {
+                        ':uname': user_sess_data.username
+                    },
+                    KeyConditionExpression: 'username = :uname',
+                    TableName: constants.TABLE_NAME,
+                    IndexName: constants.INDEX_NAME
+                };
+                return new Promise(queryAsyncOperation);
+            } else {
+                params = {
+                    ExpressionAttributeValues: {
+                        ':cog_id': user_sess_data.cognito_id
+                    },
+                    KeyConditionExpression: 'cognito_id = :cog_id',
+                    TableName: constants.TABLE_NAME
+                };
+                return new Promise(queryAsyncOperation);
+            }
         }
 
 
         var insertData = function(data, aws_creden) {
             _aws.config.credentials = aws_creden;
-            var params;
-            var isUniqueUsername = model.isUniqueUsername();
-            if(isUniqueUsername) {
-                params = {
-                    TableName: constants.TABLE_NAME_2,
-                    Item: data
-                };
-            } else {
-                params = {
-                    TableName: constants.TABLE_NAME,
-                    Item: data
-                };
-            }
+            var params = {
+                TableName: constants.TABLE_NAME,
+                Item: data
+            };
 
             var insertOperation = function(err, data) {
                 if(err) {
@@ -221,7 +232,7 @@ module.exports = class CognitoOperation {
                     }
                 } else {
                     /****** setting login status in data_model*****/
-                    sess_data.status = constants.LOGIN_SUCCESS;                
+                    sess_data.status = constants.LOGIN_SUCCESS;        
                 }
 
                 var keys = model.getRegistrationFields();        
@@ -239,12 +250,9 @@ module.exports = class CognitoOperation {
         var registerOperation = function(data, sess_data) {            
             if(data) {                       
                 /****** setting reg status for already registered or username exists condition *****/
-                var isUniqueUsername = model.isUniqueUsername();
-                if(isUniqueUsername) {
-                    sess_data.status = constants.NOT_UNIQUE_USERNAME;
-                } else {
+                if(!sess_data.hasOwnProperty("status")) {
                     sess_data.status = constants.ALREADY_REGISTERED;
-                }               
+                }              
             } else {        
                 var result = {
                     auth_id: sess_data.auth_id,
@@ -294,15 +302,43 @@ module.exports = class CognitoOperation {
         
                     var handleData = function(data) {
                         if(requestType == constants.REQ_LOGIN) {                            
-                            loginOperation(data, req.session.data);                            
+                            loginOperation(data, req.session.data);                          
                         } else {                            
                             registerOperation(data, req.session.data);                                        
                         }                            
                         resolveCognito(req.session.data);
                     }
-                    /********* checking user already registered or not ********/
-                    var promise = readData(req.session.data, new _aws.CognitoIdentityCredentials(params));
-                    promise.then(handleData, handleError);        
+
+                    var handleData_username = function(data) {
+                        // console.log("\nQUERY DATA:", data, "\n***** QUERY DATA FINISH***");
+                        if(data) {
+                            // console.log("\nhandleData_username: ** IF **: \n");
+                            req.session.data.status = constants.NOT_UNIQUE_USERNAME;
+                            registerOperation(data, req.session.data);
+                            resolveCognito(req.session.data);
+                        } else {                            
+                            // console.log("\nhandleData_username: ** ELSE **: \n");
+                            var promise_cognito = readData(req.session.data, new _aws.CognitoIdentityCredentials(params), "cognito");
+                            promise_cognito.then(handleData_cognito, handleError);
+                        }
+                    }
+
+                    var handleData_cognito = function(data) {
+                        // console.log("\nhandleData_cognito\n");
+                        registerOperation(data, req.session.data);
+                        resolveCognito(req.session.data);
+                    }
+                    
+                    var isUniqueUsername = model.isUniqueUsername();
+                    if(isUniqueUsername && requestType == constants.REQ_REGISTER) {
+                        // console.log("\nisUniqueUsername && requestType == constants.REQ_REGISTER\n");
+                        var promise_username = readData(req.session.data, new _aws.CognitoIdentityCredentials(params), "username");
+                        promise_username.then(handleData_username, handleError);                                                                       
+                    } else {                        
+                        /********* checking user already registered or not ********/
+                        var promise = readData(req.session.data, new _aws.CognitoIdentityCredentials(params));
+                        promise.then(handleData, handleError);
+                    }
                 } else {
                     rejectCognito(err);
                 }

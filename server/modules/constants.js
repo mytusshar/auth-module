@@ -21,6 +21,7 @@ exports.RESPONSE_FILE = "response.html";
 
 /********* table params **********/
 exports.TABLE_NAME = "users";
+exports.INDEX_NAME = 'username-index';
 exports.TABLE_NAME_2 = "users2";
 
 /********* request type ********/
@@ -48,3 +49,14 @@ exports.GOOGLE_CALLBACK = "/auth/google/callback";
 /*********** amazon routes *************/
 exports.AMAZON_LOGIN = "/auth/amazon"; 
 exports.AMAZON_CALLBACK = "/auth/amazon/callback";
+
+
+/*
+,
+"Condition": {
+    "ForAllValues:StringEquals": {
+        "dynamodb:LeadingKeys": "${cognito-identity.amazonaws.com:sub}"
+    }
+}
+
+*/

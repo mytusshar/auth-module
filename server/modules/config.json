@@ -3,7 +3,7 @@
 
     "reg_fields": ["username", "name", "city", "email"],
 
-    "unique_username": true,
+    "unique_username": false,
     
     "server_address": "http://localhost:3000",
 

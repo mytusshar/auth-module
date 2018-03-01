@@ -4,7 +4,7 @@ const FACEBOOK_LOGIN = SERVER_ADDRESS + "/auth/facebook";
 const FACEBOOK_REG = SERVER_ADDRESS + "/reg/facebook";
 const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
 const PROFILE = SERVER_ADDRESS + "/profile";
-const REQUIRE_LOGIN_NAME = true;
+const REQUIRE_LOGIN_NAME = false;
 
 // buttons 
 var b_login;
