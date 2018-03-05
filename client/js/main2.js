@@ -1,22 +1,4 @@
 
-
-var recievedDataOperation = function(e) { 
-    var output =  document.getElementById("output");
-    var data = e.data;
-    if(data.status == 1) {
-        var result = "UserName: " + data.username + "<br>" +  
-                    "Name: " + data.name + "<br>" + 
-                    "Email: " + data.email + "<br>" +
-                    "CognitoID: " + data.cognito_id + "<br>";
-                    
-        output.innerHTML = result;
-    } else {
-        output.innerHTML = JSON.stringify(data);
-    }
-    console.log("recieved: " + JSON.stringify(data));
-}
-
-
 var handleErrorStyles = function(code, show, hide_1, hide_2, hide_3) {
     if(code == 0) {
         show.style.display = "block";
@@ -29,32 +11,31 @@ var handleErrorStyles = function(code, show, hide_1, hide_2, hide_3) {
 }
 
 
-
 function getFormData() {
     var name = document.getElementById("name").value.trim();
     var city = document.getElementById("city").value.trim();
     var email = document.getElementById("email").value.trim();
     var username = document.getElementById("username").value.trim();
 
-    var err_username = document.getElementById("errorusername");
-    var err_name = document.getElementById("errorname");
-    var err_city = document.getElementById("errorcity");
-    var err_email = document.getElementById("erroremail");
+    var errUsername = document.getElementById("errorusername");
+    var errName = document.getElementById("errorname");
+    var errCity = document.getElementById("errorcity");
+    var errEmail = document.getElementById("erroremail");
 
     var data = {isValid: false};
 
     if(username == "") {
-        err_username.innerHTML = "Enter username!";
-        handleErrorStyles(0, err_username, err_name, err_city, err_email);
+        errUsername.innerHTML = "Enter username!";
+        handleErrorStyles(0, errUsername, errName, errCity, errEmail);
     } else if(name == "") {
-        err_name.innerHTML = "Enter Name!";
-        handleErrorStyles(0, err_name, err_city, err_email, err_username);
+        errName.innerHTML = "Enter Name!";
+        handleErrorStyles(0, errName, errCity, errEmail, errUsername);
     } else if(email == "") {
-        err_email.innerHTML = "Enter Email ID!";
-        handleErrorStyles(0, err_email, err_name, err_city, err_username);
+        errEmail.innerHTML = "Enter Email ID!";
+        handleErrorStyles(0, errEmail, errName, errCity, errUsername);
     } else if(city == "") {
-        err_city.innerHTML = "Enter City Name!";
-        handleErrorStyles(0, err_city, err_email, err_name, err_username);
+        errCity.innerHTML = "Enter City Name!";
+        handleErrorStyles(0, errCity, errEmail, errName, errUsername);
     } else {
         data = {
             isValid: true,
@@ -64,7 +45,7 @@ function getFormData() {
             request: REGISTER,
             email: email
         }
-        handleErrorStyles(1, err_city, err_email, err_name, err_username);
+        handleErrorStyles(1, errCity, errEmail, errName, errUsername);
     }
     return data;
 }

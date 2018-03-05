@@ -6,13 +6,14 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var AmazonStrategy = require('passport-amazon').Strategy;
 var cors = require('cors');
+var bodyParser = require('body-parser');
 
 var controller = require('./modules/controller.js');
 var constants = require('./modules/constants.js');
-var model = require('./modules/data_model.js')
+var model = require('./modules/data_model.js');
+var CognitoOperation = require('./modules/services.js');
 
 /********* initializing parameter keys ********* */
-// model.paramKeys(constants.CONFIG_FILE_NAME);
 model.readConfiguration(constants.CONFIG_FILE_NAME);
 
 // Initialize express
@@ -30,6 +31,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Passport serialization
 passport.serializeUser(controller.serializeParam);
@@ -74,10 +77,16 @@ var handleAuthRequest = function(req, res) {
 
         default: console.log("ERROR: Unknown " + requestType + " request.");
     }
-
 }
-
 app.get(constants.AUTH_REQUEST_URL, handleAuthRequest);
+
+
+/*********** refreh token route ****************/
+var refreshOperation = function(req, res) {
+    console.log("\nREFRESH TOKEN REQUEST: ", req.body.refresh_token);
+    new CognitoOperation(req, res, "refresh");
+}
+app.post(constants.REFRESH_ROUTE, refreshOperation);
 
 
 /*************** Facebook strategy *************/
@@ -95,7 +104,7 @@ app.get(constants.FACEBOOK_CALLBACK, authFacebook, controller.successRedirect);
 /************** Google Strategy *****************/
 passport.use(new GoogleStrategy(controller.googleDeveloperDetails, controller.getUserDetails));
 
-app.get(constants.GOOGLE_LOGIN, passport.authenticate(constants.GOOGLE, { scope: ['email'] }));
+app.get(constants.GOOGLE_LOGIN, passport.authenticate(constants.GOOGLE, { scope: ['email'], accessType: 'offline', prompt: 'consent' }));
 
 var authGoogle = passport.authenticate(constants.GOOGLE, {
     failureRedirect: constants.GOOGLE_LOGIN

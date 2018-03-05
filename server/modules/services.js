@@ -8,17 +8,46 @@ var configData;
 
 module.exports = class CognitoOperation {
 
-    constructor(req, res) {
+    constructor(req, res, type) {
         this.aws = require('aws-sdk');
         configData = model.awsConfigData();
         this.aws.config.region = configData.aws.awsRegion;
         this.aws.config.endpoint = null;
-        this.initOperation(req, res);
+        if(!type) {
+            this.initOperation(req, res);
+        } else {
+            this.refreshTokenOperation(req, res);
+        }
     }
 
-    initOperation(req, res) {
-        // var _aws = this.getAws();
-        // console.log("Authentication: ", _aws.config);     
+    refreshTokenOperation(req, res) {
+        var _aws = this.aws;
+        var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {        
+            _aws.config.credentials.params = CognitoOperation.getAwsParams(req.body, "refresh");  
+
+            var refreshOperation = function(err) {
+                if (!err) {
+                    var refreshCreden = {};
+                    refreshCreden.cognitoID = _aws.config.credentials.identityId;
+                    refreshCreden.accessKey = _aws.config.credentials.accessKeyId;
+                    refreshCreden.secretKey = _aws.config.credentials.secretAccessKey;
+
+                    res.json({"REFRESH_DATA": refreshCreden});
+                    resolveCognito();
+                    console.log("\nXXX: ", refreshCreden, "\n\n********** Resolved & Refresh token response sent *******");
+                } else {
+                    console.log("REFRESH_ERROR: ", err);
+                    res.json({"ERROR": err})
+                    rejectCognito();
+                }
+            }
+            _aws.config.credentials.refresh(refreshOperation);                  
+        }
+        
+        return new Promise(cognitoAsyncOperation);
+    }
+
+    initOperation(req, res) { 
         function handleError(err) {
             console.log("CognitoOperation: errorHandler: ", err);
         }    
@@ -109,10 +138,15 @@ module.exports = class CognitoOperation {
     }
 
            
-    static getAwsParams(sess_data) {
+    static getAwsParams(sess_data, refreshToken) {
         var logins = {};
         var provider = sess_data.provider;
-        var authToken = sess_data.auth_token;
+        var authToken;
+        if(!refreshToken) {
+            authToken = sess_data.auth_token;
+        } else {
+            authToken = sess_data.refresh_token;
+        }
     
         switch(provider) {
             case constants.FACEBOOK: logins = {'graph.facebook.com': authToken};
@@ -141,24 +175,9 @@ module.exports = class CognitoOperation {
         var readData = function(user_sess_data, aws_creden, key_type) {
             _aws.config.credentials = aws_creden; 
             var params;
-            
-            // var readAsyncOperation = function(resolveReadDB, rejectReadDB) {
-            //     var readOperation = function(err, data) {
-            //         if(err) {
-            //             console.log("\ntable:users::readData::error - ", JSON.stringify(err, null, 2));
-            //             rejectReadDB(err);
-            //         } else {
-            //             console.log("\ntable:users::readData::success", JSON.stringify(data, null, 2) + "\n");
-            //             resolveReadDB(data.Item);
-            //         }
-            //     }
-            //     var db = new _aws.DynamoDB.DocumentClient();
-            //     db.get(params, readOperation);        
-            // }
 
             var queryAsyncOperation = function(resolveQueryDB, rejectQueryDB) {
-                var queryOperation = function(err, data) {
-                    // console.log("\nqueryOperation\n");                    
+                var queryOperation = function(err, data) {                 
                     if(err) {
                         console.log("\ntable:users::queryData::error - ", JSON.stringify(err, null, 2));
                         rejectQueryDB(err);
@@ -173,7 +192,6 @@ module.exports = class CognitoOperation {
 
             var isUniqueUsername = model.isUniqueUsername();
             if(isUniqueUsername && key_type == "username") {
-                // console.log("\nisUniqueUsername && key_type == \"username\"\n");
                 params = {
                     ExpressionAttributeValues: {
                         ':uname': user_sess_data.username
@@ -280,21 +298,20 @@ module.exports = class CognitoOperation {
         var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
             var requestType = req.session.data.request;
             var params = CognitoOperation.getAwsParams(req.session.data);
-
             /******* initialize the Credentials object *********/
             _aws.config.credentials = new _aws.CognitoIdentityCredentials(params);
             var cognito_credentials = _aws.config.credentials;
         
-            var getCognitoCredenials = function(err) {
+            var getCognitoCredenials = function(err) {                
                 if (!err) {     
-                    var udata = {};
-                    var cognitoID = cognito_credentials.identityId;
-                    var accessKey = cognito_credentials.accessKeyId;
-                    var secretKey = cognito_credentials.secretAccessKey;
+                    // var udata = {};
+                    // var cognitoID = cognito_credentials.identityId;;
+                    // var accessKey = cognito_credentials.accessKeyId;
+                    // var secretKey = cognito_credentials.secretAccessKey;
                     /************* setting cognito data into request **********/
-                    req.session.data.cognito_id = cognitoID;
-                    req.session.data.accessKey = accessKey;
-                    req.session.data.secretKey = secretKey;                    
+                    req.session.data.cognito_id = cognito_credentials.identityId;
+                    req.session.data.accessKey = cognito_credentials.accessKeyId;
+                    req.session.data.secretKey = cognito_credentials.secretAccessKey;
         
                     var handleError = function(err) {
                         rejectCognito(err);
@@ -310,28 +327,23 @@ module.exports = class CognitoOperation {
                     }
 
                     var handleData_username = function(data) {
-                        // console.log("\nQUERY DATA:", data, "\n***** QUERY DATA FINISH***");
                         if(data) {
-                            // console.log("\nhandleData_username: ** IF **: \n");
                             req.session.data.status = constants.NOT_UNIQUE_USERNAME;
                             registerOperation(data, req.session.data);
                             resolveCognito(req.session.data);
                         } else {                            
-                            // console.log("\nhandleData_username: ** ELSE **: \n");
                             var promise_cognito = readData(req.session.data, new _aws.CognitoIdentityCredentials(params), "cognito");
                             promise_cognito.then(handleData_cognito, handleError);
                         }
                     }
 
                     var handleData_cognito = function(data) {
-                        // console.log("\nhandleData_cognito\n");
                         registerOperation(data, req.session.data);
                         resolveCognito(req.session.data);
                     }
                     
                     var isUniqueUsername = model.isUniqueUsername();
                     if(isUniqueUsername && requestType == constants.REQ_REGISTER) {
-                        // console.log("\nisUniqueUsername && requestType == constants.REQ_REGISTER\n");
                         var promise_username = readData(req.session.data, new _aws.CognitoIdentityCredentials(params), "username");
                         promise_username.then(handleData_username, handleError);                                                                       
                     } else {                        

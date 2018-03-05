@@ -45,6 +45,9 @@ exports.getUserDetails = function(accessToken, refreshToken, params, profile, do
     } else {
         profile.token = accessToken;
     }
+    profile.refreshToken = refreshToken;
+    // console.log("\nPROFILE: ", profile, "\n");
+    // console.log("\nPARAMS: ", params, "\n");
     done(null, profile);
 }
 
@@ -88,8 +91,11 @@ exports.ensureAuthenticated = function(req, res, next) {
     var provider = sess_data.provider;
 
     sess_data.auth_token = req.session.passport.user.token;
+    sess_data.refresh_token = req.session.passport.user.refreshToken;
     sess_data.auth_name = auth_data.name;
     sess_data.auth_email = auth_data.email;
+
+    console.log("\nAUTH DATA: ", req.session, "\n");
 
     /****** since passport-amazon return auth id with key "user_id" ******/
     switch(provider) {

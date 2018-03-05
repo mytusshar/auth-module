@@ -51,6 +51,10 @@ exports.AMAZON_LOGIN = "/auth/amazon";
 exports.AMAZON_CALLBACK = "/auth/amazon/callback";
 
 
+/****** refresh credentials route *********/
+exports.REFRESH_ROUTE = "/refresh";
+
+
 /*
 ,
 "Condition": {

@@ -6,89 +6,138 @@ const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
 const PROFILE = SERVER_ADDRESS + "/profile";
 const REQUIRE_LOGIN_NAME = false;
 
-// buttons 
-var b_login;
-var b_register;
-var b_reg_facebook;
-var b_login_facebook;
-var b_login_google;
-var b_reg_google;
-var b_login_amazon;
-var b_reg_amazon;
-
 const LOGIN = "login";
 const REGISTER = "register";
+
+// buttons 
+var buttonLoginBlock;
+var buttonRegBlock;
+var buttonLoginFacebook;
+var buttonLoginGoogle;
+var buttonLoginAmazon;
+var buttonRegFacebook;
+var buttonRegAmazon;
+var buttonRegGoogle;
+
+var buttonRefresh;
+var userDataForRefresh;
+
 /********** facebook login/reg functions ********/
-var b_reg_facebookFunction = function(){ 
+var regFacebookFunction = function(){ 
     openIdentityProvider(REGISTER, "facebook");
 }
-var b_facebookFunction = function(){ 
+var loginFacebookFunction = function(){ 
     openIdentityProvider(LOGIN, "facebook");
 }
 
 /********** google login/reg functions ******/
-var b_reg_googleFunction = function(){ 
+var regGoogleFunction = function(){ 
     openIdentityProvider(REGISTER, "google");
 }
-var b_googleFunction = function(){ 
+var loginGoogleFunction = function(){ 
     openIdentityProvider(LOGIN, "google");
 }
 
 /********** amazon login/reg functions ******/
-var b_reg_amazonFunction = function(){ 
+var regAmazonFunction = function(){ 
     openIdentityProvider(REGISTER, "amazon");
 }
-var b_amazonFunction = function(){ 
+var loginAmazonFunction = function(){ 
     openIdentityProvider(LOGIN, "amazon");
 }
 
 /******* login/register functions *******/
-var b_loginFunction = function(){ 
+var showLoginBlock = function(){ 
     hideOrShowBlock(LOGIN);
 };
-var b_RegFunction = function(){ 
+var showRegBlock = function(){ 
     hideOrShowBlock(REGISTER);
 };
 
+var refreshFunction = function() {
+    var url = SERVER_ADDRESS + "/refresh";
+    console.log("Fetch: ", userDataForRefresh);
+    fetch(url, {
+        method : 'POST',
+        headers: {
+            'Accept' : 'application/json, text/plain, */*',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(userDataForRefresh)
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log("refresh data: ", data);
+    })
+    .catch((err) => console.log(err))
+}
 
-function hideOrShowBlock(b_type) {
-    var reg_block = document.getElementById("register-block");
-    var login_block = document.getElementById("login-block");
 
-    if(login_block.style.display !== "block" && b_type == LOGIN) {
-        login_block.style.display = "block";
-        reg_block.style.display = "none";
+function hideOrShowBlock(buttonType) {
+    var regBlock = document.getElementById("register-block");
+    var loginBlock = document.getElementById("login-block");
+
+    if(loginBlock.style.display !== "block" && buttonType == LOGIN) {
+        loginBlock.style.display = "block";
+        regBlock.style.display = "none";
     } 
-    else if(reg_block.style.display !== "block" && b_type == REGISTER) {
-        reg_block.style.display = "block";
-        login_block.style.display = "none";
+    else if(regBlock.style.display !== "block" && buttonType == REGISTER) {
+        regBlock.style.display = "block";
+        loginBlock.style.display = "none";
     }
 }
 
+var recievedDataOperation = function(e) { 
+    var output =  document.getElementById("output");
+    var data = e.data;
+
+    /********* refresh data assign ********/
+    userDataForRefresh = data;
+
+    if(data.status == 1) {
+        var result = "UserName: " + data.username + "<br>" +  
+                    "Name: " + data.name + "<br>" + 
+                    "Email: " + data.email + "<br>" +
+                    "CognitoID: " + data.cognito_id + "<br>";
+                    
+        output.innerHTML = result;
+    } else {
+        output.innerHTML = JSON.stringify(data);
+    }
+    console.log("recieved: " + JSON.stringify(data));
+}
+
+
 window.onload = function(){
+
+    /******* refresh button *********/
+    buttonRefresh = document.getElementById("refresh");
+    buttonRefresh.addEventListener("click", refreshFunction);
+
+
     /******* facebook buttons *******/
-    b_login_facebook = document.getElementById("facebook");
-    b_login_facebook.addEventListener("click", b_facebookFunction);
-    b_reg_facebook = document.getElementById("reg_facebook");
-    b_reg_facebook.addEventListener("click", b_reg_facebookFunction);
+    buttonLoginFacebook = document.getElementById("facebook");
+    buttonLoginFacebook.addEventListener("click", loginFacebookFunction);
+    buttonRegFacebook = document.getElementById("reg-facebook");
+    buttonRegFacebook.addEventListener("click", regFacebookFunction);
 
     /******* google buttons *******/
-    b_login_google = document.getElementById("google");
-    b_login_google.addEventListener("click", b_googleFunction);
-    b_reg_google = document.getElementById("reg_google");
-    b_reg_google.addEventListener("click", b_reg_googleFunction);
+    buttonLoginGoogle = document.getElementById("google");
+    buttonLoginGoogle.addEventListener("click", loginGoogleFunction);
+    buttonRegGoogle = document.getElementById("reg-google");
+    buttonRegGoogle.addEventListener("click", regGoogleFunction);
     
     /******* amazon buttons *******/
-    b_login_amazon = document.getElementById("amazon");
-    b_login_amazon.addEventListener("click", b_amazonFunction);
-    b_reg_amazon = document.getElementById("reg_amazon");
-    b_reg_amazon.addEventListener("click", b_reg_amazonFunction);
+    buttonLoginAmazon = document.getElementById("amazon");
+    buttonLoginAmazon.addEventListener("click", loginAmazonFunction);
+    buttonRegAmazon = document.getElementById("reg-amazon");
+    buttonRegAmazon.addEventListener("click", regAmazonFunction);
 
     /******* login/register buttons *******/
-    b_login = document.getElementById("b_login");
-    b_login.addEventListener("click", b_loginFunction);
-    b_register = document.getElementById("b_register");
-    b_register.addEventListener("click", b_RegFunction);
+    buttonLoginBlock = document.getElementById("b-login");
+    buttonLoginBlock.addEventListener("click", showLoginBlock);
+    buttonRegBlock = document.getElementById("b-register");
+    buttonRegBlock.addEventListener("click", showRegBlock);
 }
 
 
@@ -98,14 +147,14 @@ function openIdentityProvider(req_type, authProvider) {
     var url = URL_AUTHENTICATION;
 
     if(req_type == REGISTER) {
-        var user_data = getFormData();
-        console.log(user_data)
-        user_data.provider = authProvider;
+        var userData = getFormData();
+        console.log(userData)
+        userData.provider = authProvider;
         // return if not isValid data
-        if(!user_data.isValid) {
+        if(!userData.isValid) {
             return; 
         }
-        url = appendURL(user_data, url);
+        url = appendURL(userData, url);
         console.log("REG:URL: " + url);
     } else {
         var data = {
@@ -114,14 +163,14 @@ function openIdentityProvider(req_type, authProvider) {
         }
         // getting user_name
         if(REQUIRE_LOGIN_NAME) {
-            var name = document.getElementById("user_name").value.trim();
-            var err_name = document.getElementById("error_username");
+            var name = document.getElementById("user-name").value.trim();
+            var errUname = document.getElementById("error-username");
             if(name == "") {
-                err_name.innerHTML = "Enter Name!";
-                err_name.style.display = "block";
+                errUname.innerHTML = "Enter Name!";
+                errUname.style.display = "block";
                 return;
             } else {
-                err_name.style.display = "none";
+                errUname.style.display = "none";
             }
             data.username = name
         }
