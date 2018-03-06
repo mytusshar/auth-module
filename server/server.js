@@ -40,20 +40,20 @@ passport.deserializeUser(controller.deserializeParam);
 
 ////////////////////
 ///////////
-var user_count = 0;
+var userCount = 0;
 ///////////
 ////////////////////
 
 /*********** Authentication request ***********/
 var handleAuthRequest = function(req, res) {     
-    var user_data = controller.getURLParam(req);
-    var requestType = user_data.request;
-    var provider = user_data.provider;
-    var unique_id = ++user_count;
+    var userData = controller.getURLParam(req);
+    var requestType = userData.request;
+    var provider = userData.provider;
+    var uniqueId = ++userCount;
 
     /********* setting data in request session *********/
-    req.session.data = user_data;
-    req.session.data.idd = unique_id;
+    req.session.data = userData;
+    req.session.data.idd = uniqueId;
 
     console.log("\n*************************************");
     console.log("****** NEW: " + provider + " " + requestType + " request. ******");

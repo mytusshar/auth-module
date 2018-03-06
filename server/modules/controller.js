@@ -46,8 +46,6 @@ exports.getUserDetails = function(accessToken, refreshToken, params, profile, do
         profile.token = accessToken;
     }
     profile.refreshToken = refreshToken;
-    // console.log("\nPROFILE: ", profile, "\n");
-    // console.log("\nPARAMS: ", params, "\n");
     done(null, profile);
 }
 
@@ -82,27 +80,56 @@ exports.getURLParam = function(req) {
     return data;
 }
 
+exports.getAwsParams = function(sessionData, refreshToken) {
+    var configData = model.awsConfigData();
+
+    var logins = {};
+    var provider = sessionData.provider;
+    var authToken;
+    if(!refreshToken) {
+        authToken = sessionData.auth_token;
+    } else {
+        authToken = sessionData.refresh_token;
+    }
+
+    switch(provider) {
+        case constants.FACEBOOK: logins = {'graph.facebook.com': authToken};
+        break;
+        case constants.GOOGLE: logins = {'accounts.google.com': authToken};
+        break;
+        case constants.AMAZON: logins = {'www.amazon.com': authToken};
+        break;
+    }
+
+    var params = {
+        AccountId: configData.accountId,
+        RoleArn: configData.iamRoleArn,
+        IdentityPoolId: configData.cognitoIdentityPoolId,
+        Logins: logins
+    };
+
+    return params;
+}
+
 
 exports.ensureAuthenticated = function(req, res, next) {
     /*********** setting data from auth provider in request session ***********/
-    var auth_data;
-    var sess_data = req.session.data;
-    var auth_data = req.session.passport.user._json;
-    var provider = sess_data.provider;
+    var authData;
+    var sessionData = req.session.data;
+    var authData = req.session.passport.user._json;
+    var provider = sessionData.provider;
 
-    sess_data.auth_token = req.session.passport.user.token;
-    sess_data.refresh_token = req.session.passport.user.refreshToken;
-    sess_data.auth_name = auth_data.name;
-    sess_data.auth_email = auth_data.email;
-
-    console.log("\nAUTH DATA: ", req.session, "\n");
+    sessionData.auth_token = req.session.passport.user.token;
+    sessionData.refresh_token = req.session.passport.user.refreshToken;
+    sessionData.auth_name = authData.name;
+    sessionData.auth_email = authData.email;
 
     /****** since passport-amazon return auth id with key "user_id" ******/
     switch(provider) {
-        case constants.AMAZON: sess_data.auth_id = auth_data.user_id;
+        case constants.AMAZON: sessionData.auth_id = authData.user_id;
         break;
 
-        default: sess_data.auth_id = auth_data.id;
+        default: sessionData.auth_id = authData.id;
     }
 
     if(req.isAuthenticated()) {

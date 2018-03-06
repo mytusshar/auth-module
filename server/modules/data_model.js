@@ -7,27 +7,27 @@ var constants = require('./constants.js');
 /**** config file data *****/
 var configData;
 
-var param_keys = {};
-var reg_fields ={};
-var global_data = {};
+// var param_keys = {};
+// var reg_fields ={};
+var globalData = {};
 
-var login_status = constants.LOGIN_FAILURE;
-var register_status = constants.REGISTER_FAILURE;
-var request_type = constants.REQ_LOGIN;
+// var login_status = constants.LOGIN_FAILURE;
+// var register_status = constants.REGISTER_FAILURE;
+// var request_type = constants.REQ_LOGIN;
 
 exports.globalData = function(data) {
     if(data) {
-        global_data[data.idd] = data;
+        globalData[data.idd] = data;
 
-        var keys = Object.keys(global_data);
+        var keys = Object.keys(globalData);
         console.log("**********  GLOBAL DATA  ***********");
         for(var i=0; i<keys.length; i++) {
             var index = keys[i];
-            console.log(index + ":: " + JSON.stringify(global_data[index]) + "\n");
+            console.log(index + ":: " + JSON.stringify(globalData[index]) + "\n");
         }
         console.log("*****************************************\n");
     } else {
-        return global_data;
+        return globalData;
     }
 }
 
@@ -49,7 +49,7 @@ exports.getRegistrationFields = function() {
 
 /********** reading aws config data *********/
 exports.awsConfigData = function() {
-    return configData;
+    return configData.aws;
 }
 
 /********* is login username field is provided ********/
