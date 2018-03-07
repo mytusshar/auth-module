@@ -1,8 +1,33 @@
 
+var exports = module.exports = {};
 
-exports.readData = function(user_sess_data, aws_creden, key_type) {
-    _aws.config.credentials = aws_creden; 
-    var params;
+var _aws = new require('aws-sdk');
+
+var model = require('./data_model.js');
+var constants = require('./constants.js');
+
+exports.insertData = function(params, awsCredentials) {
+    _aws.config.credentials = awsCredentials;
+
+    var insertAsyncOperation = function(resolveInsertDB, rejectInsertDB) {
+        var insertOperation = function(err, data) {                 
+            if(err) {
+                console.log("\ntable:users::insertData::error - ", JSON.stringify(err, null, 2) + "\n");
+                rejectInsertDB(err);
+            } else {
+                console.log("\ntable:users::insertData::success\n");
+                resolveInsertDB(data);
+            }
+        }
+        var db = new _aws.DynamoDB.DocumentClient();
+        db.put(params, insertOperation);        
+    }
+    return new Promise(insertAsyncOperation);
+}
+
+
+exports.readData = function(params, awsCredentials) {
+    _aws.config.credentials = awsCredentials;
 
     var queryAsyncOperation = function(resolveQueryDB, rejectQueryDB) {
         var queryOperation = function(err, data) {                 
@@ -17,26 +42,41 @@ exports.readData = function(user_sess_data, aws_creden, key_type) {
         var db = new _aws.DynamoDB.DocumentClient();
         db.query(params, queryOperation);        
     }
+    return new Promise(queryAsyncOperation);
+}
 
+
+exports.getParamsForDynamoDB = function(data, code) {
     var isUniqueUsername = model.isUniqueUsername();
-    if(isUniqueUsername && key_type == "username") {
+    if(isUniqueUsername && code == constants.READ_USERNAME) {
         params = {
             ExpressionAttributeValues: {
-                ':uname': user_sess_data.username
+                ':uname': data.username
             },
             KeyConditionExpression: 'username = :uname',
             TableName: constants.TABLE_NAME,
             IndexName: constants.INDEX_NAME
         };
-        return new Promise(queryAsyncOperation);
-    } else {
+    }
+    else if (code == constants.READ_COGNITO_ID){
         params = {
             ExpressionAttributeValues: {
-                ':cog_id': user_sess_data.cognito_id
+                ':cog_id': data.cognito_id
             },
             KeyConditionExpression: 'cognito_id = :cog_id',
             TableName: constants.TABLE_NAME
         };
-        return new Promise(queryAsyncOperation);
     }
+    else if (code == constants.INSERT_DATA) {
+        params = {
+            TableName: constants.TABLE_NAME,
+            Item: data
+        };
+    } else {
+        console.log("UNDEFINED DynamoDB Operation.");
+        return;
+    }
+
+    return params;
 }
+

@@ -124,7 +124,7 @@ exports.ensureAuthenticated = function(req, res, next) {
     sessionData.auth_name = authData.name;
     sessionData.auth_email = authData.email;
 
-    /****** since passport-amazon return auth id with key "user_id" ******/
+    /****** since passport-amazon return auth_id with key "user_id" ******/
     switch(provider) {
         case constants.AMAZON: sessionData.auth_id = authData.user_id;
         break;
@@ -151,5 +151,3 @@ exports.ensureAuthenticated = function(req, res, next) {
 exports.cognitoOperation = function(req, res) {
     new CognitoOperation(req, res);
 }
-
-

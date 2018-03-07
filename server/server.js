@@ -50,7 +50,6 @@ var handleAuthRequest = function(req, res) {
     var requestType = userData.request;
     var provider = userData.provider;
     var uniqueId = ++userCount;
-
     /********* setting data in request session *********/
     req.session.data = userData;
     req.session.data.idd = uniqueId;
@@ -62,19 +61,13 @@ var handleAuthRequest = function(req, res) {
     switch(provider) {
         case constants.FACEBOOK: {
             res.redirect(constants.FACEBOOK_LOGIN);
-        }
-        break;
-
+        } break;
         case constants.GOOGLE: {
             res.redirect(constants.GOOGLE_LOGIN);
-        }
-        break;
-
+        } break;
         case constants.AMAZON: {
             res.redirect(constants.AMAZON_LOGIN);
-        }
-        break;
-
+        } break;
         default: console.log("ERROR: Unknown " + requestType + " request.");
     }
 }
@@ -91,7 +84,6 @@ app.post(constants.REFRESH_ROUTE, refreshOperation);
 
 /*************** Facebook strategy *************/
 passport.use(new FacebookStrategy(controller.facebookDeveloperDetails, controller.getUserDetails));
-
 app.get(constants.FACEBOOK_LOGIN, passport.authenticate(constants.FACEBOOK, { scope: ['email'] }));
 
 var authFacebook = passport.authenticate(constants.FACEBOOK, {
@@ -103,7 +95,6 @@ app.get(constants.FACEBOOK_CALLBACK, authFacebook, controller.successRedirect);
 
 /************** Google Strategy *****************/
 passport.use(new GoogleStrategy(controller.googleDeveloperDetails, controller.getUserDetails));
-
 app.get(constants.GOOGLE_LOGIN, passport.authenticate(constants.GOOGLE, { scope: ['email'], accessType: 'offline', prompt: 'consent' }));
 
 var authGoogle = passport.authenticate(constants.GOOGLE, {
@@ -115,7 +106,6 @@ app.get(constants.GOOGLE_CALLBACK, authGoogle, controller.successRedirect);
 
 /************** Amazon Strategy *****************/
 passport.use(new AmazonStrategy(controller.amazonDeveloperDetails, controller.getUserDetails));
-
 app.get(constants.AMAZON_LOGIN, passport.authenticate(constants.AMAZON, { scope: ['profile'] }));
 
 var authAmazon = passport.authenticate(constants.AMAZON, {

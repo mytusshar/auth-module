@@ -6,6 +6,7 @@ var _aws = new require('aws-sdk');
 var constants = require('./constants.js');
 var model = require('./data_model.js');
 var controller = require('./controller.js');
+var dynamo = require('./dynamo.js');
 
 exports.sendResponse = function(req, res) {
     /********** setting authId in cookie to access the data of user having same id **********/
@@ -112,132 +113,22 @@ exports.loginOperation = function(data, sessionData) {
 }
 
 
-exports.registerOperation = function(data, sessionData) {
-    if(data) {
-        /****** setting reg status for already registered or username exists condition *****/
-        if(!sessionData.hasOwnProperty("status")) {
-            sessionData.status = constants.ALREADY_REGISTERED;
-        }              
-    } else {
-        var result = {
-            auth_id: sessionData.auth_id,
-            provider: sessionData.provider,
-            cognito_id: sessionData.cognito_id
-        }
-        /****** setting login status in req session *****/
-        sessionData.status = constants.LOGIN_SUCCESS;
-
-        var keys = model.getRegistrationFields();
-        for(var i=0; i<keys.length; i++) {
-            var index = keys[i];
-            if(sessionData.hasOwnProperty(index)) {
-                result[index] = sessionData[index];
-            }
-        }
-        console.log("\nregisterOperation: DATA: ", JSON.stringify(result), "\n");
-        /******* inserting data into DynamoDB *******/
-        // var params = CognitoOperation.getAwsParams(req.session.data);
-        var params = controller.getAwsParams(sessionData);
-        insertData(result,  new _aws.CognitoIdentityCredentials(params));
+exports.registerOperation = function(sessionData) {
+    var result = {
+        auth_id: sessionData.auth_id,
+        provider: sessionData.provider,
+        cognito_id: sessionData.cognito_id
     }
-}
+    /****** setting login status in req session *****/
+    sessionData.status = constants.LOGIN_SUCCESS;
 
-
-
-exports.getAwsParams = function(sessionData, refreshToken) {
-    var configData = model.awsConfigData();
-
-    var logins = {};
-    var provider = sessionData.provider;
-    var authToken;
-    if(!refreshToken) {
-        authToken = sessionData.auth_token;
-    } else {
-        authToken = sessionData.refresh_token;
-    }
-
-    switch(provider) {
-        case constants.FACEBOOK: logins = {'graph.facebook.com': authToken};
-        break;
-        case constants.GOOGLE: logins = {'accounts.google.com': authToken};
-        break;
-        case constants.AMAZON: logins = {'www.amazon.com': authToken};
-        break;
-    }
-
-    var params = {
-        AccountId: configData.accountId,
-        RoleArn: configData.iamRoleArn,
-        IdentityPoolId: configData.cognitoIdentityPoolId,
-        Logins: logins
-    };
-
-    return params;
-}
-
-
-// exports.dynamodbParams = function() {
-
-// }
-var insertData = function(data, awsCredentials) {
-    _aws.config.credentials = awsCredentials;
-    var params = {
-        TableName: constants.TABLE_NAME,
-        Item: data
-    };
-
-    var insertOperation = function(err, data) {
-        if(err) {
-            console.log("\ntable:users::insertData::error - ", JSON.stringify(err, null, 2) + "\n");
-        } else {
-            console.log("\ntable:users::insertData::success\n");
+    var keys = model.getRegistrationFields();
+    for(var i=0; i<keys.length; i++) {
+        var index = keys[i];
+        if(sessionData.hasOwnProperty(index)) {
+            result[index] = sessionData[index];
         }
     }
-
-    var db = new _aws.DynamoDB.DocumentClient();
-    db.put(params, insertOperation);
+    console.log("\nregisterOperation: DATA: ", JSON.stringify(result), "\n");
+    return result;
 }
-
-
-exports.readData = function(userSessionData, awsCredentials, type) {
-    _aws.config.credentials = awsCredentials;
-    var params;
-
-    var queryAsyncOperation = function(resolveQueryDB, rejectQueryDB) {
-        var queryOperation = function(err, data) {                 
-            if(err) {
-                console.log("\ntable:users::queryData::error - ", JSON.stringify(err, null, 2));
-                rejectQueryDB(err);
-            } else {
-                console.log("\ntable:users::queryData::success", JSON.stringify(data.Items[0], null, 2) + "\n");
-                resolveQueryDB(data.Items[0]);
-            }
-        }
-        var db = new _aws.DynamoDB.DocumentClient();
-        db.query(params, queryOperation);        
-    }
-
-    var isUniqueUsername = model.isUniqueUsername();
-    if(isUniqueUsername && type == "username") {
-        params = {
-            ExpressionAttributeValues: {
-                ':uname': userSessionData.username
-            },
-            KeyConditionExpression: 'username = :uname',
-            TableName: constants.TABLE_NAME,
-            IndexName: constants.INDEX_NAME
-        };
-        return new Promise(queryAsyncOperation);
-    } else {
-        params = {
-            ExpressionAttributeValues: {
-                ':cog_id': userSessionData.cognito_id
-            },
-            KeyConditionExpression: 'cognito_id = :cog_id',
-            TableName: constants.TABLE_NAME
-        };
-        return new Promise(queryAsyncOperation);
-    }
-}
-
-

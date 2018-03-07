@@ -1,12 +1,18 @@
 var exports = module.exports = {};
 
 /****** Status codes ******/
-exports.NOT_UNIQUE_USERNAME = 5;
-exports.REGISTER_FAILURE = 4;
-exports.NOT_REGISTERED = 3;
-exports.ALREADY_REGISTERED = 2;
-exports.LOGIN_SUCCESS = 1;
 exports.LOGIN_FAILURE = 0;
+exports.LOGIN_SUCCESS = 1;
+exports.ALREADY_REGISTERED = 2;
+exports.NOT_REGISTERED = 3;
+exports.REGISTER_FAILURE = 4;
+exports.NOT_UNIQUE_USERNAME = 5;
+
+/****** DynamoDB operation Code *****/
+exports.READ_USERNAME = 0;
+exports.READ_COGNITO_ID = 1;
+exports.INSERT_DATA  = 2;
+
 
 /******* providers name ********/
 exports.FACEBOOK = "facebook";
