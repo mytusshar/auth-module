@@ -7,6 +7,7 @@ exports.ALREADY_REGISTERED = 2;
 exports.NOT_REGISTERED = 3;
 exports.REGISTER_FAILURE = 4;
 exports.NOT_UNIQUE_USERNAME = 5;
+exports.INVALID_USERNAME = 6;
 
 /****** DynamoDB operation Code *****/
 exports.READ_USERNAME = 0;

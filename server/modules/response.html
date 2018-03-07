@@ -20,14 +20,14 @@
         function convertToJSON(data) {
             data = unescape(data);
             var str = JSON.stringify(data);
-            var sub_data =  str.substr(3, str.length - 4);
+            var subData =  str.substr(3, str.length - 4);
             var result = "";
 
-            for(var i=0; i<sub_data.length; i++) {
-                if(sub_data.charAt(i) == "\\" && sub_data.charAt(i+1) == "\"") {
+            for(var i=0; i<subData.length; i++) {
+                if(subData.charAt(i) == "\\" && subData.charAt(i+1) == "\"") {
                     continue;
                 }
-                result += sub_data.charAt(i);
+                result += subData.charAt(i);
             }
 
             return JSON.parse(result);
@@ -35,11 +35,11 @@
 
         window.onload = function(){
             console.log("cookies", JSON.stringify(document.cookie));
-            var cookie_data = getCookieValue(COOKIE_KEY);
-            var user_data = convertToJSON(cookie_data);
+            var cookieData = getCookieValue(COOKIE_KEY);
+            var userData = convertToJSON(cookieData);
 
-            window.opener.postMessage(user_data, '*');         
-            document.getElementById("output").innerHTML = "Logged in as " + user_data.message;
+            window.opener.postMessage(userData, '*');         
+            document.getElementById("output").innerHTML = "Logged in as " + userData.message;
             window.close(); 
         }
 

@@ -23,20 +23,27 @@ exports.sendResponse = function(req, res) {
                 clientResponse = userData;
                 clientResponse.message= "LOGIN SUCCESS"
                 console.log("**** RESPONSE: Login Success and send User data: Message.");
-            } 
+            }
             else if(regStatus == constants.NOT_REGISTERED){
                 clientResponse = {
                     status: constants.NOT_REGISTERED,
                     message: "NOT_REGISTERED user"
                 };
                 console.log("**** RESPONSE: Not Registered User: Message.");
-            } 
+            }
             else if(loginStatus == constants.LOGIN_FAILURE){
                 clientResponse = {
                     status: constants.LOGIN_FAILURE,
                     message: "LOGIN FAILURE, try again"
                 };
                 console.log("**** RESPONSE: Login Failure: Message.");
+            }
+            else if(loginStatus == constants.INVALID_USERNAME){
+                clientResponse = {
+                    status: constants.INVALID_USERNAME,
+                    message: "INVALID_USERNAME, username doesnot match with any accound."
+                };
+                console.log("**** RESPONSE: Invalid username: Message.");
             }
         }
         break;
@@ -89,7 +96,7 @@ exports.loginOperation = function(data, sessionData) {
     } else {              
         var isUniqueUsername = model.isUniqueUsername();
         if(isUniqueUsername) {
-            if(data.cognito_id != sessionData.cognito_id) {
+            if(data.cognito_id != sessionData.cognitoId) {
                 /****** setting login status in data_model for not registered user*****/
                 sessionData.status = constants.NOT_REGISTERED;
             } else {
@@ -115,9 +122,9 @@ exports.loginOperation = function(data, sessionData) {
 
 exports.registerOperation = function(sessionData) {
     var result = {
-        auth_id: sessionData.auth_id,
+        authId: sessionData.authId,
         provider: sessionData.provider,
-        cognito_id: sessionData.cognito_id
+        cognito_id: sessionData.cognitoId
     }
     /****** setting login status in req session *****/
     sessionData.status = constants.LOGIN_SUCCESS;

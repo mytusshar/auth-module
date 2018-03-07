@@ -76,7 +76,7 @@ app.get(constants.AUTH_REQUEST_URL, handleAuthRequest);
 
 /*********** refreh token route ****************/
 var refreshOperation = function(req, res) {
-    console.log("\nREFRESH TOKEN REQUEST: ", req.body.refresh_token);
+    console.log("\nREFRESH TOKEN REQUEST: ", req.body.refreshToken);
     new CognitoOperation(req, res, "refresh");
 }
 app.post(constants.REFRESH_ROUTE, refreshOperation);

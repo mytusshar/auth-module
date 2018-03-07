@@ -4,7 +4,7 @@ const FACEBOOK_LOGIN = SERVER_ADDRESS + "/auth/facebook";
 const FACEBOOK_REG = SERVER_ADDRESS + "/reg/facebook";
 const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
 const PROFILE = SERVER_ADDRESS + "/profile";
-const REQUIRE_LOGIN_NAME = false;
+const REQUIRE_LOGIN_NAME = true;
 
 const LOGIN = "login";
 const REGISTER = "register";
@@ -98,7 +98,7 @@ var recievedDataOperation = function(e) {
         var result = "UserName: " + data.username + "<br>" +  
                     "Name: " + data.name + "<br>" + 
                     "Email: " + data.email + "<br>" +
-                    "CognitoID: " + data.cognito_id + "<br>";
+                    "CognitoID: " + data.cognitoId + "<br>";
                     
         output.innerHTML = result;
     } else {

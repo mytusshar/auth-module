@@ -85,8 +85,9 @@ module.exports = class CognitoOperation {
         
             var getCognitoCredenials = function(err) {
                 if (!err) {
+                    var isUniqueUsername = model.isUniqueUsername();
                     /************* setting cognito data into request **********/
-                    req.session.data.cognito_id = cognitoCredentials.identityId;
+                    req.session.data.cognitoId = cognitoCredentials.identityId;
                     req.session.data.accessKey = cognitoCredentials.accessKeyId;
                     req.session.data.secretKey = cognitoCredentials.secretAccessKey;
         
@@ -117,30 +118,62 @@ module.exports = class CognitoOperation {
 
                     var handleDataUsername = function(data) {
                         if(data) {
-                            req.session.data.status = constants.NOT_UNIQUE_USERNAME;
-                            resolveCognito(req.session.data);
+                            if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
+                                if(data.cognito_id != req.session.data.cognitoId) {
+                                    req.session.data.status = constants.INVALID_USERNAME;
+                                    resolveCognito(req.session.data);
+                                } else {
+                                    var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
+                                    var promiseCognito = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                                    promiseCognito.then(handleDataCognito, handleError);
+                                }                                
+                            } else {
+                                req.session.data.status = constants.NOT_UNIQUE_USERNAME;
+                                resolveCognito(req.session.data);
+                            }                            
                         } else {
-                            var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
-                            var promiseCognito = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
-                            promiseCognito.then(handleDataCognito, handleError);
+                            if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
+                                req.session.data.status = constants.INVALID_USERNAME;
+                                resolveCognito(req.session.data);
+                            } else {
+                                var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
+                                var promiseCognito = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                                promiseCognito.then(handleDataCognito, handleError);
+                            }                            
                         }
                     }
 
                     var handleDataCognito = function(data) {
                         if(data) {
-                            req.session.data.status = constants.ALREADY_REGISTERED;
-                            resolveCognito(req.session.data);
+                            if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
+                                utils.loginOperation(data, req.session.data);
+                                resolveCognito(req.session.data);
+                            } else {
+                                req.session.data.status = constants.ALREADY_REGISTERED;
+                                resolveCognito(req.session.data);
+                            }                            
                         } else {
-                            var regData = utils.registerOperation(req.session.data);
-                            var paramsDB = dynamo.getParamsForDynamoDB(regData, constants.INSERT_DATA);
-                            var promiseInsert = dynamo.insertData(paramsDB, new _aws.CognitoIdentityCredentials(params));
-                            promiseInsert.then(handleInsertResult, handleError);
+                            if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
+                                req.session.data.status = constants.NOT_REGISTERED;
+                                resolveCognito(req.session.data);
+                            } else {
+                                var regData = utils.registerOperation(req.session.data);
+                                var paramsDB = dynamo.getParamsForDynamoDB(regData, constants.INSERT_DATA);
+                                var promiseInsert = dynamo.insertData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                                promiseInsert.then(handleInsertResult, handleError);
+                            }
                         }
                     }
                     
-                    var isUniqueUsername = model.isUniqueUsername();
+                    /********* request Decision logic *********/
                     if(isUniqueUsername && requestType == constants.REQ_REGISTER) {
                         var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
+                        var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                        promiseUsername.then(handleDataUsername, handleError);
+                    }
+                    else if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
+                        var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
+                        console.log(req.session.data);
                         var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
                         promiseUsername.then(handleDataUsername, handleError);
                     } else {

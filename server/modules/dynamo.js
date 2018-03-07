@@ -61,7 +61,7 @@ exports.getParamsForDynamoDB = function(data, code) {
     else if (code == constants.READ_COGNITO_ID){
         params = {
             ExpressionAttributeValues: {
-                ':cog_id': data.cognito_id
+                ':cog_id': data.cognitoId
             },
             KeyConditionExpression: 'cognito_id = :cog_id',
             TableName: constants.TABLE_NAME

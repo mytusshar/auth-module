@@ -87,9 +87,9 @@ exports.getAwsParams = function(sessionData, refreshToken) {
     var provider = sessionData.provider;
     var authToken;
     if(!refreshToken) {
-        authToken = sessionData.auth_token;
+        authToken = sessionData.authToken;
     } else {
-        authToken = sessionData.refresh_token;
+        authToken = sessionData.refreshToken;
     }
 
     switch(provider) {
@@ -119,17 +119,17 @@ exports.ensureAuthenticated = function(req, res, next) {
     var authData = req.session.passport.user._json;
     var provider = sessionData.provider;
 
-    sessionData.auth_token = req.session.passport.user.token;
-    sessionData.refresh_token = req.session.passport.user.refreshToken;
-    sessionData.auth_name = authData.name;
-    sessionData.auth_email = authData.email;
+    sessionData.authToken = req.session.passport.user.token;
+    sessionData.refreshToken = req.session.passport.user.refreshToken;
+    sessionData.authName = authData.name;
+    sessionData.authEmail = authData.email;
 
     /****** since passport-amazon return auth_id with key "user_id" ******/
     switch(provider) {
-        case constants.AMAZON: sessionData.auth_id = authData.user_id;
+        case constants.AMAZON: sessionData.authId = authData.user_id;
         break;
 
-        default: sessionData.auth_id = authData.id;
+        default: sessionData.authId = authData.id;
     }
 
     if(req.isAuthenticated()) {

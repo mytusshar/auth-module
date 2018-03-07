@@ -6,14 +6,7 @@ var constants = require('./constants.js');
 
 /**** config file data *****/
 var configData;
-
-// var param_keys = {};
-// var reg_fields ={};
 var globalData = {};
-
-// var login_status = constants.LOGIN_FAILURE;
-// var register_status = constants.REGISTER_FAILURE;
-// var request_type = constants.REQ_LOGIN;
 
 exports.globalData = function(data) {
     if(data) {
@@ -32,19 +25,19 @@ exports.globalData = function(data) {
 }
 
 /******** reading config file *******/
-exports.readConfiguration = function(file_name) {
-    var configFile = fs.readFileSync(path.join(__dirname, file_name), 'utf8');
+exports.readConfiguration = function(fileName) {
+    var configFile = fs.readFileSync(path.join(__dirname, fileName), 'utf8');
     configData = JSON.parse(configFile);
 }
 
-/******** setter/getter for parameter keys *******/
-exports.paramKeys = function(file_name) {
-    return configData.fields;
-}
+// /******** setter/getter for parameter keys *******/
+// exports.paramKeys = function(fileName) {
+//     return configData.fields;
+// }
 
 /******** setter/getter for registration fields keys *******/
 exports.getRegistrationFields = function() {
-    return configData.reg_fields;
+    return configData.regFields;
 }
 
 /********** reading aws config data *********/
@@ -54,10 +47,10 @@ exports.awsConfigData = function() {
 
 /********* is login username field is provided ********/
 exports.isUniqueUsername = function() {
-    return configData.unique_username;
+    return configData.uniqueUsername;
 }
 
-/********* is login username field is provided ********/
-exports.awsReadOlnyConfig = function() {
-    return configData.aws_read_config;
-}
+// /********* is login username field is provided ********/
+// exports.awsReadOlnyConfig = function() {
+//     return configData.aws_read_config;
+// }
