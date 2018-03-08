@@ -42,9 +42,11 @@ exports.facebookDeveloperDetails = {
 exports.getUserDetails = function(accessToken, refreshToken, params, profile, done) {
     if(profile.provider == "google") {
         profile.token = params.id_token
+        profile.accessToken = accessToken;
     } else {
         profile.token = accessToken;
     }
+    // console.log("\n" + profile.provider + ": ", params);
     profile.refreshToken = refreshToken;
     done(null, profile);
 }
@@ -66,7 +68,7 @@ exports.getURLParam = function(req) {
     var param = req.query;
     var data = {
         request: param.request,
-        provider: param.provider 
+        provider: param.provider
     };
 
     var keys = model.getRegistrationFields();
@@ -89,7 +91,7 @@ exports.getAwsParams = function(sessionData, refreshToken) {
     if(!refreshToken) {
         authToken = sessionData.authToken;
     } else {
-        authToken = sessionData.refreshToken;
+        authToken = sessionData.newAccessToken;
     }
 
     switch(provider) {
@@ -120,6 +122,7 @@ exports.ensureAuthenticated = function(req, res, next) {
     var provider = sessionData.provider;
 
     sessionData.authToken = req.session.passport.user.token;
+    sessionData.accessToken = req.session.passport.user.accessToken;
     sessionData.refreshToken = req.session.passport.user.refreshToken;
     sessionData.authName = authData.name;
     sessionData.authEmail = authData.email;

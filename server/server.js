@@ -5,13 +5,17 @@ var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var AmazonStrategy = require('passport-amazon').Strategy;
+var refresh = require('passport-oauth2-refresh');
 var cors = require('cors');
 var bodyParser = require('body-parser');
+
+var google = require('googleapis');
 
 var controller = require('./modules/controller.js');
 var constants = require('./modules/constants.js');
 var model = require('./modules/data_model.js');
 var CognitoOperation = require('./modules/services.js');
+var utils = require('./modules/utils.js');
 
 /********* initializing parameter keys ********* */
 model.readConfiguration(constants.CONFIG_FILE_NAME);
@@ -74,16 +78,72 @@ var handleAuthRequest = function(req, res) {
 app.get(constants.AUTH_REQUEST_URL, handleAuthRequest);
 
 
+var getGoogleIdToken = function(req, res) {
+    // console.log("\nINSIDE: getGoogleIdToken: ");
+    var refreshToken = req.body.refreshToken;
+    var accessToken = req.body.accessToken;
+    var OAuth2 = google.google.auth.OAuth2;
+
+    var client = model.getGoogleClientDetails();
+    var oauth2Client = new OAuth2(
+        client.clientID,
+        client.clientSecret,
+        client.callbackURL
+    );
+
+    var googleCreden = {
+        access_token: accessToken,
+        refresh_token: refreshToken
+    }
+    oauth2Client.setCredentials(googleCreden);
+
+    oauth2Client.refreshAccessToken(function(err, tokens) {
+        if(err) {
+            console.log("\nrefreshAccessToken: ERROR: ", err);
+        } else {
+            // console.log("\nrefreshAccessToken:SUCCESS: ", tokens);
+            req.body.newAccessToken = tokens.id_token;
+            // utils.refreshCognitoOperation(req, res);
+            utils.refreshCognitoInit(req, res);
+        }
+    });    
+}
+
 /*********** refreh token route ****************/
 var refreshOperation = function(req, res) {
-    console.log("\nREFRESH TOKEN REQUEST: ", req.body.refreshToken);
-    new CognitoOperation(req, res, "refresh");
+    var refreshToken = req.body.refreshToken;
+    var provider = req.body.provider;
+    console.log("\n******* REFRESH TOKEN REQUEST: FROM: " + provider + " **********\n");
+
+    switch(provider) {
+        case constants.GOOGLE: getGoogleIdToken(req, res);
+        break;
+        case constants.FACEBOOK: res.json({"FACEBOOK_REFRESH_TOKEN": "FCAEBOOK DOES NOT PROVIDE REFRESH TOKEN"});
+        break;
+        default: {
+            refresh.use(amazonStrat);
+
+            var refreshFunction = function(err, accessToken) {
+                if(err) {
+                    console.log("\nREFRESH AccessToken ERROR: ", err);
+                    res.json({"refresh": "error occured"});
+                } else {
+                    // console.log("\nREFRESH AccessToken SUCCESS: ", accessToken)            
+                    req.body.newAccessToken = accessToken;
+                    // utils.refreshCognitoOperation(req, res);
+                    utils.refreshCognitoInit(req, res);
+                }
+            }
+            refresh.requestNewAccessToken(provider, refreshToken, refreshFunction);
+        }
+    }
 }
 app.post(constants.REFRESH_ROUTE, refreshOperation);
 
 
 /*************** Facebook strategy *************/
-passport.use(new FacebookStrategy(controller.facebookDeveloperDetails, controller.getUserDetails));
+var facebookStrat = new FacebookStrategy(controller.facebookDeveloperDetails, controller.getUserDetails);
+passport.use(facebookStrat);
 app.get(constants.FACEBOOK_LOGIN, passport.authenticate(constants.FACEBOOK, { scope: ['email'] }));
 
 var authFacebook = passport.authenticate(constants.FACEBOOK, {
@@ -94,7 +154,8 @@ app.get(constants.FACEBOOK_CALLBACK, authFacebook, controller.successRedirect);
 
 
 /************** Google Strategy *****************/
-passport.use(new GoogleStrategy(controller.googleDeveloperDetails, controller.getUserDetails));
+var googleStrat = new GoogleStrategy(controller.googleDeveloperDetails, controller.getUserDetails);
+passport.use(googleStrat);
 app.get(constants.GOOGLE_LOGIN, passport.authenticate(constants.GOOGLE, { scope: ['email'], accessType: 'offline', prompt: 'consent' }));
 
 var authGoogle = passport.authenticate(constants.GOOGLE, {
@@ -105,7 +166,8 @@ app.get(constants.GOOGLE_CALLBACK, authGoogle, controller.successRedirect);
 
 
 /************** Amazon Strategy *****************/
-passport.use(new AmazonStrategy(controller.amazonDeveloperDetails, controller.getUserDetails));
+var amazonStrat = new AmazonStrategy(controller.amazonDeveloperDetails, controller.getUserDetails);
+passport.use(amazonStrat);
 app.get(constants.AMAZON_LOGIN, passport.authenticate(constants.AMAZON, { scope: ['profile'] }));
 
 var authAmazon = passport.authenticate(constants.AMAZON, {

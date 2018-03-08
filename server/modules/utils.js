@@ -139,3 +139,46 @@ exports.registerOperation = function(sessionData) {
     console.log("\nregisterOperation: DATA: ", JSON.stringify(result), "\n");
     return result;
 }
+
+exports.refreshCognitoInit = function(req, res) {
+    var handleRefresh = function(data) {
+        res.json({"REFRESH_DATA": data});
+        console.log("\n********** Resolved & Refresh token response sent *******");
+    }
+
+    var handleError = function(err) {
+        // console.log("\nhandleRefresh: ERROR: ", err)
+        res.json({"ERROR": err});
+    }
+
+    var promiseRefresh = refreshCognitoOperation(req, res);
+    promiseRefresh.then(handleRefresh, handleError);
+}
+
+var refreshCognitoOperation = function(req, res) {
+    // console.log("\nAWS_CREDENTIALS: ", _aws.config.credentials);
+    var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
+        var params = controller.getAwsParams(req.body);
+        _aws.config.credentials = new _aws.CognitoIdentityCredentials(params);
+        _aws.config.credentials.params = params;
+
+        var refreshOperation = function(err) {
+            if (!err) { 
+                var credentials = {};
+                credentials.cognitoId = _aws.config.credentials.identityId;
+                credentials.accessKey = _aws.config.credentials.accessKeyId;
+                credentials.secretKey = _aws.config.credentials.secretAccessKey;
+                // res.json({"REFRESH_DATA": credentials});
+                console.log("\nREFRESH_COGNITO_SUCCESS: ", credentials);                
+                resolveCognito(credentials);
+            } else {
+                console.log("\nREFRESH_COGNITO_ERROR: ", err);
+                // res.json({"ERROR": err});
+                rejectCognito(err);
+            }
+            // delete _aws.config.credentials;
+        }
+        _aws.config.credentials.refresh(refreshOperation);
+    }
+    return new Promise(cognitoAsyncOperation);
+}

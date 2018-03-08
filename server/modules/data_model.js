@@ -30,10 +30,6 @@ exports.readConfiguration = function(fileName) {
     configData = JSON.parse(configFile);
 }
 
-// /******** setter/getter for parameter keys *******/
-// exports.paramKeys = function(fileName) {
-//     return configData.fields;
-// }
 
 /******** setter/getter for registration fields keys *******/
 exports.getRegistrationFields = function() {
@@ -50,7 +46,6 @@ exports.isUniqueUsername = function() {
     return configData.uniqueUsername;
 }
 
-// /********* is login username field is provided ********/
-// exports.awsReadOlnyConfig = function() {
-//     return configData.aws_read_config;
-// }
+exports.getGoogleClientDetails = function() {
+    return configData.google;
+}

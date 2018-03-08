@@ -8,10 +8,12 @@
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "googleapis": "^27.0.0",
     "passport": "^0.4.0",
     "passport-amazon": "^1.0.0",
     "passport-facebook": "^2.1.1",
-    "passport-google-oauth": "^1.0.0"
+    "passport-google-oauth": "^1.0.0",
+    "passport-oauth2-refresh": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {

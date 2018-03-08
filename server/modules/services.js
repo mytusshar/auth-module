@@ -12,50 +12,21 @@ var configData;
 
 module.exports = class CognitoOperation {
 
-    constructor(req, res, type) {
+    constructor(req, res) {
         this.aws = require('aws-sdk');
         configData = model.awsConfigData();
         this.aws.config.region = configData.awsRegion;
         this.aws.config.endpoint = null;
-        if(!type) {
-            this.initOperation(req, res);
-        } else {
-            this.refreshTokenOperation(req, res);
-        }
+        this.initOperation(req, res);
     }
 
-    refreshTokenOperation(req, res) {
-        var _aws = this.aws;
-        var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
-            _aws.config.credentials.params = controller.getAwsParams(req.body, "refresh");
-
-            var refreshOperation = function(err) {
-                if (!err) {
-                    var refreshCreden = {};
-                    refreshCreden.cognitoID = _aws.config.credentials.identityId;
-                    refreshCreden.accessKey = _aws.config.credentials.accessKeyId;
-                    refreshCreden.secretKey = _aws.config.credentials.secretAccessKey;
-
-                    res.json({"REFRESH_DATA": refreshCreden});
-                    resolveCognito();
-                    console.log("\nXXX: ", refreshCreden, "\n\n********** Resolved & Refresh token response sent *******");
-                } else {
-                    console.log("REFRESH_ERROR: ", err);
-                    res.json({"ERROR": err})
-                    rejectCognito();
-                }
-            }
-            _aws.config.credentials.refresh(refreshOperation);
-        }
-        return new Promise(cognitoAsyncOperation);
-    }
 
     initOperation(req, res) {
         var _aws = this.aws;
         function handleError(err) {
             console.log("CognitoOperation: errorHandler: ", err);
-            delete _aws.config.credentials;
-            console.log("\nAWS Object: ", this.aws.config)
+            // delete _aws.config.credentials;
+            // console.log("\nAWS Object: ", this.aws.config)
         }
 
         function handleData(data) {
@@ -64,7 +35,7 @@ module.exports = class CognitoOperation {
             /********* sending response *********/
             utils.sendResponse(req, res);
             /********* deleting aws credentials *******/
-            delete _aws.config.credentials;
+            // delete _aws.config.credentials;
         }
 
         var promise = this.getCognitoIdentity(req, res);
@@ -112,7 +83,7 @@ module.exports = class CognitoOperation {
                                 var paramsDB = dynamo.getParamsForDynamoDB(regData, constants.INSERT_DATA);
                                 var promiseInsert = dynamo.insertData(paramsDB, new _aws.CognitoIdentityCredentials(params));
                                 promiseInsert.then(handleInsertResult, handleError);
-                            }                            
+                            }
                         }
                     }
 
@@ -173,7 +144,7 @@ module.exports = class CognitoOperation {
                     }
                     else if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
                         var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
-                        console.log(req.session.data);
+                        // console.log(req.session.data);
                         var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
                         promiseUsername.then(handleDataUsername, handleError);
                     } else {
