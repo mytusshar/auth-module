@@ -156,18 +156,23 @@ exports.refreshCognitoInit = function(req, res) {
 }
 
 var refreshCognitoOperation = function(req, res) {
-    // console.log("\nAWS_CREDENTIALS: ", _aws.config.credentials);
     var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
         var params = controller.getAwsParams(req.body);
-        _aws.config.credentials = new _aws.CognitoIdentityCredentials(params);
-        _aws.config.credentials.params = params;
+        // _aws.config.credentials = new _aws.CognitoIdentityCredentials(params);
+        // _aws.config.credentials.params = params;
+        var creden = new _aws.CognitoIdentityCredentials(params);
+        var awsConfig = Object.assign({}, _aws.config);
+        awsConfig.credentials = creden;
 
         var refreshOperation = function(err) {
             if (!err) { 
                 var credentials = {};
-                credentials.cognitoId = _aws.config.credentials.identityId;
-                credentials.accessKey = _aws.config.credentials.accessKeyId;
-                credentials.secretKey = _aws.config.credentials.secretAccessKey;
+                // credentials.cognitoId = _aws.config.credentials.identityId;
+                // credentials.accessKey = _aws.config.credentials.accessKeyId;
+                // credentials.secretKey = _aws.config.credentials.secretAccessKey;
+                credentials.cognitoId = awsConfig.credentials.identityId;
+                credentials.accessKey = awsConfig.credentials.accessKeyId;
+                credentials.secretKey = awsConfig.credentials.secretAccessKey;
                 // res.json({"REFRESH_DATA": credentials});
                 console.log("\nREFRESH_COGNITO_SUCCESS: ", credentials);                
                 resolveCognito(credentials);
@@ -178,7 +183,8 @@ var refreshCognitoOperation = function(req, res) {
             }
             // delete _aws.config.credentials;
         }
-        _aws.config.credentials.refresh(refreshOperation);
+        // _aws.config.credentials.refresh(refreshOperation);
+        awsConfig.credentials.refresh(refreshOperation);
     }
     return new Promise(cognitoAsyncOperation);
 }

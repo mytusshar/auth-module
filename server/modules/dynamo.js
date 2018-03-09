@@ -28,7 +28,7 @@ exports.insertData = function(params, awsCredentials) {
 
 exports.readData = function(params, awsCredentials) {
     _aws.config.credentials = awsCredentials;
-
+    
     var queryAsyncOperation = function(resolveQueryDB, rejectQueryDB) {
         var queryOperation = function(err, data) {                 
             if(err) {

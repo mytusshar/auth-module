@@ -1,0 +1,4 @@
+
+#   instance_id: i-09f419f536cef1b15
+#   public_DNS: ec2-52-91-114-26.compute-1.amazonaws.com
+#   
