@@ -1,0 +1,97 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body { 
+    margin: 0;
+    font-family: Arial;
+}
+  
+.header {
+    overflow: hidden;
+    height: 150px;
+    text-align: center;
+    background-color:rgb(0, 0, 0);
+}
+
+#profile-heading {
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+    padding: 10px;
+}
+
+
+.column {
+    float: left;
+    width: 48%;
+    margin: 1%;
+    padding: 10px;
+    background-color: honeydew;
+    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.582), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.button {
+    width: 80%;
+    height: 70px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(23, 142, 5);
+    margin : 10px;
+    font-size: 20px;
+    font-family: Montserrat;
+    cursor: pointer;
+}
+
+
+#clockdiv{
+    margin: 0 auto;
+    font-family: sans-serif;
+    color: #fff;
+    display: inline-block;
+    font-weight: 100;
+    text-align: center;
+    font-size: 30px;
+}
+
+#clockdiv > div{
+    padding: 10px;
+    border-radius: 3px;
+    background: rgb(0, 0, 0);
+    display: inline-block;
+}
+
+#clockdiv div > span{
+    padding: 15px;
+    border-radius: 3px;
+    background: #00816A;
+    display: inline-block;
+}
+
+.smalltext{
+    padding-top: 5px;
+    font-size: 16px;
+}
+
+
+#result-block {
+    background: rgba(34, 33, 33, 0.486);
+    color: #ffffff;
+    text-align: left;
+    font-weight: 40px;
+    font-size: 20px;
+    margin-top: 70px;
+}
+
+.block {
+    word-wrap: break-word;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: rgb(0, 0, 0);
+}
+
+#button-result {
+    font-size: 20px;
+}

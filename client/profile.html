@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="css/profile.css">
+        <script src="js/profile.js"></script>
+        <script src="js/clock.js"></script>
+        <script src="js/constants.js"></script>
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+    </head>
+
+    <body>
+
+        <div align="center">
+            <div class="header">
+                <h2 id="profile-heading">Independent Authentication Module</h2>
+            </div>
+    
+            <h1>Your session will end in</h1>
+            <div id="clockdiv">
+                <div>
+                    <span class="minutes"></span>
+                    <div class="smalltext">Minutes</div>
+                </div>
+                <div>
+                    <span class="seconds"></span>
+                    <div class="smalltext">Seconds</div>
+                </div>
+            </div>
+    
+            <div>
+    
+                <div class="column">
+                    <h2>User Data After Login</h2>
+                    <h3>Successful Login</h3>
+                    <div class="block" id="result-block">
+                        <p id="user-data">Data</p>
+                    </div>
+                </div>
+    
+                <div class="column">
+                    <button class="button" id="dynamodb-button"> DynamoDB Read </button>
+                    <button class="button" id="refresh-button"> Refresh Session </button>
+                    
+                    <div class="block" id="result-block">
+                        <!-- <p id="button-result">result</p> -->
+                        <textarea readonly id="button-result"></textarea>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+        
+    </body>
+
+</html> 

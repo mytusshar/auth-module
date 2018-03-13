@@ -1,5 +1,5 @@
 {
-    "fields": ["provider", "request", "authId", "cognitoId", "accessKey", "secretKey"],
+    "fields": ["provider", "request", "authId", "cognitoId", "accessKey", "secretKey", "sessionToken"],
 
     "regFields": ["username", "name", "city", "email"],
 

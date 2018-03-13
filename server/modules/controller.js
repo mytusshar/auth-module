@@ -46,7 +46,6 @@ exports.getUserDetails = function(accessToken, refreshToken, params, profile, do
     } else {
         profile.token = accessToken;
     }
-    // console.log("\n" + profile.provider + ": ", params);
     profile.refreshToken = refreshToken;
     done(null, profile);
 }

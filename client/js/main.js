@@ -1,13 +1,15 @@
 // constant routes
-const SERVER_ADDRESS = "http://localhost:3000";
-const FACEBOOK_LOGIN = SERVER_ADDRESS + "/auth/facebook";
-const FACEBOOK_REG = SERVER_ADDRESS + "/reg/facebook";
-const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
-const PROFILE = SERVER_ADDRESS + "/profile";
-const REQUIRE_LOGIN_NAME = true;
+// const SERVER_ADDRESS = "http://localhost:3000";
+// const FACEBOOK_LOGIN = SERVER_ADDRESS + "/auth/facebook";
+// const FACEBOOK_REG = SERVER_ADDRESS + "/reg/facebook";
+// const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
+// const PROFILE = SERVER_ADDRESS + "/profile";
+// const REFRESH_URL = SERVER_ADDRESS + "/refresh";
+// const REQUIRE_LOGIN_NAME = true;
 
-const LOGIN = "login";
-const REGISTER = "register";
+// const LOGIN = "login";
+// const REGISTER = "register";
+// const PROFILE_FILE = "profile.html";
 
 // buttons 
 var buttonLoginBlock;
@@ -19,7 +21,7 @@ var buttonRegFacebook;
 var buttonRegAmazon;
 var buttonRegGoogle;
 
-var buttonRefresh;
+// var buttonRefresh;
 var userDataForRefresh;
 
 /********** facebook login/reg functions ********/
@@ -54,23 +56,23 @@ var showRegBlock = function(){
     hideOrShowBlock(REGISTER);
 };
 
-var refreshFunction = function() {
-    var url = SERVER_ADDRESS + "/refresh";
-    console.log("Fetch: ", userDataForRefresh);
-    fetch(url, {
-        method : 'POST',
-        headers: {
-            'Accept' : 'application/json, text/plain, */*',
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(userDataForRefresh)
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log("refresh data: ", data);
-    })
-    .catch((err) => console.log(err))
-}
+// var refreshFunction = function() {
+//     var url = SERVER_ADDRESS + "/refresh";
+//     console.log("Fetch: ", userDataForRefresh);
+//     fetch(url, {
+//         method : 'POST',
+//         headers: {
+//             'Accept' : 'application/json, text/plain, */*',
+//             'Content-type': 'application/json'
+//         },
+//         body: JSON.stringify(userDataForRefresh)
+//     })
+//     .then((res) => res.json())
+//     .then((data) => {
+//         console.log("refresh data: ", data);
+//     })
+//     .catch((err) => console.log(err))
+// }
 
 
 function hideOrShowBlock(buttonType) {
@@ -87,6 +89,19 @@ function hideOrShowBlock(buttonType) {
     }
 }
 
+
+var browserStorage = function(data) {
+    if (typeof(Storage) !== "undefined") {
+        sessionStorage.setItem('user', JSON.stringify(data));
+        console.log("%%%%% YES: storage available %%%%%%", JSON.parse(sessionStorage.user));
+    } else {
+        // No Web Storage support
+        console.log("%%%%% NO: storage available %%%%%%");
+    }
+    return;
+}
+
+
 var recievedDataOperation = function(e) { 
     var output =  document.getElementById("output");
     var data = e.data;
@@ -101,19 +116,22 @@ var recievedDataOperation = function(e) {
                     "CognitoID: " + data.cognitoId + "<br>";
                     
         output.innerHTML = result;
+
+        /******* storing data in localStorage ******/
+        browserStorage(data);
+        /******* opening profile window *********/
+        window.open(PROFILE_FILE, "_self");
     } else {
         output.innerHTML = JSON.stringify(data);
     }
-    console.log("recieved: " + JSON.stringify(data));
+    // console.log("recieved: " + JSON.stringify(data));
 }
 
 
-window.onload = function(){
-
+window.onload = function() {
     /******* refresh button *********/
-    buttonRefresh = document.getElementById("refresh");
-    buttonRefresh.addEventListener("click", refreshFunction);
-
+    // buttonRefresh = document.getElementById("refresh");
+    // buttonRefresh.addEventListener("click", refreshFunction);
 
     /******* facebook buttons *******/
     buttonLoginFacebook = document.getElementById("facebook");

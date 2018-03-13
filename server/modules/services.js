@@ -20,13 +20,10 @@ module.exports = class CognitoOperation {
         this.initOperation(req, res);
     }
 
-
     initOperation(req, res) {
         var _aws = this.aws;
         function handleError(err) {
             console.log("CognitoOperation: errorHandler: ", err);
-            // delete _aws.config.credentials;
-            // console.log("\nAWS Object: ", this.aws.config)
         }
 
         function handleData(data) {
@@ -34,8 +31,6 @@ module.exports = class CognitoOperation {
             model.globalData(data);
             /********* sending response *********/
             utils.sendResponse(req, res);
-            /********* deleting aws credentials *******/
-            // delete _aws.config.credentials;
         }
 
         var promise = this.getCognitoIdentity(req, res);
@@ -61,6 +56,7 @@ module.exports = class CognitoOperation {
                     req.session.data.cognitoId = cognitoCredentials.identityId;
                     req.session.data.accessKey = cognitoCredentials.accessKeyId;
                     req.session.data.secretKey = cognitoCredentials.secretAccessKey;
+                    req.session.data.sessionToken = cognitoCredentials.sessionToken;
         
                     var handleError = function(err) {
                         rejectCognito(err);

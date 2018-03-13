@@ -12,69 +12,78 @@ exports.sendResponse = function(req, res) {
     /********** setting authId in cookie to access the data of user having same id **********/
     var userData = req.session.data;
     var requestType = userData.request;
-    var regStatus = userData.status;
-    var loginStatus = userData.status;
+    var requestStatus = userData.status;
     var clientResponse;
 
     switch(requestType) {
         case constants.REQ_LOGIN: {
-            if(loginStatus == constants.LOGIN_SUCCESS) {
-                /****** send user data*****/
-                clientResponse = userData;
-                clientResponse.message= "LOGIN SUCCESS"
-                console.log("**** RESPONSE: Login Success and send User data: Message.");
-            }
-            else if(regStatus == constants.NOT_REGISTERED){
-                clientResponse = {
-                    status: constants.NOT_REGISTERED,
-                    message: "NOT_REGISTERED user"
-                };
-                console.log("**** RESPONSE: Not Registered User: Message.");
-            }
-            else if(loginStatus == constants.LOGIN_FAILURE){
-                clientResponse = {
-                    status: constants.LOGIN_FAILURE,
-                    message: "LOGIN FAILURE, try again"
-                };
-                console.log("**** RESPONSE: Login Failure: Message.");
-            }
-            else if(loginStatus == constants.INVALID_USERNAME){
-                clientResponse = {
-                    status: constants.INVALID_USERNAME,
-                    message: "INVALID_USERNAME, username doesnot match with any accound."
-                };
-                console.log("**** RESPONSE: Invalid username: Message.");
+            switch(requestStatus) {
+                case constants.LOGIN_SUCCESS: {
+                    /****** send user data*****/
+                    clientResponse = userData;
+                    clientResponse.message= "LOGIN SUCCESS"
+                    console.log("**** RESPONSE: Login Success and send User data: Message.");
+                } break;
+
+                case constants.NOT_REGISTERED: {
+                    clientResponse = {
+                        status: constants.NOT_REGISTERED,
+                        message: "NOT_REGISTERED user"
+                    };
+                    console.log("**** RESPONSE: Not Registered User: Message.");
+                } break;
+
+                case constants.LOGIN_FAILURE: {
+                    clientResponse = {
+                        status: constants.LOGIN_FAILURE,
+                        message: "LOGIN FAILURE, try again"
+                    };
+                    console.log("**** RESPONSE: Login Failure: Message.");
+                } break;
+
+                case constants.INVALID_USERNAME: {
+                    clientResponse = {
+                        status: constants.INVALID_USERNAME,
+                        message: "INVALID_USERNAME, username doesnot match with any account."
+                    };
+                    console.log("**** RESPONSE: Invalid username: Message.");
+                }
             }
         }
         break;
 
         case constants.REQ_REGISTER: {
-            if(regStatus == constants.ALREADY_REGISTERED) {
-                clientResponse = {
-                    status: constants.ALREADY_REGISTERED,
-                    message: "ALREADY_REGISTERED user"
-                };
-                console.log("**** RESPONSE: Already Registered Please Login: Message.");
-            }
-            else if(regStatus == constants.NOT_UNIQUE_USERNAME) {
-                clientResponse = {
-                    status: constants.NOT_UNIQUE_USERNAME,
-                    message: "USERNAME_ALREADY_EXISTS"
-                };
-                console.log("**** RESPONSE: USERNAME_ALREADY_EXISTS, use other username: Message.");
-            }
-            else if(loginStatus == constants.LOGIN_SUCCESS) {
-                /****** send user data*****/
-                clientResponse = userData;
-                clientResponse.message = "REGISTER SUCCESS"
-                console.log("**** RESPONSE: Register Success and send User data: Message.");
-            } 
-            else if(regStatus == constants.REGISTER_FAILURE){
-                clientResponse = {
-                    status: constants.REGISTER_FAILURE,
-                    message: "REGISTER_FAILURE try again"
-                };
-                console.log("**** RESPONSE: Register Failure: Message.");
+            switch(requestStatus) {
+                case constants.ALREADY_REGISTERED: {
+                    clientResponse = {
+                        status: constants.ALREADY_REGISTERED,
+                        message: "ALREADY_REGISTERED user"
+                    };
+                    console.log("**** RESPONSE: Already Registered Please Login: Message.");
+                } break;
+
+                case constants.NOT_UNIQUE_USERNAME: {
+                    clientResponse = {
+                        status: constants.NOT_UNIQUE_USERNAME,
+                        message: "USERNAME_ALREADY_EXISTS"
+                    };
+                    console.log("**** RESPONSE: USERNAME_ALREADY_EXISTS, use other username: Message.");
+                } break;
+
+                case constants.LOGIN_SUCCESS: {
+                    /****** send user data*****/
+                    clientResponse = userData;
+                    clientResponse.message = "REGISTER SUCCESS"
+                    console.log("**** RESPONSE: Register Success and send User data: Message.");
+                } break;
+
+                case constants.REGISTER_FAILURE: {
+                    clientResponse = {
+                        status: constants.REGISTER_FAILURE,
+                        message: "REGISTER_FAILURE try again"
+                    };
+                    console.log("**** RESPONSE: Register Failure: Message.");
+                }
             }
         }
         break;
@@ -142,13 +151,12 @@ exports.registerOperation = function(sessionData) {
 
 exports.refreshCognitoInit = function(req, res) {
     var handleRefresh = function(data) {
-        res.json({"REFRESH_DATA": data});
+        res.json({"refreshData": data});
         console.log("\n********** Resolved & Refresh token response sent *******");
     }
 
     var handleError = function(err) {
-        // console.log("\nhandleRefresh: ERROR: ", err)
-        res.json({"ERROR": err});
+        res.json({"refreshError": err});
     }
 
     var promiseRefresh = refreshCognitoOperation(req, res);
@@ -158,8 +166,6 @@ exports.refreshCognitoInit = function(req, res) {
 var refreshCognitoOperation = function(req, res) {
     var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
         var params = controller.getAwsParams(req.body);
-        // _aws.config.credentials = new _aws.CognitoIdentityCredentials(params);
-        // _aws.config.credentials.params = params;
         var creden = new _aws.CognitoIdentityCredentials(params);
         var awsConfig = Object.assign({}, _aws.config);
         awsConfig.credentials = creden;
@@ -167,23 +173,17 @@ var refreshCognitoOperation = function(req, res) {
         var refreshOperation = function(err) {
             if (!err) { 
                 var credentials = {};
-                // credentials.cognitoId = _aws.config.credentials.identityId;
-                // credentials.accessKey = _aws.config.credentials.accessKeyId;
-                // credentials.secretKey = _aws.config.credentials.secretAccessKey;
                 credentials.cognitoId = awsConfig.credentials.identityId;
                 credentials.accessKey = awsConfig.credentials.accessKeyId;
                 credentials.secretKey = awsConfig.credentials.secretAccessKey;
-                // res.json({"REFRESH_DATA": credentials});
+                credentials.sessionToken = awsConfig.credentials.sessionToken;
                 console.log("\nREFRESH_COGNITO_SUCCESS: ", credentials);                
                 resolveCognito(credentials);
             } else {
                 console.log("\nREFRESH_COGNITO_ERROR: ", err);
-                // res.json({"ERROR": err});
                 rejectCognito(err);
             }
-            // delete _aws.config.credentials;
         }
-        // _aws.config.credentials.refresh(refreshOperation);
         awsConfig.credentials.refresh(refreshOperation);
     }
     return new Promise(cognitoAsyncOperation);

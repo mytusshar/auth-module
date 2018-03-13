@@ -8,7 +8,6 @@ var AmazonStrategy = require('passport-amazon').Strategy;
 var refresh = require('passport-oauth2-refresh');
 var cors = require('cors');
 var bodyParser = require('body-parser');
-
 var google = require('googleapis');
 
 var controller = require('./modules/controller.js');
@@ -42,11 +41,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 passport.serializeUser(controller.serializeParam);
 passport.deserializeUser(controller.deserializeParam);
 
-////////////////////
-///////////
+/*******************************
+******* unique request ID ******/
 var userCount = 0;
-///////////
-////////////////////
+/********************
+ ********************/
 
 /*********** Authentication request ***********/
 var handleAuthRequest = function(req, res) {     
@@ -79,7 +78,6 @@ app.get(constants.AUTH_REQUEST_URL, handleAuthRequest);
 
 
 var getGoogleIdToken = function(req, res) {
-    // console.log("\nINSIDE: getGoogleIdToken: ");
     var refreshToken = req.body.refreshToken;
     var accessToken = req.body.accessToken;
     var OAuth2 = google.google.auth.OAuth2;
@@ -101,9 +99,7 @@ var getGoogleIdToken = function(req, res) {
         if(err) {
             console.log("\nrefreshAccessToken: ERROR: ", err);
         } else {
-            // console.log("\nrefreshAccessToken:SUCCESS: ", tokens);
             req.body.newAccessToken = tokens.id_token;
-            // utils.refreshCognitoOperation(req, res);
             utils.refreshCognitoInit(req, res);
         }
     });    
@@ -127,10 +123,8 @@ var refreshOperation = function(req, res) {
                 if(err) {
                     console.log("\nREFRESH AccessToken ERROR: ", err);
                     res.json({"refresh": "error occured"});
-                } else {
-                    // console.log("\nREFRESH AccessToken SUCCESS: ", accessToken)            
+                } else {      
                     req.body.newAccessToken = accessToken;
-                    // utils.refreshCognitoOperation(req, res);
                     utils.refreshCognitoInit(req, res);
                 }
             }
