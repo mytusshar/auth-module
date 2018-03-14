@@ -1,28 +1,21 @@
 
-
-var buttonRefresh;
 var buttonDynamodbRead;
-
-// const AWS_REGION = "us-east-1";
-// const AWS_ENDPOINT = "https://dynamodb.us-east-1.amazonaws.com";
-// const TABLE_NAME = "users";
-// const SERVER_ADDRESS = "http://localhost:3000";
-// const REFRESH_URL = SERVER_ADDRESS + "/refresh";
+var buttonRefresh;
+var buttonLoginPage;
+var modalContainer;
+var modal;
+var closeButton;
+var alertText;
 
 window.onload = function() {
     initializeClock('clockdiv', deadline);
-
-    /******* refresh button *********/
-    buttonRefresh = document.getElementById("refresh-button");
-    buttonRefresh.addEventListener("click", refreshFunction);
-
     /******* dynamodb read operation ******/
     buttonDynamodbRead = document.getElementById("dynamodb-button");
     buttonDynamodbRead.addEventListener("click", dynamodbReadOperation)
 
     initializeProfile();
+    initModal();
 }
-
 
 var initializeProfile = function() {
     var userData = JSON.parse(sessionStorage.user);
@@ -37,9 +30,7 @@ var initializeProfile = function() {
     element.innerHTML = result;
 }
 
-
 var refreshFunction = function() {
-    // var url = SERVER_ADDRESS + "/refresh";
     console.log("Fetch: ", sessionStorage.user);
     fetch(REFRESH_URL, {
         method : 'POST',
@@ -59,7 +50,9 @@ var refreshFunction = function() {
         sessData.accessKey = data.accessKey;
         sessData.secretKey = data.secretKey;
         sessionStorage.user = JSON.stringify(sessData);
+
         initializeProfile();
+        closeModal();
     })
     .catch((err) => console.log(err))
 }
@@ -94,4 +87,39 @@ var dynamodbReadOperation = function() {
             document.getElementById('button-result').innerHTML = "GetItem succeeded: " + "\n" + JSON.stringify(data, undefined, 2);
         }
     });
+}
+
+var initModal = function() {
+    /******* refresh button *********/
+    buttonRefresh = document.getElementById("button-refresh");    
+    buttonRefresh.addEventListener("click", refreshFunction);
+    /********* modal close button ******/
+    closeButton = document.getElementById("close");    
+    closeButton.addEventListener("click", closeModal);
+    /******** login-page return button ******/
+    buttonLoginPage = document.getElementById("button-login-page")
+    buttonLoginPage.addEventListener("click", openLoginPage);
+
+    modalContainer = document.getElementById("modal-container");
+    modal = document.getElementById("modal");
+    alertText = document.getElementById("alert-text");    
+}
+
+var openLoginPage = function() {
+    closeModal();
+    window.open(INDEX_FILE, "_self");
+}
+
+var openModal = function(message, button) {
+    modalContainer.style.display = "block";
+    modal.style.display = "block";
+    button.style.display = "block";
+    alertText.innerHTML = message;
+}
+
+var closeModal = function() {
+    modalContainer.style.display = "none";
+    buttonRefresh.style.display = "none";
+    buttonLoginPage.style.display = "none";
+    modal.style.display = "none";
 }

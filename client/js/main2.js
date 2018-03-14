@@ -4,12 +4,11 @@ var handleErrorStyles = function(code, show, hide_1, hide_2, hide_3) {
         show.style.display = "block";
     } else {
         show.style.display = "none";
-    }    
+    }
     hide_1.style.display = "none";
     hide_2.style.display = "none";
     hide_3.style.display = "none";
 }
-
 
 function getFormData() {
     var name = document.getElementById("name").value.trim();
@@ -53,7 +52,8 @@ function getFormData() {
 
 function appendURL(data, url) {
     if(data.request == REGISTER) {
-        url = url + "?" + "username=" + data.username + "&" + "provider=" + data.provider + "&" + "request=" + data.request + "&" + "name=" + data.name + "&" + "city=" + data.city + "&" + "email=" + data.email;
+        url = url + "?" + "username=" + data.username + "&" + "provider=" + data.provider + "&" + "request="
+             + data.request + "&" + "name=" + data.name + "&" + "city=" + data.city + "&" + "email=" + data.email;
     } else {
         if(REQUIRE_LOGIN_NAME) {
             url = url + "?" + "provider=" + data.provider + "&" + "request=" + data.request + "&" + "username=" + data.username;

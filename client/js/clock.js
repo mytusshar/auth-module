@@ -24,6 +24,22 @@ function initializeClock(id, endtime) {
         minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
         secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
 
+        /****** showing refresh/login page return modal ******/
+        if(t.minutes == SESSION_REFRESH_TIME && t.seconds == 0) {
+            var sessData = JSON.parse(sessionStorage.user);
+            if(sessData.provider != "facebook") {
+                var message = "Your session will expire soon.<br>" +
+                            "Please click Refresh button to refresh the session.";
+                openModal(message, buttonRefresh);                
+            }
+        }
+        else if(t.minutes == SESSION_EXPIRE_TIME && t.seconds == 0) {
+            var message = "Your session is Expired.<br>" +
+                            "Please click button to login again.";
+            sessionStorage.removeItem("user");
+            openModal(message, buttonLoginPage);
+        }
+
         if (t.total <= 0) {
             clearInterval(timeinterval);
         }

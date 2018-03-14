@@ -3,6 +3,7 @@
 
     <head>
         <link rel="stylesheet" href="css/profile.css">
+        <link rel="stylesheet" href="css/modal.css">
         <script src="js/profile.js"></script>
         <script src="js/clock.js"></script>
         <script src="js/constants.js"></script>
@@ -16,6 +17,7 @@
                 <h2 id="profile-heading">Independent Authentication Module</h2>
             </div>
     
+            <!-- clock -->
             <h1>Your session will end in</h1>
             <div id="clockdiv">
                 <div>
@@ -39,15 +41,30 @@
                 </div>
     
                 <div class="column">
-                    <button class="button" id="dynamodb-button"> DynamoDB Read </button>
-                    <button class="button" id="refresh-button"> Refresh Session </button>
-                    
+                    <button class="button" id="dynamodb-button"> DynamoDB Read </button>                    
                     <div class="block" id="result-block">
-                        <!-- <p id="button-result">result</p> -->
                         <textarea readonly id="button-result"></textarea>
                     </div>
                 </div>
     
+            </div>
+        </div>
+
+        <!-- alert modal -->
+            <div id="modal-container">
+                <div class="flex">
+                    <div id="modal">
+                        <div id="close">
+                            <span>&#43;</span>
+                        </div>
+                        <div class="content">
+                            <h2 id="alert-refresh">Alert</h2>
+                            <p id="alert-text"></p>                            
+                        </div>
+                        <button id="button-refresh">Refresh Session</button>
+                        <button id="button-login-page">Goto Login Page</button>
+                    </div>
+                </div>
             </div>
         </div>
         

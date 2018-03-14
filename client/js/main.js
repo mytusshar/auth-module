@@ -1,16 +1,3 @@
-// constant routes
-// const SERVER_ADDRESS = "http://localhost:3000";
-// const FACEBOOK_LOGIN = SERVER_ADDRESS + "/auth/facebook";
-// const FACEBOOK_REG = SERVER_ADDRESS + "/reg/facebook";
-// const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
-// const PROFILE = SERVER_ADDRESS + "/profile";
-// const REFRESH_URL = SERVER_ADDRESS + "/refresh";
-// const REQUIRE_LOGIN_NAME = true;
-
-// const LOGIN = "login";
-// const REGISTER = "register";
-// const PROFILE_FILE = "profile.html";
-
 // buttons 
 var buttonLoginBlock;
 var buttonRegBlock;
@@ -20,9 +7,6 @@ var buttonLoginAmazon;
 var buttonRegFacebook;
 var buttonRegAmazon;
 var buttonRegGoogle;
-
-// var buttonRefresh;
-var userDataForRefresh;
 
 /********** facebook login/reg functions ********/
 var regFacebookFunction = function(){ 
@@ -56,25 +40,6 @@ var showRegBlock = function(){
     hideOrShowBlock(REGISTER);
 };
 
-// var refreshFunction = function() {
-//     var url = SERVER_ADDRESS + "/refresh";
-//     console.log("Fetch: ", userDataForRefresh);
-//     fetch(url, {
-//         method : 'POST',
-//         headers: {
-//             'Accept' : 'application/json, text/plain, */*',
-//             'Content-type': 'application/json'
-//         },
-//         body: JSON.stringify(userDataForRefresh)
-//     })
-//     .then((res) => res.json())
-//     .then((data) => {
-//         console.log("refresh data: ", data);
-//     })
-//     .catch((err) => console.log(err))
-// }
-
-
 function hideOrShowBlock(buttonType) {
     var regBlock = document.getElementById("register-block");
     var loginBlock = document.getElementById("login-block");
@@ -106,9 +71,6 @@ var recievedDataOperation = function(e) {
     var output =  document.getElementById("output");
     var data = e.data;
 
-    /********* refresh data assign ********/
-    userDataForRefresh = data;
-
     if(data.status == 1) {
         var result = "UserName: " + data.username + "<br>" +  
                     "Name: " + data.name + "<br>" + 
@@ -124,15 +86,10 @@ var recievedDataOperation = function(e) {
     } else {
         output.innerHTML = JSON.stringify(data);
     }
-    // console.log("recieved: " + JSON.stringify(data));
 }
 
 
 window.onload = function() {
-    /******* refresh button *********/
-    // buttonRefresh = document.getElementById("refresh");
-    // buttonRefresh.addEventListener("click", refreshFunction);
-
     /******* facebook buttons *******/
     buttonLoginFacebook = document.getElementById("facebook");
     buttonLoginFacebook.addEventListener("click", loginFacebookFunction);

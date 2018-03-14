@@ -11,6 +11,10 @@ const PROFILE = SERVER_ADDRESS + "/profile";
 const REFRESH_URL = SERVER_ADDRESS + "/refresh";
 const REQUIRE_LOGIN_NAME = true;
 
+const SESSION_EXPIRE_TIME = 1;
+const SESSION_REFRESH_TIME = 5;
+
 const LOGIN = "login";
 const REGISTER = "register";
 const PROFILE_FILE = "profile.html";
+const INDEX_FILE = "index.html";
