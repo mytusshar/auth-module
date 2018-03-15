@@ -55,15 +55,15 @@ If it is set to "false" then username will not have any contraints for its uniqu
 
 - Now you have to provide which third party identity providers that you want in your application to support.
 
-Presently this module supports for:
-* Google
-* Facebook
-* Amazon
+    Presently this module supports for:
+    * Google
+    * Facebook
+    * Amazon
 
-You have to create developer account for those providers on their provided sites, and there you will get 
-"clientID", "clientSecret".
-You have to provide "callback URL" on which third party authentication provider will redirect after successfull authentication.
-You can provide which profile fields you want to read from users's third party account.
+    You have to create developer account for those providers on their provided sites, and there you will get 
+    "clientID", "clientSecret".
+    You have to provide "callback URL" on which third party authentication provider will redirect after successfull authentication.
+    You can provide which profile fields you want to read from users's third party account.
 
 - Your IAM Module is ready to use. 
 
