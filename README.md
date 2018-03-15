@@ -34,41 +34,41 @@ accounts and gives you authenticated user directly.
 
 ## Follow below steps to use IAM module in your existing project.
 
-####1. Clone this repository on your system
+####  1. Clone this repository on your system
 
-####2. Check for the config.json file in server
+####  2. Check for the config.json file in server
 
-    Add following details in it.
-    
-    - "regFields": If you want registration flow then add registration fields in this array. 
-    Please make sure to pass all registration fields during registration request.
+Add following details in it.
 
-    - "uniqueUsername": If you want unique username for each user in your system,  set this field to "true", 
-    or else set this field to false. 
-        Once this field is set to "true" you will have to create index on the "username" column in DynamoDB table in which user data is stored.
-        If it is set to "false" then username will not have any contraints for its uniqueness in system.
+- "regFields": If you want registration flow then add registration fields in this array. 
+Please make sure to pass all registration fields during registration request.
 
-    - "serverAddress": When deploying this module on AWS EC2 or Beanstalk, you will have to add IP address of that instance.
+- "uniqueUsername": If you want unique username for each user in your system,  set this field to "true", 
+or else set this field to false. 
+Once this field is set to "true" you will have to create index on the "username" column in DynamoDB table in which user data is stored.
+If it is set to "false" then username will not have any contraints for its uniqueness in system.
 
-    - "aws": This field contains all the Amazon Web server details.
-        add your "accountId", "awsRegion", "cognitoIdentityPoolId", "iamRoleArn" created for authenticated users.
+- "serverAddress": When deploying this module on AWS EC2 or Beanstalk, you will have to add IP address of that instance.
 
-    - Now you have to provide which third party identity providers yoou want in your application to support.
+- "aws": This field contains all the Amazon Web server details.
+    add your "accountId", "awsRegion", "cognitoIdentityPoolId", "iamRoleArn" created for authenticated users.
 
-        Presently this module supports for:
-        * Google
-        * Facebook
-        * Amazon
+- Now you have to provide which third party identity providers that you want in your application to support.
 
-        You have to create developer account for those providers on their provided sites, and there you will get 
-        "clientID", "clientSecret"
-        You have to provide "callback URL" on which third party authentication provider will redirect after successfull authentication.
-        You can provide which profile fields you want to read from users's third party account.
+Presently this module supports for:
+* Google
+* Facebook
+* Amazon
 
-    - Your IAM Module is ready to use. 
+You have to create developer account for those providers on their provided sites, and there you will get 
+"clientID", "clientSecret".
+You have to provide "callback URL" on which third party authentication provider will redirect after successfull authentication.
+You can provide which profile fields you want to read from users's third party account.
+
+- Your IAM Module is ready to use. 
 
 
-####3. Running Server
+####  3. Running Server
 
 * Open project folder in terminal and change to server directory using below command 
 
@@ -95,7 +95,7 @@ accounts and gives you authenticated user directly.
 * You are good to go.
 
 
-####. Runnig Client application using Tomcat server [ OPTIONAL ]
+#### Runnig Client application using Tomcat server [ OPTIONAL ]
 
 * Install Tomcat using following link.
 
