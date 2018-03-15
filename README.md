@@ -34,11 +34,11 @@ accounts and gives you authenticated user directly.
 
 ## Follow below steps to use IAM module in your existing project.
 
-###1. Clone this repository on your system
+####1. Clone this repository on your system
 
-###2. Check for the config.json file in server
+####2. Check for the config.json file in server
 
-* Add following details in it.
+    Add following details in it.
     
     - "regFields": If you want registration flow then add registration fields in this array. 
     Please make sure to pass all registration fields during registration request.
@@ -68,7 +68,7 @@ accounts and gives you authenticated user directly.
     - Your IAM Module is ready to use. 
 
 
-###2. Running Server
+####3. Running Server
 
 * Open project folder in terminal and change to server directory using below command 
 
@@ -84,7 +84,7 @@ accounts and gives you authenticated user directly.
 
 ## We have provided sample client application which demonstrate how to use IAM Module in your application. 
 
-###3. Running Client 
+#### Running Client 
 
 * Open project folder in terminal and change to client directory using below command 
 
@@ -95,7 +95,7 @@ accounts and gives you authenticated user directly.
 * You are good to go.
 
 
-###4. Runnig Client application using Tomcat server [ OPTIONAL ]
+####. Runnig Client application using Tomcat server [ OPTIONAL ]
 
 * Install Tomcat using following link.
 
