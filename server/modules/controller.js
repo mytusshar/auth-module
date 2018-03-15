@@ -15,27 +15,27 @@ var configData = JSON.parse(configFile);
 var facebookClient = configData.facebook;
 var googleClient = configData.google;
 var amazonClient = configData.amazon;
-var serverAddress = configData.serverAddress;
+// var serverAddress = configData.serverAddress;
 
 /***************** developer details ****************/
 exports.googleDeveloperDetails = {
     clientID: googleClient.clientID,
     clientSecret: googleClient.clientSecret,
-    callbackURL: serverAddress + googleClient.callbackURL,
+    callbackURL: googleClient.callbackURL,
     profileFields: googleClient.profileFields
 }
 
 exports.amazonDeveloperDetails = {
     clientID: amazonClient.clientID,
     clientSecret: amazonClient.clientSecret,
-    callbackURL: serverAddress + amazonClient.callbackURL,
+    callbackURL: amazonClient.callbackURL,
     profileFields: amazonClient.profileFields
 }
 
 exports.facebookDeveloperDetails = {
     clientID: facebookClient.clientID,
     clientSecret: facebookClient.clientSecret,
-    callbackURL: serverAddress + facebookClient.callbackURL,
+    callbackURL: facebookClient.callbackURL,
     profileFields: facebookClient.profileFields
 }
 

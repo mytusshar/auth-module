@@ -1,4 +1,4 @@
-//Required modules and libraries
+//Required modules
 var express = require('express');
 var session = require('express-session');
 var passport = require('passport');
@@ -175,8 +175,11 @@ app.get(constants.AMAZON_CALLBACK, authAmazon, controller.successRedirect);
 // GET success page
 app.get(constants.SUCCESS, controller.ensureAuthenticated, controller.cognitoOperation);
 
+app.get("/", function(req, res) {
+    res.json({"Status": "server runnning successfully"});
+});
 /*********** Server listening on port 3000 *************/
-app.set('port', 3000);
+app.set('port', 8081);
 var terminalMSG =  function() {
     console.log('Express server listening on port ' + server.address().port);
 }

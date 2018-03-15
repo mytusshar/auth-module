@@ -7,12 +7,12 @@ var modal;
 var closeButton;
 var alertText;
 
-window.onload = function() {
-    initializeClock('clockdiv', deadline);
+window.onload = function() {    
     /******* dynamodb read operation ******/
     buttonDynamodbRead = document.getElementById("dynamodb-button");
     buttonDynamodbRead.addEventListener("click", dynamodbReadOperation)
 
+    initializeClock('clockdiv', deadline);
     initializeProfile();
     initModal();
 }
@@ -53,6 +53,7 @@ var refreshFunction = function() {
 
         initializeProfile();
         closeModal();
+        initializeClock('clockdiv', deadline);
     })
     .catch((err) => console.log(err))
 }
@@ -107,6 +108,7 @@ var initModal = function() {
 
 var openLoginPage = function() {
     closeModal();
+    sessionStorage.removeItem("user");
     window.open(INDEX_FILE, "_self");
 }
 

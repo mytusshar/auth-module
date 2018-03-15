@@ -55,6 +55,6 @@ exports.getGoogleClientDetails = function() {
     return configData.google;
 }
 
-exports.getServerAddress = function() {
-    return configData.serverAddress;
-}
+// exports.getServerAddress = function() {
+//     return configData.serverAddress;
+// }
