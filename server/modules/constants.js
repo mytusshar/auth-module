@@ -35,8 +35,6 @@ exports.TABLE_NAME_2 = "users2";
 exports.REQ_REGISTER = "register";
 exports.REQ_LOGIN = "login";
 
-exports.SERVER_ADDRESS = "http://localhost:3000";
-
 /********** Auth request URL *********/
 exports.AUTH_REQUEST_URL = "/auth";
 

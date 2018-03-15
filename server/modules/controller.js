@@ -10,30 +10,32 @@ var CognitoOperation = require('./services.js');
 /*********** reading developer details from config file*********I*/
 var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
 var configData = JSON.parse(configFile);
+// var configData = model.getConfigurationData();
 
 var facebookClient = configData.facebook;
 var googleClient = configData.google;
 var amazonClient = configData.amazon;
+var serverAddress = configData.serverAddress;
 
 /***************** developer details ****************/
 exports.googleDeveloperDetails = {
     clientID: googleClient.clientID,
     clientSecret: googleClient.clientSecret,
-    callbackURL: googleClient.callbackURL,
+    callbackURL: serverAddress + googleClient.callbackURL,
     profileFields: googleClient.profileFields
 }
 
 exports.amazonDeveloperDetails = {
     clientID: amazonClient.clientID,
     clientSecret: amazonClient.clientSecret,
-    callbackURL: amazonClient.callbackURL,
+    callbackURL: serverAddress + amazonClient.callbackURL,
     profileFields: amazonClient.profileFields
 }
 
 exports.facebookDeveloperDetails = {
     clientID: facebookClient.clientID,
     clientSecret: facebookClient.clientSecret,
-    callbackURL: facebookClient.callbackURL,
+    callbackURL: serverAddress + facebookClient.callbackURL,
     profileFields: facebookClient.profileFields
 }
 

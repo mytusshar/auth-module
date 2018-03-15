@@ -17,7 +17,7 @@ var CognitoOperation = require('./modules/services.js');
 var utils = require('./modules/utils.js');
 
 /********* initializing parameter keys ********* */
-model.readConfiguration(constants.CONFIG_FILE_NAME);
+model.readConfiguration();
 
 // Initialize express
 var app = express();
@@ -83,10 +83,11 @@ var getGoogleIdToken = function(req, res) {
     var OAuth2 = google.google.auth.OAuth2;
 
     var client = model.getGoogleClientDetails();
+    var serverAddress = model.getServerAddress();
     var oauth2Client = new OAuth2(
         client.clientID,
         client.clientSecret,
-        client.callbackURL
+        serverAddress + client.callbackURL
     );
 
     var googleCreden = {
@@ -114,7 +115,7 @@ var refreshOperation = function(req, res) {
     switch(provider) {
         case constants.GOOGLE: getGoogleIdToken(req, res);
         break;
-        case constants.FACEBOOK: res.json({"FACEBOOK_REFRESH_TOKEN": "FCAEBOOK DOES NOT PROVIDE REFRESH TOKEN"});
+        case constants.FACEBOOK: res.json({"FACEBOOK_REFRESH_TOKEN": "FACEBOOK DOES NOT PROVIDE REFRESH TOKEN"});
         break;
         default: {
             refresh.use(amazonStrat);

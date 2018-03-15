@@ -25,9 +25,14 @@ exports.globalData = function(data) {
 }
 
 /******** reading config file *******/
-exports.readConfiguration = function(fileName) {
-    var configFile = fs.readFileSync(path.join(__dirname, fileName), 'utf8');
+exports.readConfiguration = function() {
+    var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
     configData = JSON.parse(configFile);
+}
+
+/********** return configData ********/
+exports.getConfigurationData = function() {
+    return configData;
 }
 
 
@@ -48,4 +53,8 @@ exports.isUniqueUsername = function() {
 
 exports.getGoogleClientDetails = function() {
     return configData.google;
+}
+
+exports.getServerAddress = function() {
+    return configData.serverAddress;
 }
