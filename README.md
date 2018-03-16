@@ -123,8 +123,7 @@ If it is set to "false" then username will not have any contraints for its uniqu
 
     $ node server.js
 
-## We have provided sample client application which demonstrrts for:
-    * Googleate how to use I-Auth Module in your application. 
+## We have provided sample client application which demonstrates how to use I-Auth Module in your application. 
 
 #### Running Client 
 
