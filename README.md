@@ -84,23 +84,23 @@ If it is set to "false" then username will not have any contraints for its uniqu
     },
 
     "facebook": {
-        "clientID" : "158449238124791",
-        "clientSecret" : "d66db07cfd121522b6e3e6a7cd7e224a",
-        "callbackURL" : "http://localhost:8081/auth/facebook/callback",
+        "clientID" : "FACEBOOK CLIENT ID",
+        "clientSecret" : "FACEBOOK CLIENT SECRET",
+        "callbackURL" : "http://localhost:8081/auth/facebook/callback",     // server-address + /auth/facebook/callback
         "profileFields" : ["displayName", "email", "id"]
     },
     
     "google": {
-        "clientID" : "662176785730-pettrjm3iljsr98scng9nc546q684b0f.apps.googleusercontent.com",
-        "clientSecret" : "Ce3zfAEbMYZBoEk6inLdZm5i",
-        "callbackURL" : "http://localhost:8081/auth/google/callback",
+        "clientID" : "GOOGLE CLIENT ID",
+        "clientSecret" : "GOOGLE CLIENT SECRET",
+        "callbackURL" : "http://localhost:8081/auth/google/callback",     // server-address + /auth/google/callback
         "profileFields" : ["displayName", "email", "id"]
     },
 
     "amazon": {
-        "clientID" : "amzn1.application-oa2-client.3e40b491e5154580bca3c9872aef3a8c",
-        "clientSecret" : "01ed7fafdd55c0c10e2ffd1d283d11a7cf74efa4a60f54ed19da1b34b4de75b9",
-        "callbackURL" : "http://localhost:8081/auth/amazon/callback",
+        "clientID" : "AMAZON CLIENT ID",
+        "clientSecret" : "AMAZON CLIENT SECRET",
+        "callbackURL" : "http://localhost:8081/auth/amazon/callback",     // server-address + /auth/amazon/callback
         "profileFields" : ["displayName", "email", "id"]
     }
 }
