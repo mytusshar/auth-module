@@ -1,3 +1,9 @@
+
+/***
+ * author: Tushar Bochare
+ * Email: mytusshar@gmail.com
+ */
+
 var exports = module.exports = {};
 
 /****** Status codes ******/
@@ -67,5 +73,4 @@ exports.REFRESH_ROUTE = "/refresh";
         "dynamodb:LeadingKeys": "${cognito-identity.amazonaws.com:sub}"
     }
 }
-
 */

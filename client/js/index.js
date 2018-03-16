@@ -1,3 +1,9 @@
+
+/***
+ * author: Tushar Bochare
+ * Email: mytusshar@gmail.com
+ */
+
 // buttons 
 var buttonLoginBlock;
 var buttonRegBlock;

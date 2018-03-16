@@ -1,4 +1,9 @@
 
+/***
+ * author: Tushar Bochare
+ * Email: mytusshar@gmail.com
+ */
+
 const AWS_REGION = "us-east-1";
 const AWS_ENDPOINT = "http://dynamodb.us-east-1.amazonaws.com";
 const TABLE_NAME = "users";

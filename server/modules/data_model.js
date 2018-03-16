@@ -1,3 +1,9 @@
+
+/***
+ * author: Tushar Bochare
+ * Email: mytusshar@gmail.com
+ */
+
 var exports = module.exports = {};
 
 var fs = require("fs");

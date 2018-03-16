@@ -1,8 +1,12 @@
 
+/***
+ * author: Tushar Bochare
+ * Email: mytusshar@gmail.com
+ */
+
 var exports = module.exports = {};
 
 var _aws = new require('aws-sdk');
-
 var model = require('./data_model.js');
 var constants = require('./constants.js');
 
@@ -79,4 +83,3 @@ exports.getParamsForDynamoDB = function(data, code) {
 
     return params;
 }
-

@@ -1,8 +1,13 @@
 
 var exports = module.exports = {};
 
-var _aws = new require('aws-sdk');
 
+/***
+ * author: Tushar Bochare
+ * Email: mytusshar@gmail.com
+ */
+
+var _aws = new require('aws-sdk');
 var constants = require('./constants.js');
 var model = require('./data_model.js');
 var controller = require('./controller.js');

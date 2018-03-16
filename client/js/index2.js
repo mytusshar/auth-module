@@ -1,4 +1,9 @@
 
+/***
+ * author: Tushar Bochare
+ * Email: mytusshar@gmail.com
+ */
+
 var handleErrorStyles = function(code, show, hide_1, hide_2, hide_3) {
     if(code == 0) {
         show.style.display = "block";
