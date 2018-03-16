@@ -1,5 +1,5 @@
 
-# Independent Authentication Module (IAM)
+# Independent Authentication Module (I-Auth)
 
 Nowadays, security of any application has become very important role in developing 
 application and more than it maintaining users in the application is critical. 
@@ -8,7 +8,7 @@ So instead of creating new users in your application and maintaining its securit
 this library helps you to authenticate users from their existing Google/Facebook/Amazon
 accounts and gives you authenticated user directly.
 
-## Features provided by IAM Module
+## Features provided by I-Auth Module
 * Provides authenticated users from:
 
     1. Google
@@ -23,7 +23,7 @@ accounts and gives you authenticated user directly.
 
 * Registration feature using provided authentication providers.
 
-    You can add desired registration fields in client application, IAM Module will dynamicaly handles it for you.
+    You can add desired registration fields in client application, I-Auth Module will dynamicaly handles it for you.
 
 * You can configure whether your application wants unique username in your system for each user or not.
 
@@ -32,7 +32,7 @@ accounts and gives you authenticated user directly.
 * Returns access credentials which can be used to access rest of the Amazon Web Services like DynamoDB, EC2, RDS etc.
 
 
-## Follow below steps to use IAM module in your existing project.
+## Follow below steps to use I-Auth module in your existing project.
 
 ####  1. Clone this repository on your system
 
@@ -56,7 +56,7 @@ If it is set to "false" then username will not have any contraints for its uniqu
 
 - Now you have to provide which third party identity providers that you want in your application to support.
 
-    Presently this module supports for:
+    Presently I-Auth module supports for:
     * Google
     * Facebook
     * Amazon
@@ -66,7 +66,47 @@ If it is set to "false" then username will not have any contraints for its uniqu
     You have to provide "callback URL" on which third party authentication provider will redirect after successfull authentication.
     You can provide which profile fields you want to read from users's third party account.
 
-- Your IAM Module is ready to use.
+```
+{
+    "fields": ["provider", "request", "authId", "cognitoId", "accessKey", "secretKey", "sessionToken"],
+
+    "regFields": ["username", "name", "city", "email"],
+
+    "uniqueUsername": true,       //true or false
+    
+    "serverAddress": "http://localhost:8081",
+
+    "aws": {
+        "accountId": "AWS-ACCOUNT-ID,
+        "awsRegion":  "AWS-REGION",
+        "cognitoIdentityPoolId": "COGNITO-IDENTITY-POOL-ID",
+        "iamRoleArn": "IAM-ROLE-ARN"
+    },
+
+    "facebook": {
+        "clientID" : "158449238124791",
+        "clientSecret" : "d66db07cfd121522b6e3e6a7cd7e224a",
+        "callbackURL" : "http://localhost:8081/auth/facebook/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    },
+    
+    "google": {
+        "clientID" : "662176785730-pettrjm3iljsr98scng9nc546q684b0f.apps.googleusercontent.com",
+        "clientSecret" : "Ce3zfAEbMYZBoEk6inLdZm5i",
+        "callbackURL" : "http://localhost:8081/auth/google/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    },
+
+    "amazon": {
+        "clientID" : "amzn1.application-oa2-client.3e40b491e5154580bca3c9872aef3a8c",
+        "clientSecret" : "01ed7fafdd55c0c10e2ffd1d283d11a7cf74efa4a60f54ed19da1b34b4de75b9",
+        "callbackURL" : "http://localhost:8081/auth/amazon/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    }
+}
+````
+
+- Your I-Auth Module is ready to use.
 
 
 ####  3. Running Server
@@ -83,7 +123,8 @@ If it is set to "false" then username will not have any contraints for its uniqu
 
     $ node server.js
 
-## We have provided sample client application which demonstrate how to use IAM Module in your application. 
+## We have provided sample client application which demonstrrts for:
+    * Googleate how to use I-Auth Module in your application. 
 
 #### Running Client 
 
@@ -113,9 +154,9 @@ If it is set to "false" then username will not have any contraints for its uniqu
 * You are good to go.
 
 
-## STATUS CODES Returned by IAM-Module
+## STATUS CODES Returned by I-Auth Module
 
-When any kind of request is sent to IAM-Module then it responds client application with following STUTUS CODES.
+When any kind of request is sent to I-Auth Module then it responds client application with following STUTUS CODES.
 These STATUS_CODES can be used in client application.
 
 #### STATUS CODES
