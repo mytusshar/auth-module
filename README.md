@@ -100,13 +100,13 @@ If it is set to "false" then username will not have any contraints for its uniqu
 
 * Install Tomcat using following link.
 
-    [Tomcat installation]: https://devops.profitbricks.com/tutorials/how-to-install-and-configure-tomcat-8-on-ubuntu-1604/
+    [Tomcat installation]
     
 * Then go to /opt/tomcat/webapps folder and paste your client application folder in it.
   Make sure that index.html page should remain in your client application folder.
     You can refer this link for deploying web app in Tomcat server.
     
-    [deploying web app on tomcat]: https://stackoverflow.com/questions/3954621/deploying-just-html-css-webpage-to-tomcat
+    [deploying web app on tomcat]
 
 * The open http://localhost:8080/client in your browser.
 
@@ -144,3 +144,7 @@ and client application trying to register with existing username.
 Invalid userame response occures in case if client is logging in with non-existing username 
 or username and identity provider account mismatch.
 
+
+
+[Tomcat installation]: https://devops.profitbricks.com/tutorials/how-to-install-and-configure-tomcat-8-on-ubuntu-1604/
+[deploying web app on tomcat]: https://stackoverflow.com/questions/3954621/deploying-just-html-css-webpage-to-tomcat
