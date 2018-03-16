@@ -113,6 +113,10 @@ var initModal = function() {
 
 var openLoginPage = function() {
     closeModal();
+    loadLoginPage();
+}
+
+function loadLoginPage() {
     sessionStorage.removeItem("user");
     window.open(INDEX_FILE, "_self");
 }
