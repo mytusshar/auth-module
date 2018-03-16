@@ -7,6 +7,7 @@ var constants = require('./constants.js');
 var model = require('./data_model.js');
 var controller = require('./controller.js');
 var dynamo = require('./dynamo.js');
+var utils = require('./utils.js');
 
 exports.sendResponse = function(req, res) {
     /********** setting authId in cookie to access the data of user having same id **********/
@@ -97,6 +98,36 @@ exports.sendResponse = function(req, res) {
     res.sendFile(constants.RESPONSE_FILE, {root: __dirname });
 }
 
+exports.getAwsParams = function(sessionData, refreshToken) {
+    var configData = model.awsConfigData();
+    var logins = {};
+    var provider = sessionData.provider;
+    var authToken;
+    if(!refreshToken) {
+        authToken = sessionData.authToken;
+    } else {
+        authToken = sessionData.newAccessToken;
+    }
+
+    switch(provider) {
+        case constants.FACEBOOK: logins = {'graph.facebook.com': authToken};
+        break;
+        case constants.GOOGLE: logins = {'accounts.google.com': authToken};
+        break;
+        case constants.AMAZON: logins = {'www.amazon.com': authToken};
+        break;
+    }
+
+    var params = {
+        AccountId: configData.accountId,
+        RoleArn: configData.iamRoleArn,
+        IdentityPoolId: configData.cognitoIdentityPoolId,
+        Logins: logins
+    };
+
+    return params;
+}
+
 
 exports.loginOperation = function(data, sessionData) {
     if(!data) {
@@ -165,7 +196,7 @@ exports.refreshCognitoInit = function(req, res) {
 
 var refreshCognitoOperation = function(req, res) {
     var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
-        var params = controller.getAwsParams(req.body);
+        var params = utils.getAwsParams(req.body);
         var creden = new _aws.CognitoIdentityCredentials(params);
         var awsConfig = Object.assign({}, _aws.config);
         awsConfig.credentials = creden;

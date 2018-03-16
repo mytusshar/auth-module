@@ -25,7 +25,7 @@ function initializeClock(id, endtime) {
         secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
 
         /****** showing refresh/login page return modal ******/
-        if(t.minutes == SESSION_REFRESH_TIME && t.seconds == 0) {
+        if(t.minutes == SESSION_REFRESH_TIME && t.seconds == 45) {
             var sessData = JSON.parse(sessionStorage.user);
             if(sessData.provider != "facebook") {
                 var message = "Your session will expire soon.<br>" +
@@ -33,7 +33,7 @@ function initializeClock(id, endtime) {
                 openModal(message, buttonRefresh);                
             }
         }
-        else if(t.minutes == SESSION_EXPIRE_TIME && t.seconds == 0) {
+        else if(t.minutes == SESSION_EXPIRE_TIME && t.seconds == 30) {
             var message = "Your session is Expired.<br>" +
                             "Please click button to login again.";
             sessionStorage.removeItem("user");

@@ -8,7 +8,6 @@ var AmazonStrategy = require('passport-amazon').Strategy;
 var refresh = require('passport-oauth2-refresh');
 var cors = require('cors');
 var bodyParser = require('body-parser');
-var google = require('googleapis');
 
 var controller = require('./modules/controller.js');
 var constants = require('./modules/constants.js');
@@ -41,99 +40,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 passport.serializeUser(controller.serializeParam);
 passport.deserializeUser(controller.deserializeParam);
 
-/*******************************
-******* unique request ID ******/
-var userCount = 0;
-/********************
- ********************/
-
-/*********** Authentication request ***********/
-var handleAuthRequest = function(req, res) {     
-    var userData = controller.getURLParam(req);
-    var requestType = userData.request;
-    var provider = userData.provider;
-    var uniqueId = ++userCount;
-    /********* setting data in request session *********/
-    req.session.data = userData;
-    req.session.data.idd = uniqueId;
-
-    console.log("\n*************************************");
-    console.log("****** NEW: " + provider + " " + requestType + " request. ******");
-    console.log("*************************************\n");
-
-    switch(provider) {
-        case constants.FACEBOOK: {
-            res.redirect(constants.FACEBOOK_LOGIN);
-        } break;
-        case constants.GOOGLE: {
-            res.redirect(constants.GOOGLE_LOGIN);
-        } break;
-        case constants.AMAZON: {
-            res.redirect(constants.AMAZON_LOGIN);
-        } break;
-        default: console.log("ERROR: Unknown " + requestType + " request.");
-    }
-}
-app.get(constants.AUTH_REQUEST_URL, handleAuthRequest);
-
-
-var getGoogleIdToken = function(req, res) {
-    var refreshToken = req.body.refreshToken;
-    var accessToken = req.body.accessToken;
-    var OAuth2 = google.google.auth.OAuth2;
-
-    var client = model.getGoogleClientDetails();
-    var serverAddress = model.getServerAddress();
-    var oauth2Client = new OAuth2(
-        client.clientID,
-        client.clientSecret,
-        serverAddress + client.callbackURL
-    );
-
-    var googleCreden = {
-        access_token: accessToken,
-        refresh_token: refreshToken
-    }
-    oauth2Client.setCredentials(googleCreden);
-
-    oauth2Client.refreshAccessToken(function(err, tokens) {
-        if(err) {
-            console.log("\nrefreshAccessToken: ERROR: ", err);
-        } else {
-            req.body.newAccessToken = tokens.id_token;
-            utils.refreshCognitoInit(req, res);
-        }
-    });    
-}
+/********* authentication url **********/
+app.get(constants.AUTH_REQUEST_URL, controller.handleAuthRequest);
 
 /*********** refreh token route ****************/
-var refreshOperation = function(req, res) {
-    var refreshToken = req.body.refreshToken;
-    var provider = req.body.provider;
-    console.log("\n******* REFRESH TOKEN REQUEST: FROM: " + provider + " **********\n");
-
-    switch(provider) {
-        case constants.GOOGLE: getGoogleIdToken(req, res);
-        break;
-        case constants.FACEBOOK: res.json({"FACEBOOK_REFRESH_TOKEN": "FACEBOOK DOES NOT PROVIDE REFRESH TOKEN"});
-        break;
-        default: {
-            refresh.use(amazonStrat);
-
-            var refreshFunction = function(err, accessToken) {
-                if(err) {
-                    console.log("\nREFRESH AccessToken ERROR: ", err);
-                    res.json({"refresh": "error occured"});
-                } else {      
-                    req.body.newAccessToken = accessToken;
-                    utils.refreshCognitoInit(req, res);
-                }
-            }
-            refresh.requestNewAccessToken(provider, refreshToken, refreshFunction);
-        }
-    }
-}
-app.post(constants.REFRESH_ROUTE, refreshOperation);
+app.post(constants.REFRESH_ROUTE, controller.refreshOperation);
 
 
 /*************** Facebook strategy *************/
@@ -163,6 +74,7 @@ app.get(constants.GOOGLE_CALLBACK, authGoogle, controller.successRedirect);
 /************** Amazon Strategy *****************/
 var amazonStrat = new AmazonStrategy(controller.amazonDeveloperDetails, controller.getUserDetails);
 passport.use(amazonStrat);
+refresh.use(amazonStrat);
 app.get(constants.AMAZON_LOGIN, passport.authenticate(constants.AMAZON, { scope: ['profile'] }));
 
 var authAmazon = passport.authenticate(constants.AMAZON, {

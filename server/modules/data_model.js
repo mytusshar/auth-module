@@ -7,6 +7,7 @@ var constants = require('./constants.js');
 /**** config file data *****/
 var configData;
 var globalData = {};
+var requestId = 0;
 
 exports.globalData = function(data) {
     if(data) {
@@ -22,6 +23,10 @@ exports.globalData = function(data) {
     } else {
         return globalData;
     }
+}
+
+exports.getRequestId = function() {
+    return ++requestId;
 }
 
 /******** reading config file *******/

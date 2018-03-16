@@ -43,7 +43,7 @@ module.exports = class CognitoOperation {
 
         var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
             var requestType = req.session.data.request;
-            var params = controller.getAwsParams(req.session.data);
+            var params = utils.getAwsParams(req.session.data);
 
             /******* initialize the Credentials object *********/
             _aws.config.credentials = new _aws.CognitoIdentityCredentials(params);
@@ -140,7 +140,6 @@ module.exports = class CognitoOperation {
                     }
                     else if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
                         var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
-                        // console.log(req.session.data);
                         var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
                         promiseUsername.then(handleDataUsername, handleError);
                     } else {

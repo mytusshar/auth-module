@@ -2,20 +2,22 @@ var exports = module.exports = {};
 
 var fs = require("fs");
 var path = require('path');
+var refresh = require('passport-oauth2-refresh');
+
 var services = require('./services.js');
 var constants = require('./constants.js');
 var model = require('./data_model.js');
 var CognitoOperation = require('./services.js');
+var controller = require('./controller.js');
+var utils = require('./utils.js');
 
 /*********** reading developer details from config file*********I*/
 var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
 var configData = JSON.parse(configFile);
-// var configData = model.getConfigurationData();
 
 var facebookClient = configData.facebook;
 var googleClient = configData.google;
 var amazonClient = configData.amazon;
-// var serverAddress = configData.serverAddress;
 
 /***************** developer details ****************/
 exports.googleDeveloperDetails = {
@@ -49,6 +51,7 @@ exports.getUserDetails = function(accessToken, refreshToken, params, profile, do
         profile.token = accessToken;
     }
     profile.refreshToken = refreshToken;
+    profile.params = params;
     done(null, profile);
 }
 
@@ -62,6 +65,89 @@ exports.deserializeParam = function(obj, done) {
 
 exports.serializeParam = function(user, done) {
     done(null, user);
+}
+
+/*********** Authentication request ***********/
+exports.handleAuthRequest = function(req, res) {
+    var userData = controller.getURLParam(req);
+    var requestType = userData.request;
+    var provider = userData.provider;
+    var uniqueId = model.getRequestId();
+    /********* setting data in request session *********/
+    req.session.data = userData;
+    req.session.data.idd = uniqueId;
+
+    console.log("\n*************************************");
+    console.log("****** NEW: " + provider + " " + requestType + " request. ******");
+    console.log("*************************************\n");
+
+    switch(provider) {
+        case constants.FACEBOOK: {
+            res.redirect(constants.FACEBOOK_LOGIN);
+        } break;
+        case constants.GOOGLE: {
+            res.redirect(constants.GOOGLE_LOGIN);
+        } break;
+        case constants.AMAZON: {
+            res.redirect(constants.AMAZON_LOGIN);
+        } break;
+        default: console.log("ERROR: Unknown " + requestType + " request.");
+    }
+}
+
+
+
+exports.getGoogleIdToken = function(req, res) {
+    var refreshToken = req.body.refreshToken;
+    var accessToken = req.body.accessToken;
+    var google = require('googleapis');
+    var OAuth2 = google.google.auth.OAuth2;
+    var client = model.getGoogleClientDetails();
+    var oauth2Client = new OAuth2(
+        client.clientID,
+        client.clientSecret,
+        client.callbackURL
+    );
+
+    var googleCreden = {
+        access_token: accessToken,
+        refresh_token: refreshToken
+    }
+    oauth2Client.setCredentials(googleCreden);
+
+    oauth2Client.refreshAccessToken(function(err, tokens) {
+        if(err) {
+            console.log("\nrefreshAccessToken: ERROR: ", err);
+        } else {
+            req.body.newAccessToken = tokens.id_token;
+            utils.refreshCognitoInit(req, res);
+        }
+    });    
+}
+
+exports.refreshOperation = function(req, res) {
+    var refreshToken = req.body.refreshToken;
+    var provider = req.body.provider;
+    console.log("\n******* REFRESH TOKEN REQUEST: FROM: " + provider + " **********\n");
+
+    switch(provider) {
+        case constants.GOOGLE: controller.getGoogleIdToken(req, res);
+        break;
+        case constants.FACEBOOK: res.json({"FACEBOOK_REFRESH_TOKEN": "FACEBOOK DOES NOT PROVIDE REFRESH TOKEN"});
+        break;
+        default: {
+            var refreshFunction = function(err, accessToken) {
+                if(err) {
+                    console.log("\nREFRESH AccessToken ERROR: ", err);
+                    res.json({"refresh": "error occured"});
+                } else {      
+                    req.body.newAccessToken = accessToken;
+                    utils.refreshCognitoInit(req, res);
+                }
+            }
+            refresh.requestNewAccessToken(provider, refreshToken, refreshFunction);
+        }
+    }
 }
 
 /************* getting params from url ************/
@@ -82,38 +168,6 @@ exports.getURLParam = function(req) {
     }
     return data;
 }
-
-exports.getAwsParams = function(sessionData, refreshToken) {
-    var configData = model.awsConfigData();
-
-    var logins = {};
-    var provider = sessionData.provider;
-    var authToken;
-    if(!refreshToken) {
-        authToken = sessionData.authToken;
-    } else {
-        authToken = sessionData.newAccessToken;
-    }
-
-    switch(provider) {
-        case constants.FACEBOOK: logins = {'graph.facebook.com': authToken};
-        break;
-        case constants.GOOGLE: logins = {'accounts.google.com': authToken};
-        break;
-        case constants.AMAZON: logins = {'www.amazon.com': authToken};
-        break;
-    }
-
-    var params = {
-        AccountId: configData.accountId,
-        RoleArn: configData.iamRoleArn,
-        IdentityPoolId: configData.cognitoIdentityPoolId,
-        Logins: logins
-    };
-
-    return params;
-}
-
 
 exports.ensureAuthenticated = function(req, res, next) {
     /*********** setting data from auth provider in request session ***********/

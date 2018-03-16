@@ -11,7 +11,7 @@ const PROFILE = SERVER_ADDRESS + "/profile";
 const REFRESH_URL = SERVER_ADDRESS + "/refresh";
 const REQUIRE_LOGIN_NAME = true;
 
-const SESSION_EXPIRE_TIME = 58;
+const SESSION_EXPIRE_TIME = 59;
 const SESSION_REFRESH_TIME = 59;
 
 const LOGIN = "login";
