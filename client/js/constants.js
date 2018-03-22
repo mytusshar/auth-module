@@ -3,6 +3,7 @@
  * author: Tushar Bochare
  * Email: mytusshar@gmail.com
  */
+const CLIENT_REDIRECT_URL = "http://localhost:8080/client/index.html";
 
 const AWS_REGION = "us-east-1";
 const AWS_ENDPOINT = "http://dynamodb.us-east-1.amazonaws.com";
@@ -16,8 +17,8 @@ const REFRESH_URL = SERVER_ADDRESS + "/refresh";
 
 const REQUIRE_LOGIN_NAME = true;
 
-const SESSION_EXPIRE_TIME = 57;
-const SESSION_REFRESH_TIME = 58;
+const SESSION_EXPIRE_TIME = 0;
+const SESSION_REFRESH_TIME = 5;
 const SESSION_TIME = 60;
 
 const LOGIN = "login";

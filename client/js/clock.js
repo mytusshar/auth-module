@@ -13,7 +13,7 @@ var interval;
 var messageRefresh = "Your session will expire soon.<br>" +
                     "Please click Refresh button to refresh the session.";
 var messageExpire = "Your session is Expired.<br>" +
-                        "Please click button to login again.";
+                    "Please click button to login again.";
 
 function initializeClock() {
     totalTime = SESSION_TIME;
@@ -30,7 +30,6 @@ function initializeClock() {
 
     minutes = parseInt(parseInt(value) / 60);
     seconds = parseInt(value) - parseInt(minutes)*60;
-
     minElement = document.getElementById('minutes');
     secElement = document.getElementById('seconds');
     minElement.innerHTML = minutes;
@@ -54,7 +53,6 @@ function counter() {
 
     minutes = parseInt(parseInt(value) / 60);
     seconds = parseInt(value) - parseInt(minutes)*60;
-
     /****** showing refresh/login page return modal ******/
     if(minutes == SESSION_REFRESH_TIME && seconds == 59) {
         var sessData = JSON.parse(sessionStorage.user);

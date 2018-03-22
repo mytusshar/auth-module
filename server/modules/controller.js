@@ -21,9 +21,21 @@ var utils = require('./utils.js');
 var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
 var configData = JSON.parse(configFile);
 
-exports.googleDeveloperDetails = configData.google;
-exports.facebookDeveloperDetails = configData.facebook;
-exports.amazonDeveloperDetails = configData.amazon;
+// exports.googleDeveloperDetails = configData.google;
+// exports.facebookDeveloperDetails = configData.facebook;
+// exports.amazonDeveloperDetails = configData.amazon;
+
+if(configData.hasOwnProperty("google")) {
+    exports.googleDeveloperDetails = configData.google;
+}
+
+if(configData.hasOwnProperty("amazon")) {
+    exports.amazonDeveloperDetails = configData.amazon;
+}
+
+if(configData.hasOwnProperty("facebook")) {
+    exports.facebookDeveloperDetails = configData.facebook;
+}
 
 /************ getting user details from auth provider *************/
 exports.getUserDetails = function(accessToken, refreshToken, params, profile, done) {
@@ -98,14 +110,15 @@ exports.getGoogleIdToken = function(req, res) {
     }
     oauth2Client.setCredentials(googleCreden);
 
-    oauth2Client.refreshAccessToken(function(err, tokens) {
+    oauth2Client.refreshAccessToken(responseRefreshOperation);
+    function responseRefreshOperation(err, tokens) {
         if(err) {
             console.log("\nrefreshAccessToken: ERROR: ", err);
         } else {
             req.body.newAccessToken = tokens.id_token;
             utils.refreshCognitoInit(req, res);
         }
-    });    
+    }
 }
 
 exports.refreshOperation = function(req, res) {
@@ -119,7 +132,7 @@ exports.refreshOperation = function(req, res) {
         case constants.FACEBOOK: res.json({"FACEBOOK_REFRESH_TOKEN": "FACEBOOK DOES NOT PROVIDE REFRESH TOKEN"});
         break;
         default: {
-            var refreshFunction = function(err, accessToken) {
+            function refreshFunction(err, accessToken) {
                 if(err) {
                     console.log("\nREFRESH AccessToken ERROR: ", err);
                     res.json({"refresh": "error occured"});
@@ -141,14 +154,29 @@ exports.getURLParam = function(req) {
         provider: param.provider
     };
 
-    var keys = model.getRegistrationFields();
-    for(var i=0; i<keys.length; i++) {
-        var key = keys[i];
-        if(param.hasOwnProperty(key)) {
-            var value = param[key];
-            data[key] = value;
+    var configData = model.getConfigurationData();
+
+    if(configData.hasOwnProperty("regFields")) {
+        var keys = configData.regFields;
+        for(var i=0; i<keys.length; i++) {
+            var key = keys[i];
+            if(param.hasOwnProperty(key)) {
+                var value = param[key];
+                data[key] = value;
+            }
         }
     }
+
+    // "regFields": ["username", "name", "city", "email"],
+
+    // var keys = model.getRegistrationFields();
+    // for(var i=0; i<keys.length; i++) {
+    //     var key = keys[i];
+    //     if(param.hasOwnProperty(key)) {
+    //         var value = param[key];
+    //         data[key] = value;
+    //     }
+    // }
     return data;
 }
 

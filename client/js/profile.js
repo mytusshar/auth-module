@@ -17,7 +17,6 @@ window.onload = function() {
     /******* dynamodb read operation ******/
     buttonDynamodbRead = document.getElementById("dynamodb-button");
     buttonDynamodbRead.addEventListener("click", dynamodbReadOperation);
-
     buttonLogout = document.getElementById("button-logout");
     buttonLogout.addEventListener("click", logoutUser);
 
@@ -28,30 +27,20 @@ window.onload = function() {
 
 function logoutUser() {
     var sessData = JSON.parse(sessionStorage.user);
-    var logoutUrl;
-
     switch(sessData.provider) {
-        case "google": logoutUrl = 'https://mail.google.com/mail/?logout&hl=fr';
+        case "google":
+                window.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue="
+                    + CLIENT_REDIRECT_URL;
         break;
-        case "amazon": logoutUrl = "https://www.amazon.com/gp/flex/sign-out.html/ref=nav_youraccount_signout?ie=UTF8&action=sign-out&path=%2Fgp%2Fyourstore%2Fhome&signIn=1&useRedirectOnSuccess=1";
-                    // "https://console.aws.amazon.com/ec2/logout!doLogout";
-                    // "https://www.amazon.in/signout";                    
+        case "facebook":
+                window.location.href = "https://www.facebook.com/logout.php?next=" + CLIENT_REDIRECT_URL
+                    + "&access_token=" + sessData.authToken;
         break;
-        case "facebook": logoutUrl = 'https://www.facebook.com/logout.php?next=http://127.0.0.1:5500/logout.php&access_token=' + sessData.authToken;
+        case "amazon": window.location.href = CLIENT_REDIRECT_URL;
         break;
     }
-
-    var params = 'width=600,height=500,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200';
-    var newWindow = window.open(logoutUrl, 'You are being logout', params);
-
-    setTimeout(closeTabOnLoad, 3000);
-
-    function closeTabOnLoad() {
-        if (newWindow) {
-            newWindow.close();
-        }
-        loadLoginPage()
-    }
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("counter");
 }
 
 function initializeProfile() {
