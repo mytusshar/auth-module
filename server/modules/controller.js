@@ -21,32 +21,9 @@ var utils = require('./utils.js');
 var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
 var configData = JSON.parse(configFile);
 
-var facebookClient = configData.facebook;
-var googleClient = configData.google;
-var amazonClient = configData.amazon;
-
-/***************** developer details ****************/
-exports.googleDeveloperDetails = {
-    clientID: googleClient.clientID,
-    clientSecret: googleClient.clientSecret,
-    callbackURL: googleClient.callbackURL,
-    profileFields: googleClient.profileFields
-}
-
-exports.amazonDeveloperDetails = {
-    clientID: amazonClient.clientID,
-    clientSecret: amazonClient.clientSecret,
-    callbackURL: amazonClient.callbackURL,
-    profileFields: amazonClient.profileFields
-}
-
-exports.facebookDeveloperDetails = {
-    clientID: facebookClient.clientID,
-    clientSecret: facebookClient.clientSecret,
-    callbackURL: facebookClient.callbackURL,
-    profileFields: facebookClient.profileFields
-}
-
+exports.googleDeveloperDetails = configData.google;
+exports.facebookDeveloperDetails = configData.facebook;
+exports.amazonDeveloperDetails = configData.amazon;
 
 /************ getting user details from auth provider *************/
 exports.getUserDetails = function(accessToken, refreshToken, params, profile, done) {
@@ -209,7 +186,6 @@ exports.ensureAuthenticated = function(req, res, next) {
         break;
     }
 }
-
 
 /******************* cognito operation *****************/
 exports.cognitoOperation = function(req, res) {

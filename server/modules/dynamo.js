@@ -3,7 +3,6 @@
  * author: Tushar Bochare
  * Email: mytusshar@gmail.com
  */
-
 var exports = module.exports = {};
 
 var _aws = new require('aws-sdk');
@@ -13,8 +12,8 @@ var constants = require('./constants.js');
 exports.insertData = function(params, awsCredentials) {
     _aws.config.credentials = awsCredentials;
 
-    var insertAsyncOperation = function(resolveInsertDB, rejectInsertDB) {
-        var insertOperation = function(err, data) {                 
+    function insertAsyncOperation(resolveInsertDB, rejectInsertDB) {
+        function insertOperation(err, data) {                 
             if(err) {
                 console.log("\ntable:users::insertData::error - ", JSON.stringify(err, null, 2) + "\n");
                 rejectInsertDB(err);
@@ -29,12 +28,11 @@ exports.insertData = function(params, awsCredentials) {
     return new Promise(insertAsyncOperation);
 }
 
-
 exports.readData = function(params, awsCredentials) {
     _aws.config.credentials = awsCredentials;
     
-    var queryAsyncOperation = function(resolveQueryDB, rejectQueryDB) {
-        var queryOperation = function(err, data) {                 
+    function queryAsyncOperation(resolveQueryDB, rejectQueryDB) {
+        function queryOperation(err, data) {                 
             if(err) {
                 console.log("\ntable:users::queryData::error - ", JSON.stringify(err, null, 2));
                 rejectQueryDB(err);
@@ -48,7 +46,6 @@ exports.readData = function(params, awsCredentials) {
     }
     return new Promise(queryAsyncOperation);
 }
-
 
 exports.getParamsForDynamoDB = function(data, code) {
     var isUniqueUsername = model.isUniqueUsername();

@@ -1,5 +1,3 @@
-
-
 /***
  * author: Tushar Bochare
  * Email: mytusshar@gmail.com
@@ -27,7 +25,6 @@ model.readConfiguration();
 
 // Initialize express
 var app = express();
-
 // set session
 app.use(session({
     secret: 'secret',
@@ -52,7 +49,6 @@ app.get(constants.AUTH_REQUEST_URL, controller.handleAuthRequest);
 
 /*********** refreh token route ****************/
 app.post(constants.REFRESH_ROUTE, controller.refreshOperation);
-
 
 /*************** Facebook strategy *************/
 var facebookStrat = new FacebookStrategy(controller.facebookDeveloperDetails, controller.getUserDetails);
@@ -89,7 +85,6 @@ var authAmazon = passport.authenticate(constants.AMAZON, {
 });
 app.get(constants.AMAZON_CALLBACK, authAmazon, controller.successRedirect);
 /************** Google strategy END *************/
-
 
 // GET success page
 app.get(constants.SUCCESS, controller.ensureAuthenticated, controller.cognitoOperation);

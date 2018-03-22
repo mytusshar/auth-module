@@ -15,36 +15,45 @@ var buttonRegAmazon;
 var buttonRegGoogle;
 
 /********** facebook login/reg functions ********/
-var regFacebookFunction = function(){ 
-    openIdentityProvider(REGISTER, "facebook");
+function regFacebookFunction() {
+    register("facebook");
 }
-var loginFacebookFunction = function(){ 
-    openIdentityProvider(LOGIN, "facebook");
+function loginFacebookFunction() {
+    login("facebook");
 }
 
 /********** google login/reg functions ******/
-var regGoogleFunction = function(){ 
-    openIdentityProvider(REGISTER, "google");
+function regGoogleFunction() {
+    register("google");
 }
-var loginGoogleFunction = function(){ 
-    openIdentityProvider(LOGIN, "google");
+function loginGoogleFunction() {
+    login("google");
 }
 
 /********** amazon login/reg functions ******/
-var regAmazonFunction = function(){ 
-    openIdentityProvider(REGISTER, "amazon");
+function regAmazonFunction() {
+    register("amazon");
 }
-var loginAmazonFunction = function(){ 
-    openIdentityProvider(LOGIN, "amazon");
+function loginAmazonFunction() { 
+    // openIdentityProvider(LOGIN, "amazon");
+    login("amazon");
 }
 
 /******* login/register functions *******/
-var showLoginBlock = function(){ 
+function showLoginBlock() { 
     hideOrShowBlock(LOGIN);
 };
-var showRegBlock = function(){ 
+function showRegBlock(){ 
     hideOrShowBlock(REGISTER);
 };
+
+function login(provider) {
+    openIdentityProvider(LOGIN, provider);
+}
+
+function register(provider) {
+    openIdentityProvider(REGISTER, provider);
+}
 
 function hideOrShowBlock(buttonType) {
     var regBlock = document.getElementById("register-block");
@@ -60,20 +69,17 @@ function hideOrShowBlock(buttonType) {
     }
 }
 
-
-var browserStorage = function(data) {
+function browserStorage(data) {
     if (typeof(Storage) !== "undefined") {
         sessionStorage.setItem('user', JSON.stringify(data));
         console.log("%%%%% YES: storage available %%%%%%", JSON.parse(sessionStorage.user));
     } else {
-        // No Web Storage support
         console.log("%%%%% NO: storage available %%%%%%");
     }
     return;
 }
 
-
-var recievedDataOperation = function(e) { 
+function recievedDataOperation(e) { 
     var output =  document.getElementById("output");
     var data = e.data;
 
@@ -121,13 +127,12 @@ window.onload = function() {
     buttonRegBlock.addEventListener("click", showRegBlock);
 }
 
-
-function openIdentityProvider(req_type, authProvider) {
+function openIdentityProvider(requestType, authProvider) {
     let params = `scrollbars=no, resizable=no, status=no, location=no,
                 toolbar=no, menubar=no, width=700, height=600, left=100, top=100`;                    
     var url = URL_AUTHENTICATION;
 
-    if(req_type == REGISTER) {
+    if(requestType == REGISTER) {
         var userData = getFormData();
         console.log(userData)
         userData.provider = authProvider;
@@ -170,3 +175,66 @@ function openIdentityProvider(req_type, authProvider) {
 }
 
 
+function handleErrorStyles(code, show, hide1, hide2, hide3) {
+    if(code == 0) {
+        show.style.display = "block";
+    } else {
+        show.style.display = "none";
+    }
+    hide1.style.display = "none";
+    hide2.style.display = "none";
+    hide3.style.display = "none";
+}
+
+function getFormData() {
+    var name = document.getElementById("name").value.trim();
+    var city = document.getElementById("city").value.trim();
+    var email = document.getElementById("email").value.trim();
+    var username = document.getElementById("username").value.trim();
+
+    var errUsername = document.getElementById("errorusername");
+    var errName = document.getElementById("errorname");
+    var errCity = document.getElementById("errorcity");
+    var errEmail = document.getElementById("erroremail");
+
+    var data = {isValid: false};
+
+    if(username == "") {
+        errUsername.innerHTML = "Enter username!";
+        handleErrorStyles(0, errUsername, errName, errCity, errEmail);
+    } else if(name == "") {
+        errName.innerHTML = "Enter Name!";
+        handleErrorStyles(0, errName, errCity, errEmail, errUsername);
+    } else if(email == "") {
+        errEmail.innerHTML = "Enter Email ID!";
+        handleErrorStyles(0, errEmail, errName, errCity, errUsername);
+    } else if(city == "") {
+        errCity.innerHTML = "Enter City Name!";
+        handleErrorStyles(0, errCity, errEmail, errName, errUsername);
+    } else {
+        data = {
+            isValid: true,
+            username: username,
+            name: name,
+            city: city,
+            request: REGISTER,
+            email: email
+        }
+        handleErrorStyles(1, errCity, errEmail, errName, errUsername);
+    }
+    return data;
+}
+
+function appendURL(data, url) {
+    if(data.request == REGISTER) {
+        url = url + "?" + "username=" + data.username + "&" + "provider=" + data.provider + "&" + "request="
+             + data.request + "&" + "name=" + data.name + "&" + "city=" + data.city + "&" + "email=" + data.email;
+    } else {
+        if(REQUIRE_LOGIN_NAME) {
+            url = url + "?" + "provider=" + data.provider + "&" + "request=" + data.request + "&" + "username=" + data.username;
+        } else {
+            url = url + "?" + "provider=" + data.provider + "&" + "request=" + data.request;
+        }        
+    }
+    return url;
+}

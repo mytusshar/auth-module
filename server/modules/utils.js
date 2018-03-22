@@ -1,11 +1,9 @@
-
-var exports = module.exports = {};
-
-
 /***
  * author: Tushar Bochare
  * Email: mytusshar@gmail.com
  */
+
+var exports = module.exports = {};
 
 var _aws = new require('aws-sdk');
 var constants = require('./constants.js');
@@ -186,12 +184,12 @@ exports.registerOperation = function(sessionData) {
 }
 
 exports.refreshCognitoInit = function(req, res) {
-    var handleRefresh = function(data) {
+    function handleRefresh(data) {
         res.json({"refreshData": data});
         console.log("\n********** Resolved & Refresh token response sent *******");
     }
 
-    var handleError = function(err) {
+    function handleError(err) {
         res.json({"refreshError": err});
     }
 
@@ -199,14 +197,14 @@ exports.refreshCognitoInit = function(req, res) {
     promiseRefresh.then(handleRefresh, handleError);
 }
 
-var refreshCognitoOperation = function(req, res) {
-    var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
+function refreshCognitoOperation(req, res) {
+    function cognitoAsyncOperation(resolveCognito, rejectCognito) {
         var params = utils.getAwsParams(req.body);
         var creden = new _aws.CognitoIdentityCredentials(params);
         var awsConfig = Object.assign({}, _aws.config);
         awsConfig.credentials = creden;
 
-        var refreshOperation = function(err) {
+        function refreshOperation(err) {
             if (!err) { 
                 var credentials = {};
                 credentials.cognitoId = awsConfig.credentials.identityId;

@@ -67,6 +67,7 @@ If it is set to "false" then username will not have any contraints for its uniqu
     You can provide which profile fields you want to read from users's third party account.
 
 ```
+
 {
     "fields": ["provider", "request", "authId", "cognitoId", "accessKey", "secretKey", "sessionToken"],
 
@@ -104,6 +105,7 @@ If it is set to "false" then username will not have any contraints for its uniqu
         "profileFields" : ["displayName", "email", "id"]
     }
 }
+
 ````
 
 - Your I-Auth Module is ready to use.

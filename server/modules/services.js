@@ -1,4 +1,3 @@
-
 /***
  * author: Tushar Bochare
  * Email: mytusshar@gmail.com
@@ -45,7 +44,7 @@ module.exports = class CognitoOperation {
     getCognitoIdentity(req, res) {
         var _aws = this.aws;
 
-        var cognitoAsyncOperation = function(resolveCognito, rejectCognito) {
+        function cognitoAsyncOperation(resolveCognito, rejectCognito) {
             var requestType = req.session.data.request;
             var params = utils.getAwsParams(req.session.data);
 
@@ -53,7 +52,7 @@ module.exports = class CognitoOperation {
             _aws.config.credentials = new _aws.CognitoIdentityCredentials(params);
             var cognitoCredentials = _aws.config.credentials;
         
-            var getCognitoCredenials = function(err) {
+            function getCognitoCredenials(err) {
                 if (!err) {
                     var isUniqueUsername = model.isUniqueUsername();
                     /************* setting cognito data into request **********/
@@ -62,15 +61,15 @@ module.exports = class CognitoOperation {
                     req.session.data.secretKey = cognitoCredentials.secretAccessKey;
                     req.session.data.sessionToken = cognitoCredentials.sessionToken;
         
-                    var handleError = function(err) {
+                    function handleError(err) {
                         rejectCognito(err);
                     }
         
-                    var handleInsertResult = function(data) {
+                    function handleInsertResult(data) {
                         resolveCognito(req.session.data);
                     }
 
-                    var handleData = function(data) {
+                    function handleData(data) {
                         if(requestType == constants.REQ_LOGIN) {
                             utils.loginOperation(data, req.session.data);
                             resolveCognito(req.session.data);
@@ -87,7 +86,7 @@ module.exports = class CognitoOperation {
                         }
                     }
 
-                    var handleDataUsername = function(data) {
+                    function handleDataUsername(data) {
                         if(data) {
                             if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
                                 if(data.cognito_id != req.session.data.cognitoId) {
@@ -114,7 +113,7 @@ module.exports = class CognitoOperation {
                         }
                     }
 
-                    var handleDataCognito = function(data) {
+                    function handleDataCognito(data) {
                         if(data) {
                             if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
                                 utils.loginOperation(data, req.session.data);

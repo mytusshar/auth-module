@@ -3,56 +3,72 @@
  * author: Tushar Bochare
  * Email: mytusshar@gmail.com
  */
+var totalTime;
+var minutes;
+var seconds;
+var value;
+var minElement;
+var secElement;
+var interval;
+var messageRefresh = "Your session will expire soon.<br>" +
+                    "Please click Refresh button to refresh the session.";
+var messageExpire = "Your session is Expired.<br>" +
+                        "Please click button to login again.";
 
-function getTimeRemaining(endtime) {
-    var t = Date.parse(endtime) - Date.parse(new Date());
-    var seconds = Math.floor((t / 1000) % 60);
-    var minutes = Math.floor((t / 1000 / 60) % 60);
-    var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-    var days = Math.floor(t / (1000 * 60 * 60 * 24));
-    return {
-        'total': t,
-        'days': days,
-        'hours': hours,
-        'minutes': minutes,
-        'seconds': seconds
-    };
-}
+function initializeClock() {
+    totalTime = SESSION_TIME;
 
-function initializeClock(id, endtime) {
-    var clock = document.getElementById(id);
-    var minutesSpan = clock.querySelector('.minutes');
-    var secondsSpan = clock.querySelector('.seconds');
-
-    function updateClock() {
-        var t = getTimeRemaining(endtime);
-        minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
-        secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
-
-        /****** showing refresh/login page return modal ******/
-        if(t.minutes == SESSION_REFRESH_TIME && t.seconds == 45) {
-            var sessData = JSON.parse(sessionStorage.user);
-            if(sessData.provider != "facebook") {
-                var message = "Your session will expire soon.<br>" +
-                            "Please click Refresh button to refresh the session.";
-                openModal(message, buttonRefresh);                
-            }
+    if (sessionStorage.getItem("counter")) {
+        if (sessionStorage.getItem("counter") <= 0){
+            value = parseInt(totalTime)*60;
+        } else {
+            value = sessionStorage.getItem("counter");
         }
-        else if(t.minutes == SESSION_EXPIRE_TIME && t.seconds == 30) {
-            var message = "Your session is Expired.<br>" +
-                            "Please click button to login again.";
-            sessionStorage.removeItem("user");
-            openModal(message, buttonLoginPage);
-        }
-
-        if (t.total <= 0) {
-            clearInterval(timeinterval);
-        }
+    } else {
+        value = parseInt(totalTime)*60;
     }
 
-    updateClock();
-    var timeinterval = setInterval(updateClock, 1000);
+    minutes = parseInt(parseInt(value) / 60);
+    seconds = parseInt(value) - parseInt(minutes)*60;
+
+    minElement = document.getElementById('minutes');
+    secElement = document.getElementById('seconds');
+    minElement.innerHTML = minutes;
+    secElement.innerHTML = seconds;
+
+    if(!interval) {
+        interval = setInterval(function() {
+            counter();
+        }, 1000);
+    }    
 }
 
-var deadline = new Date(Date.parse(new Date()) + 60 * 60 * 1000);
+function counter() {
+    if (value <= 0) {
+        sessionStorage.setItem("counter", totalTime*60);
+        value = parseInt(totalTime)*60;
+    } else {
+        value = parseInt(value) - 1;
+        sessionStorage.setItem("counter", value);
+    }
+
+    minutes = parseInt(parseInt(value) / 60);
+    seconds = parseInt(value) - parseInt(minutes)*60;
+
+    /****** showing refresh/login page return modal ******/
+    if(minutes == SESSION_REFRESH_TIME && seconds == 59) {
+        var sessData = JSON.parse(sessionStorage.user);
+        if(sessData.provider != "facebook") {
+            openModal(messageRefresh, buttonRefresh);                
+        }
+    }
+    else if(minutes == SESSION_EXPIRE_TIME && seconds == 59) {
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("counter");
+        openModal(messageExpire, buttonLoginPage);
+    }
+    
+    minElement.innerHTML = minutes;
+    secElement.innerHTML = seconds;
+};
 

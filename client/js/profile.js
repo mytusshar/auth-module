@@ -6,6 +6,7 @@
 
 var buttonDynamodbRead;
 var buttonRefresh;
+var buttonLogout;
 var buttonLoginPage;
 var modalContainer;
 var modal;
@@ -15,14 +16,45 @@ var alertText;
 window.onload = function() {    
     /******* dynamodb read operation ******/
     buttonDynamodbRead = document.getElementById("dynamodb-button");
-    buttonDynamodbRead.addEventListener("click", dynamodbReadOperation)
+    buttonDynamodbRead.addEventListener("click", dynamodbReadOperation);
 
-    initializeClock('clockdiv', deadline);
+    buttonLogout = document.getElementById("button-logout");
+    buttonLogout.addEventListener("click", logoutUser);
+
+    initializeClock();
     initializeProfile();
     initModal();
 }
 
-var initializeProfile = function() {
+function logoutUser() {
+    var sessData = JSON.parse(sessionStorage.user);
+    var logoutUrl;
+
+    switch(sessData.provider) {
+        case "google": logoutUrl = 'https://mail.google.com/mail/?logout&hl=fr';
+        break;
+        case "amazon": logoutUrl = "https://www.amazon.com/gp/flex/sign-out.html/ref=nav_youraccount_signout?ie=UTF8&action=sign-out&path=%2Fgp%2Fyourstore%2Fhome&signIn=1&useRedirectOnSuccess=1";
+                    // "https://console.aws.amazon.com/ec2/logout!doLogout";
+                    // "https://www.amazon.in/signout";                    
+        break;
+        case "facebook": logoutUrl = 'https://www.facebook.com/logout.php?next=http://127.0.0.1:5500/logout.php&access_token=' + sessData.authToken;
+        break;
+    }
+
+    var params = 'width=600,height=500,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200';
+    var newWindow = window.open(logoutUrl, 'You are being logout', params);
+
+    setTimeout(closeTabOnLoad, 3000);
+
+    function closeTabOnLoad() {
+        if (newWindow) {
+            newWindow.close();
+        }
+        loadLoginPage()
+    }
+}
+
+function initializeProfile() {
     var userData = JSON.parse(sessionStorage.user);
     var element = document.getElementById('user-data');
     var keys = Object.keys(userData);
@@ -35,7 +67,7 @@ var initializeProfile = function() {
     element.innerHTML = result;
 }
 
-var refreshFunction = function() {
+function refreshFunction() {
     console.log("Fetch: ", sessionStorage.user);
     fetch(REFRESH_URL, {
         method : 'POST',
@@ -58,12 +90,14 @@ var refreshFunction = function() {
 
         initializeProfile();
         closeModal();
-        initializeClock('clockdiv', deadline);
+        /****** initializing clock again **********/
+        sessionStorage.removeItem("counter");
+        initializeClock();
     })
     .catch((err) => console.log(err))
 }
 
-var getParamsForDynamodb = function() {
+function getParamsForDynamodb() {
     var sessData = JSON.parse(sessionStorage.user);
     AWS.config.update({
         "region" : AWS_REGION,
@@ -82,7 +116,7 @@ var getParamsForDynamodb = function() {
     return params;
 }
 
-var dynamodbReadOperation = function() {
+function dynamodbReadOperation() {
     var params = getParamsForDynamodb();
     var docClient = new AWS.DynamoDB.DocumentClient();
     
@@ -95,7 +129,7 @@ var dynamodbReadOperation = function() {
     });
 }
 
-var initModal = function() {
+function initModal() {
     /******* refresh button *********/
     buttonRefresh = document.getElementById("button-refresh");    
     buttonRefresh.addEventListener("click", refreshFunction);
@@ -111,24 +145,28 @@ var initModal = function() {
     alertText = document.getElementById("alert-text");    
 }
 
-var openLoginPage = function() {
+function openLoginPage() {
     closeModal();
     loadLoginPage();
 }
 
 function loadLoginPage() {
     sessionStorage.removeItem("user");
+    sessionStorage.removeItem("counter");
     window.open(INDEX_FILE, "_self");
 }
 
-var openModal = function(message, button) {
+function openModal(message, button) {
     modalContainer.style.display = "block";
     modal.style.display = "block";
     button.style.display = "block";
     alertText.innerHTML = message;
 }
 
-var closeModal = function() {
+function closeModal() {
+    if(buttonLoginPage.style.display == "block") {
+        loadLoginPage();
+    }
     modalContainer.style.display = "none";
     buttonRefresh.style.display = "none";
     buttonLoginPage.style.display = "none";

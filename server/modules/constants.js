@@ -20,7 +20,6 @@ exports.READ_USERNAME = 0;
 exports.READ_COGNITO_ID = 1;
 exports.INSERT_DATA  = 2;
 
-
 /******* providers name ********/
 exports.FACEBOOK = "facebook";
 exports.AMAZON = "amazon";
@@ -64,7 +63,6 @@ exports.AMAZON_CALLBACK = "/auth/amazon/callback";
 
 /****** refresh credentials route *********/
 exports.REFRESH_ROUTE = "/refresh";
-
 
 /*
 ,
