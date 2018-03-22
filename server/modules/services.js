@@ -22,7 +22,7 @@ module.exports = class CognitoOperation {
         this.aws.config.endpoint = null;
         this.initOperation(req, res);
     }
-
+    
     initOperation(req, res) {
         var _aws = this.aws;
         function handleError(err) {
@@ -54,7 +54,16 @@ module.exports = class CognitoOperation {
         
             function getCognitoCredenials(err) {
                 if (!err) {
-                    var isUniqueUsername = model.isUniqueUsername();
+                    
+                    /******* modification ******/
+                    // var isUniqueUsername = model.isUniqueUsername();
+                    // var configData = model.getConfigurationData();
+                    var isUniqueUsername = false;
+                    if(configData.hasOwnProperty("uniqueUsername")) {
+                        isUniqueUsername = configData.uniqueUsername;
+                    }
+                    /******* end modification ******/
+
                     /************* setting cognito data into request **********/
                     req.session.data.cognitoId = cognitoCredentials.identityId;
                     req.session.data.accessKey = cognitoCredentials.accessKeyId;
@@ -134,22 +143,62 @@ module.exports = class CognitoOperation {
                             }
                         }
                     }
+
+                    function handleDataOnlyLogin(data) {
+                        if(data) {
+                            utils.loginOperation(data, req.session.data);
+                            resolveCognito(req.session.data);
+                        } else {
+                            var regData = utils.registerOperation(req.session.data);
+                            var paramsDB = dynamo.getParamsForDynamoDB(regData, constants.INSERT_DATA);
+                            var promiseInsertOnlyLogin = dynamo.insertData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                            promiseInsertOnlyLogin.then(handleInsertResult, handleError);
+                        }
+                    }
                     
                     /********* request Decision logic *********/
-                    if(isUniqueUsername && requestType == constants.REQ_REGISTER) {
-                        var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
-                        var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
-                        promiseUsername.then(handleDataUsername, handleError);
-                    }
-                    else if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
-                        var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
-                        var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
-                        promiseUsername.then(handleDataUsername, handleError);
+
+                    /******* modifications ********/
+                    if(isUniqueUsername) {
+                        if(requestType == constants.REQ_REGISTER) {
+                            var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
+                            var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                            promiseUsername.then(handleDataUsername, handleError);
+                        }
+                        else if(requestType == constants.REQ_LOGIN) {
+                            var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
+                            var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                            promiseUsername.then(handleDataUsername, handleError);
+                        }
                     } else {
-                        var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
-                        var promise = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
-                        promise.then(handleData, handleError);
+                        if(configData.hasOwnProperty("regFields")) {
+                            var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
+                            var promise = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                            promise.then(handleData, handleError);
+                        } else {
+                            var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
+                            var promiseOnlyLogin = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                            promiseOnlyLogin.then(handleDataOnlyLogin, handleError);
+                        }                        
                     }
+
+                    // if(isUniqueUsername && requestType == constants.REQ_REGISTER) {
+                    //     var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
+                    //     var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                    //     promiseUsername.then(handleDataUsername, handleError);
+                    // }
+                    // else if(isUniqueUsername && requestType == constants.REQ_LOGIN) {
+                    //     var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_USERNAME);
+                    //     var promiseUsername = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                    //     promiseUsername.then(handleDataUsername, handleError);
+                    // } else {
+                    //     var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
+                    //     var promise = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
+                    //     promise.then(handleData, handleError);
+                    // }
+
+                    /******* end modification ******/
+
                 } else {
                     rejectCognito(err);
                 }

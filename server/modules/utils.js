@@ -136,8 +136,18 @@ exports.loginOperation = function(data, sessionData) {
     if(!data) {
         /****** setting login status in data_model for not registered user*****/
         sessionData.status = constants.NOT_REGISTERED;
-    } else {              
-        var isUniqueUsername = model.isUniqueUsername();
+    } else {
+
+        /********* modifications ******/
+        
+        var configData = model.getConfigurationData();
+        // var isUniqueUsername = model.isUniqueUsername();
+        var isUniqueUsername = false;
+        if(configData.hasOwnProperty("uniqueUsername")) {
+            isUniqueUsername = configData.uniqueUsername;
+        }
+
+        
         if(isUniqueUsername) {
             if(data.cognito_id != sessionData.cognitoId) {
                 /****** setting login status in data_model for not registered user*****/
@@ -148,16 +158,30 @@ exports.loginOperation = function(data, sessionData) {
             }
         } else {
             /****** setting login status in data_model*****/
-            sessionData.status = constants.LOGIN_SUCCESS;        
+            sessionData.status = constants.LOGIN_SUCCESS;
         }
 
-        var keys = model.getRegistrationFields();        
-        for(var i=0; i<keys.length; i++) {
-            var index = keys[i];
-            if(data.hasOwnProperty(index)) {
-                sessionData[index] = data[index];
+        // var keys = model.getRegistrationFields();        
+        // for(var i=0; i<keys.length; i++) {
+        //     var index = keys[i];
+        //     if(data.hasOwnProperty(index)) {
+        //         sessionData[index] = data[index];
+        //     }
+        // }
+
+        if(configData.hasOwnProperty("regFields")) {
+            var keys = configData.regFields;
+            for(var i=0; i<keys.length; i++) {
+                var index = keys[i];
+                if(data.hasOwnProperty(index)) {
+                    sessionData[index] = data[index];
+                }
             }
         }
+
+        /********* end modifications ******/
+        
+
     }
     console.log("\nLoginOperation DATA: ", JSON.stringify(sessionData), "\n");
 }
@@ -172,13 +196,28 @@ exports.registerOperation = function(sessionData) {
     /****** setting login status in req session *****/
     sessionData.status = constants.LOGIN_SUCCESS;
 
-    var keys = model.getRegistrationFields();
-    for(var i=0; i<keys.length; i++) {
-        var index = keys[i];
-        if(sessionData.hasOwnProperty(index)) {
-            result[index] = sessionData[index];
+    /******* modifications  ******/
+    
+    var configData = model.getConfigurationData();
+    if(configData.hasOwnProperty("regFields")) {
+        var keys = model.getRegistrationFields();
+        for(var i=0; i<keys.length; i++) {
+            var index = keys[i];
+            if(sessionData.hasOwnProperty(index)) {
+                result[index] = sessionData[index];
+            }
         }
     }
+    // var keys = model.getRegistrationFields();
+    // for(var i=0; i<keys.length; i++) {
+    //     var index = keys[i];
+    //     if(sessionData.hasOwnProperty(index)) {
+    //         result[index] = sessionData[index];
+    //     }
+    // }
+
+    /******* end modifications ******/
+    
     console.log("\nregisterOperation: DATA: ", JSON.stringify(result), "\n");
     return result;
 }

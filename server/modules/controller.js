@@ -167,16 +167,6 @@ exports.getURLParam = function(req) {
         }
     }
 
-    // "regFields": ["username", "name", "city", "email"],
-
-    // var keys = model.getRegistrationFields();
-    // for(var i=0; i<keys.length; i++) {
-    //     var key = keys[i];
-    //     if(param.hasOwnProperty(key)) {
-    //         var value = param[key];
-    //         data[key] = value;
-    //     }
-    // }
     return data;
 }
 
