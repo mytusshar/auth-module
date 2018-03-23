@@ -6,6 +6,11 @@
 
 var exports = module.exports = {};
 
+/****** Provider names *****/
+exports.PROVIDER_GOOGLE = "google";
+exports.PROVIDER_AMAZON = "amazon";
+exports.PROVIDER_FACEBOOK = "facebook";
+
 /****** Status codes ******/
 exports.LOGIN_FAILURE = 0;
 exports.LOGIN_SUCCESS = 1;
@@ -14,6 +19,16 @@ exports.NOT_REGISTERED = 3;
 exports.REGISTER_FAILURE = 4;
 exports.NOT_UNIQUE_USERNAME = 5;
 exports.INVALID_USERNAME = 6;
+
+/******* response messages *****/
+exports.MSG_LOGIN_SUCCESS = "LOGIN SUCCESS";
+exports.MSG_NOT_REGISTERED = "NOT_REGISTERED user";
+exports.MSG_LOGIN_FAILURE = "LOGIN FAILURE, try again";
+exports.MSG_INVALID_USERNAME = "INVALID_USERNAME, username doesnot match with any account.";
+exports.MSG_ALREADY_REGISTERED = "ALREADY_REGISTERED user";
+exports.MSG_USERNAME_ALREADY_EXISTS = "USERNAME_ALREADY_EXISTS";
+exports.MSG_REGISTER_SUCCESS = "REGISTER SUCCESS";
+exports.MSG_REGISTER_FAILURE = "REGISTER_FAILURE try again";
 
 /****** DynamoDB operation Code *****/
 exports.READ_USERNAME = 0;

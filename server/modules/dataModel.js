@@ -39,17 +39,13 @@ exports.getRequestId = function() {
 exports.readConfiguration = function() {
     var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
     configData = JSON.parse(configFile);
+
+    return configData;
 }
 
 /********** return configData ********/
 exports.getConfigurationData = function() {
     return configData;
-}
-
-
-/******** setter/getter for registration fields keys *******/
-exports.getRegistrationFields = function() {
-    return configData.regFields;
 }
 
 /********** reading aws config data *********/
@@ -58,14 +54,65 @@ exports.awsConfigData = function() {
 }
 
 /********* is login username field is provided ********/
-exports.isUniqueUsername = function() {
-    return configData.uniqueUsername;
+exports.checkUniqueUsername = function() {
+    if(configData.hasOwnProperty("uniqueUsername")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+exports.checkGoogleDeveloperDetails = function() {
+    if(configData.hasOwnProperty(constants.PROVIDER_GOOGLE)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+exports.checkAmazonDeveloperDetails = function() {
+    if(configData.hasOwnProperty(constants.PROVIDER_AMAZON)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+exports.checkFacebookDeveloperDetails = function() {
+    if(configData.hasOwnProperty(constants.PROVIDER_FACEBOOK)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+exports.checkRegistrationFields = function() {
+    if(configData.hasOwnProperty("regFields")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+/******** setter/getter for registration fields keys *******/
+exports.getRegistrationFields = function() {
+    return configData.regFields;
 }
 
 exports.getGoogleClientDetails = function() {
     return configData.google;
 }
 
-// exports.getServerAddress = function() {
-//     return configData.serverAddress;
-// }
+exports.getAmazonClientDetails = function() {
+    return configData.amazon;
+}
+
+exports.getFacebookClientDetails = function() {
+    return configData.facebook;
+}
+
+exports.getUniqueUsername = function() {
+    return configData.uniqueUsername;
+}
+

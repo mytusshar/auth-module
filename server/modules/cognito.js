@@ -6,7 +6,7 @@
 var fs = require("fs");
 var path = require('path');
 var constants = require('./constants.js');
-var model = require('./data_model.js');
+var model = require('./dataModel.js');
 var utils = require('./utils.js');
 var controller = require('./controller.js');
 var dynamo = require('./dynamo.js');
@@ -22,7 +22,6 @@ module.exports = class CognitoOperation {
     }
     
     initOperation(req, res) {
-        // var _aws = this.aws;
         function handleError(err) {
             console.log("CognitoOperation: errorHandler: ", err);
         }
@@ -53,10 +52,10 @@ module.exports = class CognitoOperation {
             function getCognitoCredenials(err) {
                 if (!err) {
                     
-                    var configData = model.getConfigurationData();
+                    // var configData = model.getConfigurationData();
                     var isUniqueUsername = false;
-                    if(configData.hasOwnProperty("uniqueUsername")) {
-                        isUniqueUsername = configData.uniqueUsername;
+                    if(model.checkUniqueUsername()) {
+                        isUniqueUsername = model.getUniqueUsername();
                     }
 
                     /************* setting cognito data into request **********/
@@ -164,7 +163,7 @@ module.exports = class CognitoOperation {
                             promiseUsername.then(handleDataUsername, handleError);
                         }
                     } else {
-                        if(configData.hasOwnProperty("regFields")) {
+                        if(model.checkRegistrationFields()) {
                             var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
                             var promise = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
                             promise.then(handleData, handleError);

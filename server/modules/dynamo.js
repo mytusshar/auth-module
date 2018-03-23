@@ -6,7 +6,7 @@
 var exports = module.exports = {};
 
 var _aws = new require('aws-sdk');
-var model = require('./data_model.js');
+var model = require('./dataModel.js');
 var constants = require('./constants.js');
 
 exports.insertData = function(params, awsCredentials) {
@@ -50,9 +50,9 @@ exports.readData = function(params, awsCredentials) {
 exports.getParamsForDynamoDB = function(data, code) {
 
     var isUniqueUsername = false;
-    var configData = model.getConfigurationData();
-    if(configData.hasOwnProperty("uniqueUsername")) {
-        isUniqueUsername = configData.uniqueUsername;
+    // var configData = model.getConfigurationData();
+    if(model.checkUniqueUsername()) {
+        isUniqueUsername = model.getUniqueUsername();
     }
 
     if(isUniqueUsername && code == constants.READ_USERNAME) {

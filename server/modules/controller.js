@@ -10,32 +10,38 @@ var fs = require("fs");
 var path = require('path');
 var refresh = require('passport-oauth2-refresh');
 
-var services = require('./services.js');
+var cognito = require('./cognito.js');
 var constants = require('./constants.js');
-var model = require('./data_model.js');
-var CognitoOperation = require('./services.js');
+var model = require('./dataModel.js');
+var CognitoOperation = require('./cognito.js');
 var controller = require('./controller.js');
 var utils = require('./utils.js');
 
 /*********** reading developer details from config file*********I*/
-var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
-var configData = JSON.parse(configFile);
+// var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
+// var configData = JSON.parse(configFile);
 
-if(configData.hasOwnProperty("google")) {
-    exports.googleDeveloperDetails = configData.google;
+exports.initDependencies = function() {
+    var configData = model.readConfiguration();
+
+    if(model.checkGoogleDeveloperDetails()) {
+        exports.googleDeveloperDetails = model.getGoogleClientDetails();
+    }
+    
+    if(model.checkAmazonDeveloperDetails()) {
+        exports.amazonDeveloperDetails = model.getAmazonClientDetails();
+    }
+    
+    if(model.checkFacebookDeveloperDetails()) {
+        exports.facebookDeveloperDetails = model.getFacebookClientDetails();
+    }
 }
 
-if(configData.hasOwnProperty("amazon")) {
-    exports.amazonDeveloperDetails = configData.amazon;
-}
 
-if(configData.hasOwnProperty("facebook")) {
-    exports.facebookDeveloperDetails = configData.facebook;
-}
 
 /************ getting user details from auth provider *************/
 exports.getUserDetails = function(accessToken, refreshToken, params, profile, done) {
-    if(profile.provider == "google") {
+    if(profile.provider == constants.PROVIDER_GOOGLE) {
         profile.token = params.id_token
         profile.accessToken = accessToken;
     } else {
@@ -73,16 +79,17 @@ exports.handleAuthRequest = function(req, res) {
     console.log("*************************************\n");
 
     switch(provider) {
-        case constants.FACEBOOK: {
+        case constants.FACEBOOK:
             res.redirect(constants.FACEBOOK_LOGIN);
-        } break;
-        case constants.GOOGLE: {
+        break;
+        case constants.GOOGLE:
             res.redirect(constants.GOOGLE_LOGIN);
-        } break;
-        case constants.AMAZON: {
+        break;
+        case constants.AMAZON:
             res.redirect(constants.AMAZON_LOGIN);
-        } break;
-        default: console.log("ERROR: Unknown " + requestType + " request.");
+        break;
+        default:
+            console.log("ERROR: Unknown " + requestType + " request.");
     }
 }
 
@@ -123,9 +130,11 @@ exports.refreshOperation = function(req, res) {
     console.log("\n******* REFRESH TOKEN REQUEST: FROM: " + provider + " **********\n");
 
     switch(provider) {
-        case constants.GOOGLE: controller.getGoogleIdToken(req, res);
+        case constants.GOOGLE:
+            controller.getGoogleIdToken(req, res);
         break;
-        case constants.FACEBOOK: res.json({"FACEBOOK_REFRESH_TOKEN": "FACEBOOK DOES NOT PROVIDE REFRESH TOKEN"});
+        case constants.FACEBOOK:
+            res.json({"FACEBOOK_REFRESH_TOKEN": "FACEBOOK DOES NOT PROVIDE REFRESH TOKEN"});
         break;
         default: {
             function refreshFunction(err, accessToken) {
@@ -150,10 +159,10 @@ exports.getURLParam = function(req) {
         provider: param.provider
     };
 
-    var configData = model.getConfigurationData();
+    // var configData = model.getConfigurationData();
 
-    if(configData.hasOwnProperty("regFields")) {
-        var keys = configData.regFields;
+    if(model.checkRegistrationFields()) {
+        var keys = model.getRegistrationFields();
         for(var i=0; i<keys.length; i++) {
             var key = keys[i];
             if(param.hasOwnProperty(key)) {
@@ -181,10 +190,12 @@ exports.ensureAuthenticated = function(req, res, next) {
 
     /****** since passport-amazon return auth_id with key "user_id" ******/
     switch(provider) {
-        case constants.AMAZON: sessionData.authId = authData.user_id;
+        case constants.AMAZON:
+            sessionData.authId = authData.user_id;
         break;
 
-        default: sessionData.authId = authData.id;
+        default:
+            sessionData.authId = authData.id;
     }
 
     if(req.isAuthenticated()) {
@@ -192,11 +203,14 @@ exports.ensureAuthenticated = function(req, res, next) {
     }
 
     switch(provider) {
-        case constants.FACEBOOK: res.redirect(constants.FACEBOOK_LOGIN);
+        case constants.FACEBOOK:
+            res.redirect(constants.FACEBOOK_LOGIN);
         break;
-        case constants.GOOGLE: res.redirect(constants.GOOGLE_LOGIN);
+        case constants.GOOGLE:
+            res.redirect(constants.GOOGLE_LOGIN);
         break;
-        case constants.AMAZON: res.redirect(constants.AMAZON_LOGIN);
+        case constants.AMAZON:
+            res.redirect(constants.AMAZON_LOGIN);
         break;
     }
 }

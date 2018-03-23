@@ -7,7 +7,7 @@ var exports = module.exports = {};
 
 var _aws = new require('aws-sdk');
 var constants = require('./constants.js');
-var model = require('./data_model.js');
+var model = require('./dataModel.js');
 var controller = require('./controller.js');
 var dynamo = require('./dynamo.js');
 var utils = require('./utils.js');
@@ -25,14 +25,14 @@ exports.sendResponse = function(req, res) {
                 case constants.LOGIN_SUCCESS: {
                     /****** send user data*****/
                     clientResponse = userData;
-                    clientResponse.message= "LOGIN SUCCESS"
+                    clientResponse.message= constants.MSG_LOGIN_SUCCESS;
                     console.log("**** RESPONSE: Login Success and send User data: Message.");
                 } break;
 
                 case constants.NOT_REGISTERED: {
                     clientResponse = {
                         status: constants.NOT_REGISTERED,
-                        message: "NOT_REGISTERED user"
+                        message: constants.MSG_NOT_REGISTERED
                     };
                     console.log("**** RESPONSE: Not Registered User: Message.");
                 } break;
@@ -40,7 +40,7 @@ exports.sendResponse = function(req, res) {
                 case constants.LOGIN_FAILURE: {
                     clientResponse = {
                         status: constants.LOGIN_FAILURE,
-                        message: "LOGIN FAILURE, try again"
+                        message: constants.MSG_LOGIN_FAILURE
                     };
                     console.log("**** RESPONSE: Login Failure: Message.");
                 } break;
@@ -48,7 +48,7 @@ exports.sendResponse = function(req, res) {
                 case constants.INVALID_USERNAME: {
                     clientResponse = {
                         status: constants.INVALID_USERNAME,
-                        message: "INVALID_USERNAME, username doesnot match with any account."
+                        message: constants.MSG_INVALID_USERNAME
                     };
                     console.log("**** RESPONSE: Invalid username: Message.");
                 }
@@ -61,7 +61,7 @@ exports.sendResponse = function(req, res) {
                 case constants.ALREADY_REGISTERED: {
                     clientResponse = {
                         status: constants.ALREADY_REGISTERED,
-                        message: "ALREADY_REGISTERED user"
+                        message: constants.MSG_ALREADY_REGISTERED
                     };
                     console.log("**** RESPONSE: Already Registered Please Login: Message.");
                 } break;
@@ -69,7 +69,7 @@ exports.sendResponse = function(req, res) {
                 case constants.NOT_UNIQUE_USERNAME: {
                     clientResponse = {
                         status: constants.NOT_UNIQUE_USERNAME,
-                        message: "USERNAME_ALREADY_EXISTS"
+                        message: constants.MSG_USERNAME_ALREADY_EXISTS
                     };
                     console.log("**** RESPONSE: USERNAME_ALREADY_EXISTS, use other username: Message.");
                 } break;
@@ -77,14 +77,14 @@ exports.sendResponse = function(req, res) {
                 case constants.LOGIN_SUCCESS: {
                     /****** send user data*****/
                     clientResponse = userData;
-                    clientResponse.message = "REGISTER SUCCESS"
+                    clientResponse.message = constants.MSG_REGISTER_SUCCESS;
                     console.log("**** RESPONSE: Register Success and send User data: Message.");
                 } break;
 
                 case constants.REGISTER_FAILURE: {
                     clientResponse = {
                         status: constants.REGISTER_FAILURE,
-                        message: "REGISTER_FAILURE try again"
+                        message: constants.MSG_REGISTER_FAILURE
                     };
                     console.log("**** RESPONSE: Register Failure: Message.");
                 }
@@ -134,43 +134,30 @@ exports.getAwsParams = function(sessionData, refreshToken) {
 
 exports.loginOperation = function(data, sessionData) {
     if(!data) {
-        /****** setting login status in data_model for not registered user*****/
+        /****** setting login status in dataModel for not registered user*****/
         sessionData.status = constants.NOT_REGISTERED;
     } else {
-
-        /********* modifications ******/
-        
-        var configData = model.getConfigurationData();
-        // var isUniqueUsername = model.isUniqueUsername();
+        // var configData = model.getConfigurationData();
         var isUniqueUsername = false;
-        if(configData.hasOwnProperty("uniqueUsername")) {
-            isUniqueUsername = configData.uniqueUsername;
+        if(model.checkUniqueUsername()) {
+            isUniqueUsername = model.getUniqueUsername();
         }
-
         
         if(isUniqueUsername) {
             if(data.cognito_id != sessionData.cognitoId) {
-                /****** setting login status in data_model for not registered user*****/
+                /****** setting login status in dataModel for not registered user*****/
                 sessionData.status = constants.NOT_REGISTERED;
             } else {
-                /****** setting login status in data_model*****/
+                /****** setting login status in dataModel*****/
                 sessionData.status = constants.LOGIN_SUCCESS;
             }
         } else {
-            /****** setting login status in data_model*****/
+            /****** setting login status in dataModel*****/
             sessionData.status = constants.LOGIN_SUCCESS;
         }
 
-        // var keys = model.getRegistrationFields();        
-        // for(var i=0; i<keys.length; i++) {
-        //     var index = keys[i];
-        //     if(data.hasOwnProperty(index)) {
-        //         sessionData[index] = data[index];
-        //     }
-        // }
-
-        if(configData.hasOwnProperty("regFields")) {
-            var keys = configData.regFields;
+        if(model.checkRegistrationFields()) {
+            var keys = model.getRegistrationFields();
             for(var i=0; i<keys.length; i++) {
                 var index = keys[i];
                 if(data.hasOwnProperty(index)) {
@@ -178,10 +165,6 @@ exports.loginOperation = function(data, sessionData) {
                 }
             }
         }
-
-        /********* end modifications ******/
-        
-
     }
     console.log("\nLoginOperation DATA: ", JSON.stringify(sessionData), "\n");
 }
@@ -193,13 +176,10 @@ exports.registerOperation = function(sessionData) {
         provider: sessionData.provider,
         cognito_id: sessionData.cognitoId
     }
-    /****** setting login status in req session *****/
     sessionData.status = constants.LOGIN_SUCCESS;
-
-    /******* modifications  ******/
     
-    var configData = model.getConfigurationData();
-    if(configData.hasOwnProperty("regFields")) {
+    // var configData = model.getConfigurationData();
+    if(model.checkRegistrationFields()) {
         var keys = model.getRegistrationFields();
         for(var i=0; i<keys.length; i++) {
             var index = keys[i];
@@ -207,17 +187,7 @@ exports.registerOperation = function(sessionData) {
                 result[index] = sessionData[index];
             }
         }
-    }
-    // var keys = model.getRegistrationFields();
-    // for(var i=0; i<keys.length; i++) {
-    //     var index = keys[i];
-    //     if(sessionData.hasOwnProperty(index)) {
-    //         result[index] = sessionData[index];
-    //     }
-    // }
-
-    /******* end modifications ******/
-    
+    }    
     console.log("\nregisterOperation: DATA: ", JSON.stringify(result), "\n");
     return result;
 }
