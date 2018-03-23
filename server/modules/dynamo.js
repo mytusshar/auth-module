@@ -49,14 +49,11 @@ exports.readData = function(params, awsCredentials) {
 
 exports.getParamsForDynamoDB = function(data, code) {
 
-    /********* modifications  ********/
     var isUniqueUsername = false;
     var configData = model.getConfigurationData();
     if(configData.hasOwnProperty("uniqueUsername")) {
         isUniqueUsername = configData.uniqueUsername;
     }
-    // var isUniqueUsername = model.isUniqueUsername();
-    /********* end modifications  ********/
 
     if(isUniqueUsername && code == constants.READ_USERNAME) {
         params = {

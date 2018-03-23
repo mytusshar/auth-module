@@ -21,10 +21,6 @@ var utils = require('./utils.js');
 var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
 var configData = JSON.parse(configFile);
 
-// exports.googleDeveloperDetails = configData.google;
-// exports.facebookDeveloperDetails = configData.facebook;
-// exports.amazonDeveloperDetails = configData.amazon;
-
 if(configData.hasOwnProperty("google")) {
     exports.googleDeveloperDetails = configData.google;
 }

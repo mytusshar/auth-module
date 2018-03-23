@@ -27,6 +27,10 @@ window.onload = function() {
 
 function logoutUser() {
     var sessData = JSON.parse(sessionStorage.user);
+    /***** removing user details and clock timer from seesionStorage *****/
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("counter");
+
     switch(sessData.provider) {
         case "google":
                 window.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue="
@@ -39,8 +43,6 @@ function logoutUser() {
         case "amazon": window.location.href = CLIENT_REDIRECT_URL;
         break;
     }
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("counter");
 }
 
 function initializeProfile() {
