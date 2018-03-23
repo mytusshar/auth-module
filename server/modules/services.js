@@ -38,7 +38,7 @@ module.exports = class CognitoOperation {
         promise.then(handleData, handleError);
     }
 
-    /********** Cognito: initialize cognito operation ************/
+    /********** algorithm to handle three use-cases ************/
     getCognitoIdentity(req, res) {
         var _aws = this.aws;
 
