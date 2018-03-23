@@ -9,7 +9,7 @@ this library helps you to authenticate users from their existing Google/Facebook
 accounts and gives you authenticated user directly.
 
 ## Features provided by I-Auth Module
-#### * Provides authenticated users from:
+### * Provides authenticated users from:
 
     1. Google
 
