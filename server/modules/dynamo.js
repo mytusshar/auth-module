@@ -51,7 +51,7 @@ exports.getParamsForDynamoDB = function(data, code) {
 
     /********* modifications  ********/
     var isUniqueUsername = false;
-    var configData = model.awsConfigData();
+    var configData = model.getConfigurationData();
     if(configData.hasOwnProperty("uniqueUsername")) {
         isUniqueUsername = configData.uniqueUsername;
     }

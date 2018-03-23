@@ -11,14 +11,14 @@ var utils = require('./utils.js');
 var controller = require('./controller.js');
 var dynamo = require('./dynamo.js');
 
-var configData;
+// var configData;
 
 module.exports = class CognitoOperation {
 
     constructor(req, res) {
         this.aws = require('aws-sdk');
-        configData = model.awsConfigData();
-        this.aws.config.region = configData.awsRegion;
+        var awsConfigData = model.awsConfigData();
+        this.aws.config.region = awsConfigData.awsRegion;
         this.aws.config.endpoint = null;
         this.initOperation(req, res);
     }
@@ -57,7 +57,7 @@ module.exports = class CognitoOperation {
                     
                     /******* modification ******/
                     // var isUniqueUsername = model.isUniqueUsername();
-                    // var configData = model.getConfigurationData();
+                    var configData = model.getConfigurationData();
                     var isUniqueUsername = false;
                     if(configData.hasOwnProperty("uniqueUsername")) {
                         isUniqueUsername = configData.uniqueUsername;
@@ -171,11 +171,18 @@ module.exports = class CognitoOperation {
                             promiseUsername.then(handleDataUsername, handleError);
                         }
                     } else {
+                        // var configData = model.getConfigurationData();
                         if(configData.hasOwnProperty("regFields")) {
+
+                            console.log("***************************\nregFields present in config:: STATUS:: " + configData.hasOwnProperty("regFields") + "\n*************************************");
+
                             var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
                             var promise = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
                             promise.then(handleData, handleError);
                         } else {
+
+                            console.log("***************************\nregFields NOT present in config:: STATUS:: " + configData.hasOwnProperty("regFields") + "\n*************************************");
+
                             var paramsDB = dynamo.getParamsForDynamoDB(req.session.data, constants.READ_COGNITO_ID);
                             var promiseOnlyLogin = dynamo.readData(paramsDB, new _aws.CognitoIdentityCredentials(params));
                             promiseOnlyLogin.then(handleDataOnlyLogin, handleError);

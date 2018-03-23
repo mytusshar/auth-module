@@ -1,7 +1,9 @@
 {
     "fields": ["provider", "request", "authId", "cognitoId", "accessKey", "secretKey", "sessionToken"],
 
+    "regFields": ["username", "name", "city", "email"],
 
+    "uniqueUsername": true,
     
     "serverAddress": "http://localhost:8081",
 
