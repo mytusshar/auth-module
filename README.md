@@ -139,7 +139,7 @@ accounts and gives you authenticated user directly.
 
 #### 3. Running Server
 
-* #### Open project folder in terminal and change to server directory using below command 
+* #### Open project folder in terminal and change to server directory using following command 
 
     `$ cd glm/server`
 
@@ -183,14 +183,15 @@ accounts and gives you authenticated user directly.
 
 ## STATUS CODES Returned by I-Auth Module
 
-When any kind of request is sent to I-Auth Module then it responds client application with following STUTUS CODES.
-These STATUS_CODES can be used in client application.
+When any kind of request is sent to I-Auth Module then it responds client application with following `STATUS_CODES`.
+These `STATUS_CODES` can be used in client application.
 
-#### STATUS CODES
+#### `[STATUS CODES]`
 
 * ##### LOGIN_FAILURE = 0 :             
    Incase of login failure. Very rare response in case of server internal errors. 
-Solution: Try logging in again or create an Issue regarding error.
+
+   ###### Solution: Try logging in again or create an Issue regarding error.
 
 * ##### LOGIN_SUCCESS = 1 :
   On successfull login, client will receive this status along with all user data.
@@ -206,16 +207,17 @@ Solution: Try logging in again or create an Issue regarding error.
 
 * ##### REGISTER_FAILURE = 4:   
    Incase of register failure. Very rare response in case of server internal errors. 
-Solution: Try registering again or create an Issue regarding error.
+ 
+   ###### Solution: Try registering again or create an Issue regarding error.
 
 
 * ##### NOT_UNIQUE_USERNAME = 5 :
-   This response encounters if your application needs UNIQUE_USERNAME in the system
+   This response encounters if your application needs `UNIQUE_USERNAME` in the system
 and client application trying to register with existing username.
 
 
 * ##### INVALID_USERNAME = 6 :
-    This response encounters if your application needs UNIQUE_USERNAME in the system.
+    This response encounters if your application needs `UNIQUE_USERNAME` in the system.
 Invalid userame response occures in case if client is logging in with non-existing username 
 or username and identity provider account mismatch.
 
@@ -224,4 +226,3 @@ or username and identity provider account mismatch.
 [Tomcat installation]: https://devops.profitbricks.com/tutorials/how-to-install-and-configure-tomcat-8-on-ubuntu-1604/
 [deploying web app on tomcat]: https://stackoverflow.com/questions/3954621/deploying-just-html-css-webpage-to-tomcat
 [client application]: http://localhost:8080/client
-
