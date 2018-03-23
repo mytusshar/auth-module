@@ -9,7 +9,7 @@ this library helps you to authenticate users from their existing Google/Facebook
 accounts and gives you authenticated user directly.
 
 ## Features provided by I-Auth Module
-#### * Provides authenticated users from:
+####* Provides authenticated users from:
 
     1. Google
 
@@ -19,30 +19,30 @@ accounts and gives you authenticated user directly.
 
     In future we will add more.
 
-#### * Easily configurable.
+####* Easily configurable.
 
-#### * Support for Web applications and Mobile applications.
+####* Support for Web applications and Mobile applications.
 
-#### * It handles three project use-cases:
+####* It handles three project use-cases:
     Developer can choose any one use-case according project requirement.
 
-######    * Only Login feature:    
-        In this use-case devloper can directly use I-Auth module to Login users into devloper's project. 
-        It does not require registration flow. It internally handles it.
+######* Only Login feature:    
+In this use-case devloper can directly use I-Auth module to Login users into devloper's project. 
+It does not require registration flow. It internally handles it.
 
-######   * Registration-Login feature without Unique Username in the System:    
-        In this use-case developer can provide set of registration fields during registration. 
-        I-Auth module will not check for uniqueness of Username in this use-case.
-        User need to be registered before logging in. 
-        During login user does not have to provide usename.
+######* Registration-Login feature without Unique Username in the System:    
+In this use-case developer can provide set of registration fields during registration. 
+I-Auth module will not check for uniqueness of Username in this use-case.
+User need to be registered before logging in. 
+During login user does not have to provide usename.
 
-######    * Registration-Login feature with Unique Username in the System:   
-        In this use-case developer can provide set of registration fields during registration. 
-        I-Auth module will explicitly check for uniqueness of Username in this use-case.
-        User need to be registered before logging in. 
-        Username is mandatory during login.
+######* Registration-Login feature with Unique Username in the System:   
+In this use-case developer can provide set of registration fields during registration. 
+I-Auth module will explicitly check for uniqueness of Username in this use-case.
+User need to be registered before logging in. 
+Username is mandatory during login.
 
-#### * Returns access credentials which can be used to access rest of the Amazon Web Services like DynamoDB, EC2, RDS etc.
+####* Returns access credentials which can be used to access rest of the Amazon Web Services like DynamoDB, EC2, RDS etc.
 
 
 ## Follow below steps to use I-Auth module in your existing project.
