@@ -16,14 +16,9 @@ var bodyParser = require('body-parser');
 
 var controller = require('./modules/controller.js');
 var constants = require('./modules/constants.js');
-var model = require('./modules/dataModel.js');
-var utils = require('./modules/utils.js');
-// var CognitoOperation = require('./modules/cognito.js');
-
 
 /********* initializing dependencies ********* */
 controller.initDependencies();
-
 
 // Initialize express
 var app = express();
@@ -99,7 +94,7 @@ app.get(constants.AMAZON_CALLBACK, authAmazon, controller.successRedirect);
 
 
 // GET success page
-app.get(constants.SUCCESS, controller.ensureAuthenticated, controller.cognitoOperation);
+app.get(constants.SUCCESS, controller.ensureAuthenticated, controller.cognitoAuthOperation);
 
 
 app.get("/", function(req, res) {

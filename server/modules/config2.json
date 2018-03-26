@@ -7,6 +7,14 @@
     
     "serverAddress": "http://localhost:8081",
 
+    "tableName": "users",
+
+    "tableKey": "cognito_id",
+
+    "indexName": "username-index",
+
+    "indexKey": "username",
+
     "aws": {
         "accountId": "719697336829",
         "awsRegion":  "us-east-1",

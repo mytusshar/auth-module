@@ -6,20 +6,13 @@
 
 var exports = module.exports = {};
 
-var fs = require("fs");
-var path = require('path');
 var refresh = require('passport-oauth2-refresh');
 
-var cognito = require('./cognito.js');
 var constants = require('./constants.js');
 var model = require('./dataModel.js');
-var CognitoOperation = require('./cognito.js');
+var cognito = require('./cognito.js');
 var controller = require('./controller.js');
-var utils = require('./utils.js');
 
-/*********** reading developer details from config file*********I*/
-// var configFile = fs.readFileSync(path.join(__dirname, constants.CONFIG_FILE_NAME), 'utf8');
-// var configData = JSON.parse(configFile);
 
 exports.initDependencies = function() {
     var configData = model.readConfiguration();
@@ -36,8 +29,6 @@ exports.initDependencies = function() {
         exports.facebookDeveloperDetails = model.getFacebookClientDetails();
     }
 }
-
-
 
 /************ getting user details from auth provider *************/
 exports.getUserDetails = function(accessToken, refreshToken, params, profile, done) {
@@ -94,7 +85,6 @@ exports.handleAuthRequest = function(req, res) {
 }
 
 
-
 exports.getGoogleIdToken = function(req, res) {
     var refreshToken = req.body.refreshToken;
     var accessToken = req.body.accessToken;
@@ -119,7 +109,7 @@ exports.getGoogleIdToken = function(req, res) {
             console.log("\nrefreshAccessToken: ERROR: ", err);
         } else {
             req.body.newAccessToken = tokens.id_token;
-            utils.refreshCognitoInit(req, res);
+            cognitoRefreshOperation(req, res);
         }
     }
 }
@@ -143,7 +133,7 @@ exports.refreshOperation = function(req, res) {
                     res.json({"refresh": "error occured"});
                 } else {      
                     req.body.newAccessToken = accessToken;
-                    utils.refreshCognitoInit(req, res);
+                    cognitoRefreshOperation(req, res);
                 }
             }
             refresh.requestNewAccessToken(provider, refreshToken, refreshFunction);
@@ -158,8 +148,6 @@ exports.getURLParam = function(req) {
         request: param.request,
         provider: param.provider
     };
-
-    // var configData = model.getConfigurationData();
 
     if(model.checkRegistrationFields()) {
         var keys = model.getRegistrationFields();
@@ -216,6 +204,10 @@ exports.ensureAuthenticated = function(req, res, next) {
 }
 
 /******************* cognito operation *****************/
-exports.cognitoOperation = function(req, res) {
-    new CognitoOperation(req, res);
+exports.cognitoAuthOperation = function(req, res) {
+    new cognito.CognitoAuthOperation(req, res);
+}
+
+function cognitoRefreshOperation(req, res) {
+    new cognito.CognitoRefreshOperation(req, res);
 }

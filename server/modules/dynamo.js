@@ -49,34 +49,37 @@ exports.readData = function(params, awsCredentials) {
 
 exports.getParamsForDynamoDB = function(data, code) {
 
+    var tableName = model.getTableName();
+
     var isUniqueUsername = false;
-    // var configData = model.getConfigurationData();
     if(model.checkUniqueUsername()) {
         isUniqueUsername = model.getUniqueUsername();
     }
 
     if(isUniqueUsername && code == constants.READ_USERNAME) {
+        var indexKey = model.getIndexKey();
         params = {
             ExpressionAttributeValues: {
-                ':uname': data.username
+                ':uname': data[indexKey]
             },
-            KeyConditionExpression: 'username = :uname',
-            TableName: constants.TABLE_NAME,
-            IndexName: constants.INDEX_NAME
+            KeyConditionExpression: indexKey + ' = :uname',
+            TableName: tableName,
+            IndexName: model.getIndexName()
         };
     }
     else if (code == constants.READ_COGNITO_ID){
+        var tableKey = model.getTableKey();
         params = {
             ExpressionAttributeValues: {
                 ':cog_id': data.cognitoId
             },
-            KeyConditionExpression: 'cognito_id = :cog_id',
-            TableName: constants.TABLE_NAME
+            KeyConditionExpression: tableKey + ' = :cog_id',
+            TableName: tableName
         };
     }
     else if (code == constants.INSERT_DATA) {
         params = {
-            TableName: constants.TABLE_NAME,
+            TableName: tableName,
             Item: data
         };
     } else {

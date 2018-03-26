@@ -8,8 +8,6 @@ var exports = module.exports = {};
 var _aws = new require('aws-sdk');
 var constants = require('./constants.js');
 var model = require('./dataModel.js');
-var controller = require('./controller.js');
-var dynamo = require('./dynamo.js');
 var utils = require('./utils.js');
 
 exports.sendResponse = function(req, res) {
@@ -101,7 +99,7 @@ exports.sendResponse = function(req, res) {
     res.sendFile(constants.RESPONSE_FILE, {root: __dirname });
 }
 
-exports.getAwsParams = function(sessionData, refreshToken) {
+exports.getAwsParamsForCognito = function(sessionData, refreshToken) {
     var configData = model.awsConfigData();
     var logins = {};
     var provider = sessionData.provider;
@@ -132,19 +130,20 @@ exports.getAwsParams = function(sessionData, refreshToken) {
 }
 
 
-exports.loginOperation = function(data, sessionData) {
+exports.loginOperationAfterCognito = function(data, sessionData) {
     if(!data) {
         /****** setting login status in dataModel for not registered user*****/
         sessionData.status = constants.NOT_REGISTERED;
     } else {
-        // var configData = model.getConfigurationData();
         var isUniqueUsername = false;
+        var keys = Object.keys(data);
+
         if(model.checkUniqueUsername()) {
             isUniqueUsername = model.getUniqueUsername();
         }
         
         if(isUniqueUsername) {
-            if(data.cognito_id != sessionData.cognitoId) {
+            if(data[model.getTableKey()] != sessionData.cognitoId) {
                 /****** setting login status in dataModel for not registered user*****/
                 sessionData.status = constants.NOT_REGISTERED;
             } else {
@@ -156,13 +155,10 @@ exports.loginOperation = function(data, sessionData) {
             sessionData.status = constants.LOGIN_SUCCESS;
         }
 
-        if(model.checkRegistrationFields()) {
-            var keys = model.getRegistrationFields();
-            for(var i=0; i<keys.length; i++) {
-                var index = keys[i];
-                if(data.hasOwnProperty(index)) {
-                    sessionData[index] = data[index];
-                }
+        for(var i=0; i<keys.length; i++) {
+            var index = keys[i];
+            if(data.hasOwnProperty(index)) {
+                sessionData[index] = data[index];
             }
         }
     }
@@ -170,15 +166,17 @@ exports.loginOperation = function(data, sessionData) {
 }
 
 
-exports.registerOperation = function(sessionData) {
+exports.registerOperationAfterCognito = function(sessionData) {
+    var tableKey = model.getTableKey();
     var result = {
         authId: sessionData.authId,
-        provider: sessionData.provider,
-        cognito_id: sessionData.cognitoId
+        provider: sessionData.provider
     }
+    result[tableKey] = sessionData.cognitoId;
+
+    /**** setting status for request *****/
     sessionData.status = constants.LOGIN_SUCCESS;
     
-    // var configData = model.getConfigurationData();
     if(model.checkRegistrationFields()) {
         var keys = model.getRegistrationFields();
         for(var i=0; i<keys.length; i++) {
@@ -190,44 +188,4 @@ exports.registerOperation = function(sessionData) {
     }    
     console.log("\nregisterOperation: DATA: ", JSON.stringify(result), "\n");
     return result;
-}
-
-exports.refreshCognitoInit = function(req, res) {
-    function handleRefresh(data) {
-        res.json({"refreshData": data});
-        console.log("\n********** Resolved & Refresh token response sent *******");
-    }
-
-    function handleError(err) {
-        res.json({"refreshError": err});
-    }
-
-    var promiseRefresh = refreshCognitoOperation(req, res);
-    promiseRefresh.then(handleRefresh, handleError);
-}
-
-function refreshCognitoOperation(req, res) {
-    function cognitoAsyncOperation(resolveCognito, rejectCognito) {
-        var params = utils.getAwsParams(req.body);
-        var creden = new _aws.CognitoIdentityCredentials(params);
-        var awsConfig = Object.assign({}, _aws.config);
-        awsConfig.credentials = creden;
-
-        function refreshOperation(err) {
-            if (!err) { 
-                var credentials = {};
-                credentials.cognitoId = awsConfig.credentials.identityId;
-                credentials.accessKey = awsConfig.credentials.accessKeyId;
-                credentials.secretKey = awsConfig.credentials.secretAccessKey;
-                credentials.sessionToken = awsConfig.credentials.sessionToken;
-                console.log("\nREFRESH_COGNITO_SUCCESS: ", credentials);                
-                resolveCognito(credentials);
-            } else {
-                console.log("\nREFRESH_COGNITO_ERROR: ", err);
-                rejectCognito(err);
-            }
-        }
-        awsConfig.credentials.refresh(refreshOperation);
-    }
-    return new Promise(cognitoAsyncOperation);
 }

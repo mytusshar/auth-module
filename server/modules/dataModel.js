@@ -116,3 +116,18 @@ exports.getUniqueUsername = function() {
     return configData.uniqueUsername;
 }
 
+exports.getTableName = function() {
+    return configData.tableName;
+}
+
+exports.getIndexName = function() {
+    return configData.indexName;
+}
+
+exports.getTableKey = function() {
+    return configData.tableKey;
+}
+
+exports.getIndexKey = function() {
+    return configData.indexKey;
+}

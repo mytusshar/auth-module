@@ -46,11 +46,6 @@ exports.CONFIG_FILE_NAME = "config.json";
 /****** response file name  *******/
 exports.RESPONSE_FILE = "response.html";
 
-/********* table params **********/
-exports.TABLE_NAME = "users";
-exports.INDEX_NAME = 'username-index';
-exports.TABLE_NAME_2 = "users2";
-
 /********* request type ********/
 exports.REQ_REGISTER = "register";
 exports.REQ_LOGIN = "login";
