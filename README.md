@@ -83,10 +83,10 @@ accounts and gives you authenticated user directly.
        `iamRoleArn` created for authenticated users.
 
   * ##### "tableName":
-       Enter the name of the table created in DynamoDB.
+       Enter the name of the table creating in DynamoDB.
 
   * ##### "tableKey":
-       Enter name of the partition key provided while created above table.
+       Enter name of the partition key provided while creating above table.
 
   * ##### "indexName":
        Enter the name of the index created in DynamoDB on above table (This is in case of Unique username requirement).
