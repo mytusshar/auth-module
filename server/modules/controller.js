@@ -7,7 +7,6 @@
 var exports = module.exports = {};
 
 var refresh = require('passport-oauth2-refresh');
-
 var constants = require('./constants.js');
 var model = require('./dataModel.js');
 var cognito = require('./cognito.js');

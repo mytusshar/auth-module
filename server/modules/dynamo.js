@@ -48,7 +48,6 @@ exports.readData = function(params, awsCredentials) {
 }
 
 exports.getParamsForDynamoDB = function(data, code) {
-
     var tableName = model.getTableName();
 
     var isUniqueUsername = false;

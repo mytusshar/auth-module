@@ -82,7 +82,20 @@ accounts and gives you authenticated user directly.
        add your AWS `accountId`, `awsRegion`, `cognitoIdentityPoolId`, 
        `iamRoleArn` created for authenticated users.
 
-   * ##### Now you have to provide which third party identity providers that you want in your application to support.
+  * ##### "tableName":
+       Enter the name of the table created in DynamoDB.
+
+  * ##### "tableKey":
+       Enter name of the partition key provided while created above table.
+
+  * ##### "indexName":
+       Enter the name of the index created in DynamoDB on above table (This is in case of Unique username requirement).
+       
+  * ##### "indexKey":
+       Enter name of the index key provided while creating above table (This is in case of Unique username requirement).
+       Make sure that partition key column should be present in table.
+
+  * ##### Now you have to provide which third party identity providers that you want in your application to support.
        Presently I-Auth module supports for:
         * Google
         * Facebook
@@ -103,6 +116,14 @@ accounts and gives you authenticated user directly.
     "uniqueUsername": true,       //true or false
     
     "serverAddress": "http://localhost:8081",
+
+    "tableName": "users",
+
+    "tableKey": "cognito_id",
+
+    "indexName": "username-index",
+
+    "indexKey": "username",
 
     "aws": {
         "accountId": "AWS-ACCOUNT-ID,
