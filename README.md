@@ -247,3 +247,244 @@ or username and identity provider account mismatch.
 [Tomcat installation]: https://devops.profitbricks.com/tutorials/how-to-install-and-configure-tomcat-8-on-ubuntu-1604/
 [deploying web app on tomcat]: https://stackoverflow.com/questions/3954621/deploying-just-html-css-webpage-to-tomcat
 [client application]: http://localhost:8080/client
+
+
+
+
+# Login-register with unique Username in the system.
+
+   If your requirement is Registration-login flow along with unique username for each user
+   then you will have to do the following steps to configure I-Auth module.
+
+   - First, modify `config.json` file as shown below for your requirement.
+     You can add any registration fields that you want. 
+   - Don't change the `username` field. 
+   
+   - During login, you should send `username` to the server.
+
+   - During registration, you will have to provide all the registration fields that you 
+     mentioned in the following file.
+ 
+   ````
+   "regFields": ["username", "name", "city", "email"],
+   "uniqueUsername": true,      
+   ````
+
+### 1. Creating Amazon Web Services account.
+  Sign up on aws console, and do the following.
+
+* #### Selecting appropriate Region.
+   Select the region as per your convenience. And make sure that during following steps you 
+   should select the same region.
+
+   You can get the region name from the following URL. Copy and paste the URL of the homepage 
+   of AWS console. The last field in the following URL is `region name`
+   
+     ex: https://console.aws.amazon.com/console/home?region=`us-east-1`
+   
+   Paste region name in `awsRegion` field in `config.json` file
+
+   ````
+   "aws": {
+        "accountId": "AWS-ACCOUNT-ID,
+        "awsRegion":  "AWS-REGION",
+        "cognitoIdentityPoolId": "COGNITO-IDENTITY-POOL-ID",
+        "iamRoleArn": "IAM-ROLE-ARN"
+    },
+   ````
+
+* #### Getting `aws account ID`:
+  - Click on `Support` and select `Support Center`.
+  - Then on next page you will see `account number` that is your `aws account ID`.
+
+    Paste `aws account ID` in `accountId` field in `config.json` file
+
+   ````
+   "aws": {
+        "accountId": "AWS-ACCOUNT-ID,
+        "awsRegion":  "AWS-REGION",
+        "cognitoIdentityPoolId": "COGNITO-IDENTITY-POOL-ID",
+        "iamRoleArn": "IAM-ROLE-ARN"
+    },
+   ````
+* #### Creating Table in DynamoDB:
+  - Search for DynamoDB on AWS console and open it.
+  - On next page click `create table` button.
+  - Enter `TableName` and `PrimaryKey` and take a note both fields. You will need them in 
+    future. After that click `create` button. Your table will be created. 
+  - On next page, you can see `Overview` and your table content in `Items`.
+  
+* #### Creating Index on Table:
+  - Select `Index` from the navigation pane.
+  - On next page click `Create index` button.
+  - Enter `Primary Key` as `username` and `Index Name` will be automatically created.
+  - Click `Create Index` button, it will take some time to finish creating.
+
+  Update the following fields in `config.json` file for `table name`, `table key`, `index name` and `index key` that you obtained in above steps.
+
+   ````
+     "tableName": "table name",
+     "tableKey": "table key",
+     "indexName": "index name",
+     "indexKey": "username" 
+   ````
+
+* #### Creating Cognito Identity Pool:
+  - Search for `Cognito` in AWS console and click on it. 
+  - On next screen select `Manage Federated Identities`.
+  - The click on `Create new identity pool`.
+  - On next page enter `Identity pool name`.
+  - You can optionally allow unauthenticated users to use your application. For that check the 
+    `Enable access to unauthenticated identities` box (Or leave it unchecked).
+  - Click on `Authentication Providers` and enter the `Client-Id/App-Id` that you got while 
+    creating Amazon, Google, Facebook developer application in.
+  - After that click on `Create Pool` button.
+  - On next page click on `Allow` button.
+  - Cognito identity pool is created now. Click on `edit identity pool`.
+  - On next page copy the `Identity pool ID` and paste it into the following 
+    `cognitoIdentityPoolId` field.
+
+  ````
+   "aws": {
+        "accountId": "AWS-ACCOUNT-ID,
+        "awsRegion":  "AWS-REGION",
+        "cognitoIdentityPoolId": "COGNITO-IDENTITY-POOL-ID",
+        "iamRoleArn": "IAM-ROLE-ARN"
+    },
+  ````
+
+* #### Creating IAM Role:
+  - Click on `services` and search for `iam`. Click on it.
+  - Click on `Roles`.
+  - You will see `Cognito_[You Cognito Pool Name]_Auth_Role under `Role name` column.
+    Click on it.
+  - Then click on `Add inline policy` button.
+  - Then click on JSON button and modify the JSON as shown in the picture.
+    To get the fields in `Resource`, go to DYnamoDB as shown below and copy the `Amazon 
+    Resource Name (ARN)` and paste it. Also, copy the index name and modify the second field 
+    in `Resource`.
+  - Then click on `Review Policy`. 
+  - On next page enter the name of the policy and then click `Create Policy`.
+  - On next screen copy the `Role ARN` and paste it in `iamRoleArn` field in `config.json` 
+    file.
+                                                                                                                                                  
+   ````
+      "aws": {
+          "accountId": "AWS-ACCOUNT-ID,
+          "awsRegion":  "AWS-REGION",
+          "cognitoIdentityPoolId": "COGNITO-IDENTITY-POOL-ID",
+          "iamRoleArn": "IAM-ROLE-ARN"
+       },
+   ````
+
+
+### 2. Creating AWS Elastic Beanstalk instance:
+  - Search for `Elastic Beanstalk` and select it.
+  - On next page, click on `Create New Application`.
+  - Then, enter the `application name` and its `description`. And click `Next` button.
+  - on next screen click on `Create Web Server` button.
+  - Then select platform as `NodeJS` and `Environment type` as `Load balancing,
+     auto-scaling`. Then click 'Next'.
+  - On next page leave the fields as it is for now and click 'Next'.
+  - On next page change the `description` if you want and click 'Next'.
+  - On next page leave it unchanged and click `next`.
+  - On next screen, you can change the fields that you want or leave it unchanged and click 
+    'Next'.
+  - On next screen leave the fields unchanged and click `Next`.
+  - On the next screen click `Next`.
+  - On the next screen click `Launch`.
+  - It will take some time to complete creation of the instance.
+  - Once completed copy `URL` of this instance for future process and paste it in  
+
+  ````
+     "serverAddress": "http://[ Paste URL Here ]",
+  ````
+
+
+### 3. Creating Facebook application.
+  - Go to this URL;
+     https://developers.facebook.com/
+  - Then log in with your credentials.
+  - After that click on `My Apps` and then select `Add New App`.
+  - Then enter `Display name`, email and then click on `Create APp Id` button. 
+  - Then click on `settings` and choose `basic`.
+  - On next page copy the `App Id` and `Client Secret` and add them to `config.json`` file as 
+    shown below.
+  - Also, add the `Elastic Beanstalk` URL at the mentioned place below. 
+ 
+  ````
+    "facebook": {
+        "clientID" : "App ID",
+        "clientSecret" : "client Secret",
+        "callbackURL" : "http://[ Elastic Beanstalk URL ]/auth/facebook/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    },
+  ````
+  - Then click on `Add Platform` and select `Website`.
+  - Enter your website url in `app domains` field and `site url` field and click 
+   `save changes`.
+  - Then click `Products` and click `set Up` button in `Facebook Login` product.
+  - Then choose `settings`.
+  - Then copy the callbackURL from above facebook `callbackURL` field and paste it in 
+    `Valid OAuth Redirect URIs`. And click `Save changes` button.
+  - Click following button to let users use your application.
+
+
+
+### 3. Creating Google application.
+- Paste the `Elastic Beanstalk URL` in `callbackURL`. 
+    ````
+     "google": {
+        "clientID" : "Google Client ID",
+        "clientSecret" : "Google Client Secret",
+        "callbackURL" : "http://[ Elastic Beanstalk URL]/auth/google/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    },
+   ````
+- Go to this URL;
+    https://console.developers.google.com/projectselector/apis/dashboard
+- Then log in with your credentials.
+- Then click on `Create`.
+- Enter `Project name` and then click `Create`.
+- Then click on `Credentials`.
+- Then click `Create Credentials` and select `OAuth Client Id`.
+- On next screen click on `COnfigure Consent Screen`.
+- Then on next page enter `Product name` and other fields if you want. And then click on 
+     `Save` button.
+- Then select `Web Application` and enter the `Name`.
+- In `Authorized JavaScript origins` paste the `Elastic Beanstalk URL`.
+- In `Authorized redirect URIs` paste the callback URL obtained for google after adding 
+     `Elastic Beanstalk URL` in it.
+- Then click `Create`.
+- You will see a dialogue with Client ID and `Client Secret`. Copy them and paste them in 
+     `config.json` file for google.
+
+
+### 4. Creating Amazon application.
+ - Goto https://developer.amazon.com/
+ - Click on `Developer Console` and then enter your credentials and log in.
+ - Then select `Apps and Services`.
+ - Then select `Security Profiles`.
+ - On next page click on `Create a New Security Profile`.
+ - On next page enter `Security Profile Name` and `Security Profile Description` and click 
+   `Save` button.
+ - on next screen, copy the `Client ID` and `Client Secret` and paste it in `config.json` file 
+   as shown below.
+ - Also paste the `Elastic Beanstalk URL` in `callbackURL` in following shown code.
+ 
+````
+   "amazon": {
+        "clientID" : "client ID",
+        "clientSecret" : "client Secret",
+        "callbackURL" : "http://[ Elastic Beanstalk URL]/auth/amazon/callback",
+        "profileFields" : ["displayName", "email", "id"]
+    }
+ ```` 
+
+ - Click on `web settings`.
+ - Click on `Edit`.
+ - Enter `Elastic Beanstalk URL` in `Allowed Origins` and above modified `callbackURL` for 
+   amazon in `Allowed Return URLs`.
+ - Then click on `Save`.
+
+
