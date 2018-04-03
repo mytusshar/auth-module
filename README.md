@@ -327,8 +327,14 @@ or username and identity provider account mismatch.
   
 * #### Creating Index on Table:
   - Select `Index` from the navigation pane.
+  ![01-edit](https://user-images.githubusercontent.com/18484641/38244853-8f5024a4-3759-11e8-8e4d-37e22ac331b1.png)
+
   - On next page click `Create index` button.
+  ![02-edit](https://user-images.githubusercontent.com/18484641/38244942-e8f064b0-3759-11e8-9ac6-ed863dcb024d.png)
+
   - Enter `Primary Key` as `username` and `Index Name` will be automatically created.
+  ![03-edit](https://user-images.githubusercontent.com/18484641/38245024-2b33f0a8-375a-11e8-89c7-5a2881aa1cff.png)
+  
   - Click `Create Index` button, it will take some time to finish creating.
 
   Update the following fields in `config.json` file for `table name`, `table key`, `index name` and `index key` that you obtained in above steps.
