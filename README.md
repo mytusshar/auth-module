@@ -347,17 +347,29 @@ or username and identity provider account mismatch.
    ````
 
 * #### Creating Cognito Identity Pool:
-  - Search for `Cognito` in AWS console and click on it. 
+  - Search for `Cognito` in AWS console and click on it.
+  ![01-edit](https://user-images.githubusercontent.com/18484641/38246652-1e279b16-3760-11e8-9179-01649aaaa2c4.png)
+
   - On next screen select `Manage Federated Identities`.
+  ![02-edit](https://user-images.githubusercontent.com/18484641/38246654-1ed85866-3760-11e8-91ef-40f79543853c.png)
+
   - The click on `Create new identity pool`.
+  ![03-edit](https://user-images.githubusercontent.com/18484641/38246655-2029364a-3760-11e8-9f06-6a2ef91bb389.png)
+
   - On next page enter `Identity pool name`.
   - You can optionally allow unauthenticated users to use your application. For that check the 
     `Enable access to unauthenticated identities` box (Or leave it unchecked).
   - Click on `Authentication Providers` and enter the `Client-Id/App-Id` that you got while 
     creating Amazon, Google, Facebook developer application in.
   - After that click on `Create Pool` button.
+  ![04-edit](https://user-images.githubusercontent.com/18484641/38246657-21adc8fa-3760-11e8-87e1-67b2b0f54ebd.png)
+
   - On next page click on `Allow` button.
+  ![05-edit](https://user-images.githubusercontent.com/18484641/38246660-23317c30-3760-11e8-87e4-8aabdf5169bf.png)
+
   - Cognito identity pool is created now. Click on `edit identity pool`.
+  ![06-edit](https://user-images.githubusercontent.com/18484641/38246662-2479d290-3760-11e8-93ca-b237d08b8575.png)
+
   - On next page copy the `Identity pool ID` and paste it into the following 
     `cognitoIdentityPoolId` field.
 
@@ -369,6 +381,8 @@ or username and identity provider account mismatch.
         "iamRoleArn": "IAM-ROLE-ARN"
     },
   ````
+  ![07-edit](https://user-images.githubusercontent.com/18484641/38246664-26754124-3760-11e8-839d-d364d0913d4d.png)
+
 
 * #### Creating IAM Role:
   - Click on `services` and search for `iam`. Click on it.
