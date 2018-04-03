@@ -386,16 +386,31 @@ or username and identity provider account mismatch.
 
 * #### Creating IAM Role:
   - Click on `services` and search for `iam`. Click on it.
+  ![01-edit](https://user-images.githubusercontent.com/18484641/38247806-1df4cdae-3764-11e8-9a44-130e9c1344d4.png)
+
   - Click on `Roles`.
+  ![02-edit](https://user-images.githubusercontent.com/18484641/38247807-1f222b7c-3764-11e8-8c83-ebae1b1656ea.png)
+
   - You will see `Cognito_[Your Cognito Pool Name]_Auth_Role` under `Role name` column.
     Click on it.
+  ![03-edit](https://user-images.githubusercontent.com/18484641/38247809-2095874c-3764-11e8-813e-c9277fbf738b.png)
+
   - Then click on `Add inline policy` button.
+  ![04-edit](https://user-images.githubusercontent.com/18484641/38247812-226b9124-3764-11e8-8751-16650b1d4333.png)
+
   - Then click on JSON button and modify the JSON as shown in the picture.
-    To get the fields in `Resource`, go to DYnamoDB as shown below and copy the `Amazon 
+  ![05-edit](https://user-images.githubusercontent.com/18484641/38247815-241e17f8-3764-11e8-9d13-70f98231a28d.png)
+
+  - To get the fields in `Resource`, go to DynamoDB as shown below and copy the `Amazon 
     Resource Name (ARN)` and paste it. Also, copy the index name and modify the second field 
     in `Resource`.
+  ![06-edit](https://user-images.githubusercontent.com/18484641/38247825-2a19f4a6-3764-11e8-9a38-381654eb4a39.png)
+
   - Then click on `Review Policy`. 
+
   - On next page enter the name of the policy and then click `Create Policy`.
+  ![07-edit](https://user-images.githubusercontent.com/18484641/38247829-2d038c04-3764-11e8-9fdb-e9584bc68c56.png)
+
   - On next screen copy the `Role ARN` and paste it in `iamRoleArn` field in `config.json` 
     file.
                                                                                                                                                   
@@ -407,6 +422,7 @@ or username and identity provider account mismatch.
           "iamRoleArn": "IAM-ROLE-ARN"
        },
    ````
+  ![08-edit](https://user-images.githubusercontent.com/18484641/38247838-31a09a2c-3764-11e8-832b-8f80bb97d1c2.png)
 
 
 ### 2. Creating AWS Elastic Beanstalk instance:
