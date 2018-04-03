@@ -313,10 +313,17 @@ or username and identity provider account mismatch.
    ````
 * #### Creating Table in DynamoDB:
   - Search for DynamoDB on AWS console and open it.
+  ![01-edit](https://user-images.githubusercontent.com/18484641/38244299-d4bef77e-3757-11e8-83ac-d7b899fd0fd8.png)
+
   - On next page click `create table` button.
+  ![02-edit](https://user-images.githubusercontent.com/18484641/38244396-25bfadf8-3758-11e8-9b5a-d18db8fa13e1.png)
+
   - Enter `TableName` and `PrimaryKey` and take a note both fields. You will need them in 
     future. After that click `create` button. Your table will be created. 
+  ![03-edit](https://user-images.githubusercontent.com/18484641/38244481-74706352-3758-11e8-9b8d-e7732dfcd063.png)
+
   - On next page, you can see `Overview` and your table content in `Items`.
+  ![04-edit](https://user-images.githubusercontent.com/18484641/38244622-e5451adc-3758-11e8-94a2-46f70e3cff6b.png)
   
 * #### Creating Index on Table:
   - Select `Index` from the navigation pane.
