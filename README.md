@@ -292,8 +292,7 @@ or username and identity provider account mismatch.
         "iamRoleArn": "IAM-ROLE-ARN"
     },
    ````
-  ![picture](https://drive.google.com/open?id=197GqoxDsxqexWBgT-5IeBW1CWRSeFGaL)
-   
+  ![select-region](https://user-images.githubusercontent.com/18484641/38241452-e771f964-374f-11e8-9a63-f39898f78c42.png) 
 
 * #### Getting `aws account ID`:
   - Click on `Support` and select `Support Center`.
