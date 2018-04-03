@@ -292,14 +292,14 @@ or username and identity provider account mismatch.
         "iamRoleArn": "IAM-ROLE-ARN"
     },
    ````
-  ![select-region](https://user-images.githubusercontent.com/18484641/38241452-e771f964-374f-11e8-9a63-f39898f78c42.png) 
+  ![1-select region](https://user-images.githubusercontent.com/18484641/38243795-475a67f2-3756-11e8-9b56-ed54488f7024.png)
 
 * #### Getting `aws account ID`:
   - Click on `Support` and select `Support Center`.
-   ![aws account id](https://user-images.githubusercontent.com/18484641/38241679-7929389a-3750-11e8-818d-9b34edb6b513.png)
+   ![1- account id](https://user-images.githubusercontent.com/18484641/38243644-cd046232-3755-11e8-8444-fc1677e3ee41.png)
 
   - Then on next page you will see `account number` that is your `aws account ID`.
-  ![account id 2](https://user-images.githubusercontent.com/18484641/38241678-78f7e704-3750-11e8-8e86-411666b25ede.png)
+  ![2-aws_acc_id](https://user-images.githubusercontent.com/18484641/38243645-cd3499ac-3755-11e8-83e1-39ea9bab63d6.png)
 
     Paste `aws account ID` in `accountId` field in `config.json` file
 
