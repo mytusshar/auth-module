@@ -356,7 +356,7 @@ or username and identity provider account mismatch.
 * #### Creating IAM Role:
   - Click on `services` and search for `iam`. Click on it.
   - Click on `Roles`.
-  - You will see `Cognito_[You Cognito Pool Name]_Auth_Role under `Role name` column.
+  - You will see `Cognito_[Your Cognito Pool Name]_Auth_Role` under `Role name` column.
     Click on it.
   - Then click on `Add inline policy` button.
   - Then click on JSON button and modify the JSON as shown in the picture.
@@ -394,7 +394,7 @@ or username and identity provider account mismatch.
   - On the next screen click `Next`.
   - On the next screen click `Launch`.
   - It will take some time to complete creation of the instance.
-  - Once completed copy `URL` of this instance for future process and paste it in  
+  - Once completed copy `URL` of this instance for future process and paste it in `config.json` file as shown below. 
 
   ````
      "serverAddress": "http://[ Paste URL Here ]",
@@ -431,7 +431,7 @@ or username and identity provider account mismatch.
 
 
 
-### 3. Creating Google application.
+### 4. Creating Google application.
 - Paste the `Elastic Beanstalk URL` in `callbackURL`. 
     ````
      "google": {
@@ -460,7 +460,7 @@ or username and identity provider account mismatch.
      `config.json` file for google.
 
 
-### 4. Creating Amazon application.
+### 5. Creating Amazon application.
  - Goto https://developer.amazon.com/
  - Click on `Developer Console` and then enter your credentials and log in.
  - Then select `Apps and Services`.
@@ -487,4 +487,24 @@ or username and identity provider account mismatch.
    amazon in `Allowed Return URLs`.
  - Then click on `Save`.
 
+
+### 6. Deploying configured I-Auth module on AWS Beanstalk.
+  - GO to `i-auth` folder on your computer.
+  - You will see following directories/files in it.
+     * modules
+     * node_modules
+     * package.json
+     * package-lock.json
+     * server.js
+  - Select them all and make a ZIP of it.
+  - Now, open `Elastic Beanstalk` from AWS console.
+  - You will see your previously created instance. Click on it.
+  - Click on Upload and Deploy.
+  - Select the ZIP file created and add label version.
+  - Then click on `Deploy`. It will take some time.
+  - If you see the following screen then your deployment is successful.
+
+  
+
+### 7. Accessing I-Auth Module from the client application.
 
