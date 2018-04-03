@@ -96,10 +96,10 @@ accounts and gives you authenticated user directly.
        Make sure that partition key column should be present in table.
 
   * ##### Now you have to provide which third party identity providers that you want in your application to support.
-       Presently I-Auth module supports for:
-        * Google
-        * Facebook
-        * Amazon
+      Presently I-Auth module supports for:
+      * Google
+      * Facebook
+      * Amazon
 
        You have to create developer account for those providers on their provided sites, and there you will get 
     `clientID`, `clientSecret`.
@@ -292,6 +292,8 @@ or username and identity provider account mismatch.
         "iamRoleArn": "IAM-ROLE-ARN"
     },
    ````
+  ![alt tag](https://drive.google.com/open?id=197GqoxDsxqexWBgT-5IeBW1CWRSeFGaL "Description goes here")
+   
 
 * #### Getting `aws account ID`:
   - Click on `Support` and select `Support Center`.
