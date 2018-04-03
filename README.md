@@ -296,7 +296,10 @@ or username and identity provider account mismatch.
 
 * #### Getting `aws account ID`:
   - Click on `Support` and select `Support Center`.
+   ![aws account id](https://user-images.githubusercontent.com/18484641/38241679-7929389a-3750-11e8-818d-9b34edb6b513.png)
+
   - Then on next page you will see `account number` that is your `aws account ID`.
+  ![account id 2](https://user-images.githubusercontent.com/18484641/38241678-78f7e704-3750-11e8-8e86-411666b25ede.png)
 
     Paste `aws account ID` in `accountId` field in `config.json` file
 
