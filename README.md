@@ -569,15 +569,30 @@ or username and identity provider account mismatch.
 
 ### 5. Creating Amazon application.
  - Goto https://developer.amazon.com/
- - Click on `Developer Console` and then enter your credentials and log in.
+ - Click on `Developer Console`.
+ ![01](https://user-images.githubusercontent.com/18484641/38292201-7aeaf140-3800-11e8-80c2-e2984af7e1cf.png)
+
+ - Then enter your credentials and log in.
+ ![02](https://user-images.githubusercontent.com/18484641/38292200-7abb020a-3800-11e8-9dcb-ace947a15b4c.png)
+
  - Then select `Apps and Services`.
+ ![03](https://user-images.githubusercontent.com/18484641/38292199-7a822980-3800-11e8-9ec2-811752d684ca.png)
+
  - Then select `Security Profiles`.
+ ![04](https://user-images.githubusercontent.com/18484641/38292198-7a4eb578-3800-11e8-9daa-501235a15a9e.png)
+
  - On next page click on `Create a New Security Profile`.
+ ![05](https://user-images.githubusercontent.com/18484641/38292192-794f8314-3800-11e8-972b-05363c9c7906.png)
+
  - On next page enter `Security Profile Name` and `Security Profile Description` and click 
    `Save` button.
+ ![06](https://user-images.githubusercontent.com/18484641/38292197-7a1e4488-3800-11e8-818c-70ab3d1e7e4a.png)
+
  - on next screen, copy the `Client ID` and `Client Secret` and paste it in `config.json` file 
    as shown below.
- - Also paste the `Elastic Beanstalk URL` in `callbackURL` in following shown code.
+ ![07](https://user-images.githubusercontent.com/18484641/38292196-79ec51d0-3800-11e8-9eb2-4ea88ce2c5e8.png)
+
+ - Also paste the `Elastic Beanstalk URL` in `callbackURL` as shown below in `config.json`.
  
 ````
    "amazon": {
@@ -588,11 +603,13 @@ or username and identity provider account mismatch.
     }
  ```` 
 
- - Click on `web settings`.
- - Click on `Edit`.
+ - Click on `web settings` and click on `Edit`.
+ ![08](https://user-images.githubusercontent.com/18484641/38292194-79b68532-3800-11e8-87f4-8448fcb71ae2.png)
+
  - Enter `Elastic Beanstalk URL` in `Allowed Origins` and above modified `callbackURL` for 
    amazon in `Allowed Return URLs`.
  - Then click on `Save`.
+ ![09](https://user-images.githubusercontent.com/18484641/38292193-7986d490-3800-11e8-9d14-3cde17e354ce.png)
 
 
 ### 6. Deploying configured I-Auth module on AWS Beanstalk.
