@@ -535,19 +535,36 @@ or username and identity provider account mismatch.
     https://console.developers.google.com/projectselector/apis/dashboard
 - Then log in with your credentials.
 - Then click on `Create`.
+![01-edit](https://user-images.githubusercontent.com/18484641/38291786-e4a41316-37fe-11e8-84df-1ed7b46dcb9b.png)
+
 - Enter `Project name` and then click `Create`.
+![02-edit](https://user-images.githubusercontent.com/18484641/38291785-e47249ee-37fe-11e8-88f4-eea456e9084a.png)
+
 - Then click on `Credentials`.
+![03-edit](https://user-images.githubusercontent.com/18484641/38291782-e42aaa8a-37fe-11e8-9e2b-b0011cfa1584.png)
+
 - Then click `Create Credentials` and select `OAuth Client Id`.
+![04-edit](https://user-images.githubusercontent.com/18484641/38291781-e3fb89a8-37fe-11e8-90c9-8f985234444e.png)
+
 - On next screen click on `COnfigure Consent Screen`.
+![05-edit](https://user-images.githubusercontent.com/18484641/38291780-e3cd2540-37fe-11e8-8d3c-c0350abd3d63.png)
+
 - Then on next page enter `Product name` and other fields if you want. And then click on 
      `Save` button.
+![06-edit](https://user-images.githubusercontent.com/18484641/38291779-e39c9b0a-37fe-11e8-9133-c8a0a9064c60.png)
+
 - Then select `Web Application` and enter the `Name`.
+![07-edit](https://user-images.githubusercontent.com/18484641/38291778-e36c4d10-37fe-11e8-902c-af2987023bbf.png)
+
 - In `Authorized JavaScript origins` paste the `Elastic Beanstalk URL`.
 - In `Authorized redirect URIs` paste the callback URL obtained for google after adding 
      `Elastic Beanstalk URL` in it.
 - Then click `Create`.
+![08-edit](https://user-images.githubusercontent.com/18484641/38291776-e33c97a0-37fe-11e8-809d-172db335e9da.png)
+
 - You will see a dialogue with Client ID and `Client Secret`. Copy them and paste them in 
      `config.json` file for google.
+![09-edit](https://user-images.githubusercontent.com/18484641/38291775-e30cca34-37fe-11e8-8beb-b9686e88e5b0.png)
 
 
 ### 5. Creating Amazon application.
