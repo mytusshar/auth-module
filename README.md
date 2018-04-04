@@ -427,25 +427,50 @@ or username and identity provider account mismatch.
 
 ### 2. Creating AWS Elastic Beanstalk instance:
   - Search for `Elastic Beanstalk` and select it.
+  ![01-edit](https://user-images.githubusercontent.com/18484641/38290403-b57ab2b2-37f8-11e8-9bba-ded448b18781.png)
+
   - On next page, click on `Create New Application`.
+  ![02-edit](https://user-images.githubusercontent.com/18484641/38290402-b549512c-37f8-11e8-8455-828b692b28eb.png)
+
   - Then, enter the `application name` and its `description`. And click `Next` button.
+  ![03-edit](https://user-images.githubusercontent.com/18484641/38290401-b519dcbc-37f8-11e8-8b0f-cbd54d063e32.png)
+
   - on next screen click on `Create Web Server` button.
+  ![4-edit](https://user-images.githubusercontent.com/18484641/38290400-b4e70526-37f8-11e8-8a7e-0dcd7c5b05ae.png)
+
   - Then select platform as `NodeJS` and `Environment type` as `Load balancing,
      auto-scaling`. Then click 'Next'.
+  ![06-edit](https://user-images.githubusercontent.com/18484641/38290398-b4817cd8-37f8-11e8-9974-386a1b41ad6b.png)
+
   - On next page leave the fields as it is for now and click 'Next'.
+  ![07-edit](https://user-images.githubusercontent.com/18484641/38290397-b44e3d28-37f8-11e8-8bb5-f6427e70ea19.png)
+
   - On next page change the `description` if you want and click 'Next'.
+  ![08-edit](https://user-images.githubusercontent.com/18484641/38290394-b41d799a-37f8-11e8-8d9b-93e98024dfda.png)
+
   - On next page leave it unchanged and click `next`.
+  ![09-edit](https://user-images.githubusercontent.com/18484641/38290392-b3e2888a-37f8-11e8-8e7d-7394f6f56094.png)
+
   - On next screen, you can change the fields that you want or leave it unchanged and click 
     'Next'.
+  ![10-edit](https://user-images.githubusercontent.com/18484641/38290390-b3affcf8-37f8-11e8-884e-a424c690acbb.png)
+
   - On next screen leave the fields unchanged and click `Next`.
+  ![11-edit](https://user-images.githubusercontent.com/18484641/38290389-b37cc5c2-37f8-11e8-901e-22ecc9bf947b.png)
+
   - On the next screen click `Next`.
+  ![12-edit](https://user-images.githubusercontent.com/18484641/38290388-b3483e42-37f8-11e8-90c6-ba45be648afe.png)
+
   - On the next screen click `Launch`.
+  ![13-edit](https://user-images.githubusercontent.com/18484641/38290387-b31402f8-37f8-11e8-8e53-2ef3b772aa1f.png)
+
   - It will take some time to complete creation of the instance.
   - Once completed copy `URL` of this instance for future process and paste it in `config.json` file as shown below. 
 
   ````
      "serverAddress": "http://[ Paste URL Here ]",
   ````
+  ![14-edit](https://user-images.githubusercontent.com/18484641/38290386-b2e012cc-37f8-11e8-869e-b1bcc64fc273.png)
 
 
 ### 3. Creating Facebook application.
