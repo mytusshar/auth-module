@@ -477,11 +477,18 @@ or username and identity provider account mismatch.
   - Go to this URL;
      https://developers.facebook.com/
   - Then log in with your credentials.
+  ![01](https://user-images.githubusercontent.com/18484641/38290947-2e6f0f2c-37fb-11e8-8bde-a846a625596b.png)
+
   - After that click on `My Apps` and then select `Add New App`.
+  ![02](https://user-images.githubusercontent.com/18484641/38290982-4ee33bc0-37fb-11e8-9baf-eaa4499065e4.png)
+
   - Then enter `Display name`, email and then click on `Create APp Id` button. 
-  - Then click on `settings` and choose `basic`.
-  - On next page copy the `App Id` and `Client Secret` and add them to `config.json`` file as 
-    shown below.
+  ![03](https://user-images.githubusercontent.com/18484641/38290998-66bcf1aa-37fb-11e8-8f02-d21a6420b7b4.png)
+
+  - Then click on `settings` and choose `basic`. On next page copy the `App Id` and `Client Secret` and add them to `config.json`` file as 
+    shown below..
+  ![04](https://user-images.githubusercontent.com/18484641/38291011-77f3dce0-37fb-11e8-8e5e-55e1619dcf85.png)
+
   - Also, add the `Elastic Beanstalk` URL at the mentioned place below. 
  
   ````
@@ -493,13 +500,24 @@ or username and identity provider account mismatch.
     },
   ````
   - Then click on `Add Platform` and select `Website`.
+  ![05](https://user-images.githubusercontent.com/18484641/38291020-7c8ea3de-37fb-11e8-8e21-a885c3e21b51.png)
+
   - Enter your website url in `app domains` field and `site url` field and click 
    `save changes`.
+  ![06](https://user-images.githubusercontent.com/18484641/38291022-7dd1e1de-37fb-11e8-85fa-96c8c5602480.png)
+
   - Then click `Products` and click `set Up` button in `Facebook Login` product.
+  ![004](https://user-images.githubusercontent.com/18484641/38291017-7a66f804-37fb-11e8-9216-6cfc0b5f4e12.png)
+
   - Then choose `settings`.
+  ![07](https://user-images.githubusercontent.com/18484641/38291025-7f0eee48-37fb-11e8-8eef-67d10997d55e.png)
+
   - Then copy the callbackURL from above facebook `callbackURL` field and paste it in 
     `Valid OAuth Redirect URIs`. And click `Save changes` button.
+  ![09](https://user-images.githubusercontent.com/18484641/38291029-81e46576-37fb-11e8-87c1-009c7207b4bf.png)
+
   - Click following button to let users use your application.
+  ![09](https://user-images.githubusercontent.com/18484641/38291029-81e46576-37fb-11e8-87c1-009c7207b4bf.png)
 
 
 
