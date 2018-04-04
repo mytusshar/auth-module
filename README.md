@@ -174,17 +174,6 @@ accounts and gives you authenticated user directly.
 
 ## We have provided sample client application which demonstrates how to use I-Auth Module in your application. 
 
-### Running Client 
-
-* #### Open project folder in terminal and change to client directory using below command 
-
-    `$ cd glm/client`
-
-* #### Open `client.html` inside your browser 
-
-* #### You are good to go.
-
-
 ### Runnig Client application using Tomcat server [ OPTIONAL ]
 
 * #### Install Tomcat using following link.
@@ -636,5 +625,44 @@ or username and identity provider account mismatch.
 
   
 
-### 7. Accessing I-Auth Module from the client application.
+# Accessing I-Auth Module from the client application.
+You can refer sample client application that we have provided.
+In client application we have provided some functions that you can directly use in your application.
+In this client appplication we have created functions for:
+* Log in or register user.
+* Refreshing user session (user session ends after every one hour.).
+* Accessing DynamoDB from client application using AWS Cognito AccessKey and SecretKey and SessionKey.
 
+
+### To use the client application, perform following steps:
+* In client application,  go to `js` directory and open `constants.js` file.
+    ````
+      const CLIENT_REDIRECT_URL = "http://localhost:8080/client/index.html";
+
+      const AWS_REGION = "us-east-1";
+      const AWS_ENDPOINT = "http://dynamodb.us-east-1.amazonaws.com";
+      const TABLE_NAME = "users";
+
+      const SERVER_ADDRESS = "http://localhost:8081";
+      const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
+      const REFRESH_URL = SERVER_ADDRESS + "/refresh";
+
+      const REQUIRE_LOGIN_NAME = true;
+
+      const SESSION_EXPIRE_TIME = 0;
+      const SESSION_REFRESH_TIME = 5;
+      const SESSION_TIME = 60;
+  ````
+* Change `CLIENT_REDIRECT_URL` to your tomcat server address.
+* Change `AWS_REGION` to the region that you have selected on aws account.
+* Change `AWS_ENDPOINT` to http://dynamodb.`[AWS_REGION]`.amazonaws.com. Replace AWS_REGION with your aws region.
+* Change`TABLE_NAME` to table name in DynamoDB.
+* Chnage `SERVER_ADDRESS` to `AWS Beanstalk URL` that we used before.
+* `URL_AUTHENTICATION`, this is the URL on which login/register request will be processed.
+* `REFRESH_URL, on this URL; session refresh request will be processed.
+* Rest of the code ypour can refer and understand.
+
+* To run the client application deploy it on Tomcat server. I have provided how to install and deploy web app on Tomcat Server above.
+
+
+    
