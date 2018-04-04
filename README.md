@@ -770,10 +770,12 @@ In this client appplication we have created functions for:
 * To run the client application deploy it on Tomcat server. I have provided how to install and deploy web app on Tomcat Server above.
 
 
-# CASE-2: Login-register without unique Username in the system.
-    In this case you have to follow all above steps that are needed to complete for `CASE-1: Login-register with unique Username in the system`.
-    Only you don't have to create index on table.
+## CASE-2: Login-register without unique Username in the system.
 
-# CASE-3: Only Login without unique Username in the system.
-    In this case you have to follow all above steps that are needed to complete for `CASE-1: Login-register with unique Username in the system`.
-    Only you don't have to create index on table.
+In this case you have to follow all above steps that are needed to complete for `CASE-1: Login-register with unique Username in the system`.
+Only you don't have to create index on table.
+
+## CASE-3: Only Login without unique Username in the system.
+
+In this case you have to follow all above steps that are needed to complete for `CASE-1: Login-register with unique Username in the system`.
+Only you don't have to create index on table.
