@@ -286,7 +286,7 @@ or username and identity provider account mismatch.
 
 
 
-# Login-register with unique Username in the system.
+# CASE-1: Login-register with unique Username in the system.
 
    If your requirement is Registration-login flow along with unique username for each user
    then you will have to do the following steps to configure I-Auth module.
@@ -396,8 +396,6 @@ or username and identity provider account mismatch.
    ````
 
 
-
-
 * ### Creating Cognito Identity Pool:
   - #### Search for `Cognito` in AWS console and click on it.
 
@@ -484,7 +482,6 @@ or username and identity provider account mismatch.
    ````
 
      ![08-edit](https://user-images.githubusercontent.com/18484641/38247838-31a09a2c-3764-11e8-832b-8f80bb97d1c2.png)
-
 
 
 
@@ -601,6 +598,7 @@ or username and identity provider account mismatch.
     ![09](https://user-images.githubusercontent.com/18484641/38291029-81e46576-37fb-11e8-87c1-009c7207b4bf.png)
 
 
+
 ## 4. Creating Google application.
 - #### Paste the `Elastic Beanstalk URL` in `callbackURL`. 
     ````
@@ -706,7 +704,6 @@ or username and identity provider account mismatch.
 
 
 
-
 ## 6. Deploying configured I-Auth module on AWS Beanstalk.
   - GO to `i-auth` folder on your computer.
   - You will see following directories/files in it.
@@ -773,4 +770,10 @@ In this client appplication we have created functions for:
 * To run the client application deploy it on Tomcat server. I have provided how to install and deploy web app on Tomcat Server above.
 
 
-    
+# CASE-2: Login-register without unique Username in the system.
+    In this case you have to follow all above steps that are needed to complete for `CASE-1: Login-register with unique Username in the system`.
+    Only you don't have to create index on table.
+
+# CASE-3: Only Login without unique Username in the system.
+    In this case you have to follow all above steps that are needed to complete for `CASE-1: Login-register with unique Username in the system`.
+    Only you don't have to create index on table.
