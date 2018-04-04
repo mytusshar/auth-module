@@ -623,10 +623,16 @@ or username and identity provider account mismatch.
   - Select them all and make a ZIP of it.
   - Now, open `Elastic Beanstalk` from AWS console.
   - You will see your previously created instance. Click on it.
+  ![01-edit](https://user-images.githubusercontent.com/18484641/38293404-f99029bc-3804-11e8-8e4e-a9d4e9e2e0c5.png)
+
   - Click on Upload and Deploy.
-  - Select the ZIP file created and add label version.
-  - Then click on `Deploy`. It will take some time.
+  ![02-edit](https://user-images.githubusercontent.com/18484641/38293403-f958e43e-3804-11e8-9ac5-02c85363956d.png)
+
+  - Select the ZIP file created and add label version. Then click on `Deploy`. It will take some time.
+  ![03-edit](https://user-images.githubusercontent.com/18484641/38293402-f922507c-3804-11e8-9246-1c45d22e20b7.png)
+
   - If you see the following screen then your deployment is successful.
+  ![04-edit](https://user-images.githubusercontent.com/18484641/38293401-f8e820f0-3804-11e8-8f24-785a8308365a.png)
 
   
 
