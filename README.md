@@ -191,6 +191,48 @@ accounts and gives you authenticated user directly.
 * #### You are good to go.
 
 
+## Routes provided by I-Auth Module
+ Following are the routes that are provided by I-Auth module which client application should use to get required response.
+
+### 1. "Server_address"/auth:
+   Whenever the user wants to login/register then request should be made to this route.
+
+   * #### During login request client should send `provider-name` and `request-type` (it will be "login" in this case) as URL parameter.
+       
+     #### Example Login Request:
+     #### 1. Unique Username case: 
+
+         http://localhost:8081/auth?provider=facebook&request=login&username=myusername
+
+     #### 2. Not Unique Username case: 
+
+         http://localhost:8081/auth?provider=facebook&request=login
+
+* #### During registration request client should send `provider-name` and `request-type` (it will be "register" in this case) and all the registration fields that are required as URL parameter.
+       
+     #### Example Registration Request:
+     #### 1. Unique Username case: 
+
+         http://localhost:8081/auth?provider=facebook&request=register&username=myusername&name=your-name&city=city-name
+
+     #### 2. Not Unique Username case: 
+
+         http://localhost:8081/auth?provider=facebook&request=register&name=your-name&city=city-name
+
+
+### 2. "Server_address"/refresh:
+  When client session will expire, then to get the new session tokens this URL should be requested with `provider-name`, `access-token` and `refresh-token` as HTTP request body parameter. This is POST request.
+
+   #### Example:
+   ````
+    {
+        provider: 'google'
+        accessToken: 'google access token',
+        refreshToken: 'google refresh token'
+    }
+   ```` 
+
+
 ## STATUS CODES Returned by I-Auth Module
 
 When any kind of request is sent to I-Auth Module then it responds client application with following `STATUS_CODES`.
