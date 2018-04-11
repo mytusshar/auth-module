@@ -1,17 +1,37 @@
 body {
-    background: url("../img/background.jpg") no-repeat fixed center center;
     background-size: cover;
+    background-color: rgb(131, 115, 93);
     font-family: Montserrat;
 }
 
 .logo {
-    width: 560px;
+    width: 530px;
     height: 100px;
-    margin: 30px auto;
+    margin: 0px auto;
+    margin-top: 200px;
     font-weight: bold;
     text-decoration-style: wavy;
-    font-size: 40px;
-    color: rgba(245, 247, 244, 0.466);
+    font-size: 25px;
+    color: rgba(255, 255, 255, 0.885);
+}
+
+.box {
+    width: 400px;
+    border-radius: 5px;
+    padding-bottom: 30px;
+    margin: 0 auto;
+    border: thin solid rgb(138, 134, 134);
+    background:  rgb(116, 96, 75);
+}
+
+.reg-buttons {
+    width: 197.9px;
+    height: 40px;
+    padding: 5px;
+    color: rgb(239, 247, 247);
+    font-size: 20px;
+    border: thin solid rgb(128, 124, 124);
+    background-color: #363641;
 }
 
 .block {
@@ -19,16 +39,13 @@ body {
     padding: 20px;
     border-radius: 5px;
     margin: 0 auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.582), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-    background: rgba(100, 99, 99, 0.356);
-    border-top: 5px solid #0000007c;
+    background: rgba(116, 96, 75);
+    border-color: rgba(116, 96, 75);
 }
 
 .block h1 {
     text-align: center;
-    color: rgba(0, 0, 0, 0.712);
+    color: rgb(206, 206, 206);
     font-size: 25px;
     margin-bottom: 20px;
 }
@@ -37,7 +54,7 @@ body {
     width: 95%;
     height: 40px;
     box-sizing: border-box;
-    border-radius: 5px;
+    border-radius: 1px;
     color: #fff;
     margin : 10px;
     text-transform: uppercase;
@@ -51,36 +68,17 @@ body {
     height: 40px;
     padding-left: 13px;
     box-sizing: border-box;
-    border-radius: 5px;
+    border-radius: 1px;
     color: rgb(255, 255, 255);
     margin : 10px;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(14, 13, 13);
     font-size: 16px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     cursor: text;
 }
 
-.reg-buttons {
-    width: 248px;
-    height: 40px;
-    padding: 5px;
-    color: rgba(239, 247, 247, 0.568);
-    font-size: 20px;
-    border-color: rgba(1, 2, 24, 0);
-    background-color: #14142591;
-}
-
-.box {
-    width: 501px;
-    border-radius: 5px;
-    padding-bottom: 30px;
-    margin: 0 auto;
-    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.582), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-    background: rgba(51, 100, 22, 0.459);
-}
-
 .error {
-    color: rgb(185, 8, 8);
+    color: rgb(255, 41, 41);
     margin-left: 15px;
     font-weight: bold;
     font-style: italic;
@@ -88,34 +86,15 @@ body {
     display: none;
 }
 
-
-#result-block {
-    background: rgba(34, 33, 33, 0.486);
-    color: #ffffff;    
-    margin-top: 70px;
-}
-
 #output {
-    color: rgba(255, 255, 255, 0.753);
+    background: rgba(34, 33, 33, 0.486);
+    color: #ffffff;
+    padding: 10px;
     font-size: 15px;
     -ms-text-autospace: ideograph-space;
     font-style: italic;
+    display: none;
     font-family: Courier New, Courier, monospace;      
-}
-
-#facebook, #reg-facebook {
-    background: #1154b8cb;
-    border: 1px solid #1154b8b9;
-}
-
-#google, #reg-google {
-    background: #b81111ce;
-    border: 1px solid #b81111d0;
-}
-
-#amazon, #reg-amazon {
-    background: #fc9003da;
-    border: 1px solid #ff9100d0;
 }
 
 #register-block {
@@ -131,3 +110,34 @@ body {
     border: 1px solid #088f1fd4;
 }
 
+.fa {
+    padding: 15px;
+    font-size: 30px;
+    width: 60px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    border-radius: 50px;
+}
+  
+.fa:hover {
+    opacity: 0.7;
+}
+  
+.fa-facebook {
+    background: rgb(44, 76, 145);
+    color: white;
+    margin-left: 10px;
+}
+  
+.fa-amazon {
+    background: #f88d00;
+    color: white;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.fa-google {
+    background: #d32222;
+    color: white;
+}

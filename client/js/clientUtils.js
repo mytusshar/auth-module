@@ -2,20 +2,20 @@
 function recievedDataOperation(e) { 
     var output =  document.getElementById("output");
     var data = e.data;
+    console.log(data);
 
     if(data.status == 1) {
         var result = "UserName: " + data.username + "<br>" +  
                     "Name: " + data.name + "<br>" + 
                     "Email: " + data.email + "<br>" +
                     "CognitoID: " + data.cognitoId + "<br>";
-                    
-        output.innerHTML = result;
 
         /******* storing data in localStorage ******/
         browserStorage(data);
         /******* opening profile window *********/
         window.open(PROFILE_FILE, "_self");
     } else {
+        output.style.display = "block";
         output.innerHTML = JSON.stringify(data);
     }
 }

@@ -7,11 +7,12 @@
         <script src="js/index.js"></script>
         <script src="js/constants.js"></script>
         <script src="js/clientUtils.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     </head>
 
     <body>            
-        <div class="logo">Generalized Login Module</div>
+        <div class="logo">AWS Based User Authentication Module</div>
         
         <div class="box">
             <div class="register">
@@ -25,9 +26,10 @@
                 <input class="input" id="user-name" placeholder="User name*">
                 <span id="error-username" class="error">error</span>
 
-                <button class="button" id="facebook"> Login with Facebook </button>
-                <button class="button" id="google"> Login with Google </button>
-                <button class="button" id="amazon"> Login with Amazon </button>
+                <a href="#" class="fa fa-facebook" id="facebook"></a>
+                <a href="#" class="fa fa-amazon" id="amazon"></a>
+                <a href="#" class="fa fa-google" id="google"></a>
+
             </div>
     
             <div class="block" id="register-block">
@@ -45,14 +47,16 @@
                 <input class="input" id="city" placeholder="City*">
                 <span id="errorcity" class="error"></span>
 
-                <button class="button" id="reg-facebook"> Register using Facebook </button>
-                <button class="button" id="reg-google"> Register using Google </button>
-                <button class="button" id="reg-amazon"> Register using Amazon </button>
-            </div>
-        </div>
+                <a href="#" class="fa fa-facebook" id="reg-facebook"></a>
+                <a href="#" class="fa fa-amazon" id="reg-amazon"></a>
+                <a href="#" class="fa fa-google" id="reg-google"></a>
 
-        <div class="block" id="result-block">
-            <p id="output"> Response from server </p>            
+            </div>
+
+            <div class="block" id="result-block">
+                <p id="output"> Response from server </p>            
+            </div>
+
         </div>
 
     </body>
