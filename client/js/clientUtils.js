@@ -92,7 +92,7 @@ function dynamodbReadOperation() {
         if (err) {
             document.getElementById('button-result').innerHTML = "Unable to read item: " + "\n" + JSON.stringify(err, undefined, 2);
         } else {
-            document.getElementById('button-result').innerHTML = "GetItem succeeded: " + "\n" + JSON.stringify(data, undefined, 2);
+            document.getElementById('button-result').innerHTML = "GetItem succeeded: " + "\n" + JSON.stringify(data.Item, undefined, 2);
         }
     });
 }

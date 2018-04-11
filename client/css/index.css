@@ -1,6 +1,6 @@
 body {
     background-size: cover;
-    background-color: rgb(131, 115, 93);
+    background-color: rgb(218, 218, 218);
     font-family: Montserrat;
 }
 
@@ -12,7 +12,7 @@ body {
     font-weight: bold;
     text-decoration-style: wavy;
     font-size: 25px;
-    color: rgba(255, 255, 255, 0.885);
+    color: rgba(73, 71, 71, 0.885);
 }
 
 .box {
@@ -95,6 +95,10 @@ body {
     font-style: italic;
     display: none;
     font-family: Courier New, Courier, monospace;      
+}
+
+#b-register {
+    margin-top: 20px;
 }
 
 #register-block {

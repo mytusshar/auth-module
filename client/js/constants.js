@@ -3,7 +3,8 @@
  * author: Tushar Bochare
  * Email: mytusshar@gmail.com
  */
-const CLIENT_REDIRECT_URL = "http://localhost:8080/client/index.html";
+// const CLIENT_REDIRECT_URL = "http://localhost:8080/client/index.html";
+const CLIENT_REDIRECT_URL = "http://clientapp-env.us-east-1.elasticbeanstalk.com/index.html";
 
 const AWS_REGION = "us-east-1";
 const AWS_ENDPOINT = "http://dynamodb.us-east-1.amazonaws.com";
