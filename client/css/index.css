@@ -1,4 +1,5 @@
 body {
+    margin: 0;
     background-size: cover;
     background-color: rgb(249, 249, 249);
     font-family: Montserrat;
@@ -8,7 +9,8 @@ body {
     width: 530px;
     height: 100px;
     margin: 0px auto;
-    margin-top: 200px;
+    margin-top: 80px;
+    margin-bottom: 70px;
     font-weight: bold;
     text-decoration-style: wavy;
     font-size: 25px;
@@ -141,4 +143,16 @@ body {
 .fa-google {
     background: #d32222;
     color: white;
+}
+
+.footer {
+    overflow: hidden;
+    background-color: #333;
+    color: #e1e1e1;
+    position: fixed;
+    text-align: center;
+    font-size: 15px;
+    bottom: 0;
+    width: 100%;
+    height: 5%;
 }

@@ -228,4 +228,7 @@ function openModalIndex(message) {
 function closeModalIndex() {
     modalContainer.style.display = "none";
     modal.style.display = "none";
+    if(sessionStorage.getItem("user")) {
+        logoutUser();
+    }
 }

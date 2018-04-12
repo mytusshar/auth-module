@@ -11,10 +11,15 @@ function recievedDataOperation(e) {
 
         /******* storing data in localStorage ******/
         browserStorage(data);
-        /******* opening profile window *********/
-        window.open(PROFILE_FILE, "_self");
+
+        if(data.request == "register") {
+            openModalIndex("Congratulations! You have successfully registered. Please signin now.");
+        } else {
+            /******* opening profile window *********/
+            window.open(PROFILE_FILE, "_self");
+        }
     } else if(data.hasOwnProperty("status")) {
-        openModalIndex(JSON.stringify(data))
+        openModalIndex(data.message);
     }
 }
 
