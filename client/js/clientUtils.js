@@ -1,6 +1,5 @@
 
-function recievedDataOperation(e) { 
-    var output =  document.getElementById("output");
+function recievedDataOperation(e) {
     var data = e.data;
     console.log(data);
 
@@ -14,22 +13,18 @@ function recievedDataOperation(e) {
         browserStorage(data);
         /******* opening profile window *********/
         window.open(PROFILE_FILE, "_self");
-    } else {
-        output.style.display = "block";
-        output.innerHTML = JSON.stringify(data);
+    } else if(data.hasOwnProperty("status")) {
+        openModalIndex(JSON.stringify(data))
     }
 }
-
 
 function login(provider) {
     openIdentityProvider(LOGIN, provider);
 }
 
-
 function register(provider) {
     openIdentityProvider(REGISTER, provider);
 }
-
 
 function logoutUser() {
     var sessData = JSON.parse(sessionStorage.user);
@@ -51,7 +46,6 @@ function logoutUser() {
         break;
     }
 }
-
 
 function refreshFunction() {
     console.log("Fetch: ", sessionStorage.user);
@@ -82,7 +76,6 @@ function refreshFunction() {
     })
     .catch((err) => console.log(err))
 }
-
 
 function dynamodbReadOperation() {
     var params = getParamsForDynamodb();

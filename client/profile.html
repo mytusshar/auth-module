@@ -13,59 +13,53 @@
 
     <body>
 
-        <div align="center">
-            <div class="header">
-                <h2 id="profile-heading">Independent Authentication Module</h2>
-                <button id="button-logout">LOGOUT</button>
+        <div>
+            <div class="navbar">
+                <a href="#home" id="home">Home</a>
+                <a href="#developer-tools" id="developer-tools">Developer Tools</a>
+                <a href="#logout" id="button-logout">Logout</a>
+
+                <div  class="time">
+                    <span id="minutes">06</span>
+                    <span id="colon"><b>:</b></span>
+                    <span id="seconds">44</span>
+                </div>
             </div>
 
-            <!-- clock -->
-            <h1>Your session will end in</h1>
-            <div id="clockdiv">
-                <div>
-                    <span class="minutes" id="minutes"></span>
-                    <div class="smalltext">Minutes</div>
-                </div>
-                <div>
-                    <span class="seconds" id="seconds"></span>
-                    <div class="smalltext">Seconds</div>
-                </div>
+            <div id="main-home">
+                <p>Welcome! You have successfully logged in....</p>                
             </div>
-    
-            <div>
-    
-                <div class="column">
+        
+            <div id="dev-tools">
+                <div class="column1">
                     <h2>User Data After Login</h2>
-                    <h3>Successful Login</h3>
-                    <div class="block" id="result-block">
+                    <div class="block">
                         <p id="user-data">Data</p>
                     </div>
                 </div>
-    
-                <div class="column">
-                    <button class="button" id="dynamodb-button"> DynamoDB Read </button>
-                    <div class="block" id="result-block">
-                        <textarea readonly id="button-result"></textarea>
+
+                <div class="column2">
+                    <button class="button" id="dynamodb-button"> Database Read</button>
+                    <div class="block">
+                        <textarea readonly class="block" id="button-result"></textarea>
                     </div>
                 </div>
-    
             </div>
         </div>
 
         <!-- alert modal -->
-            <div id="modal-container">
-                <div class="flex">
-                    <div id="modal">
-                        <div id="close">
-                            <span>&#43;</span>
-                        </div>
-                        <div class="content">
-                            <h2 id="alert-refresh">Alert</h2>
-                            <p id="alert-text"></p>                            
-                        </div>
-                        <button id="button-refresh">Refresh Session</button>
-                        <button id="button-login-page">Goto Login Page</button>
+        <div id="modal-container">
+            <div class="flex">
+                <div id="modal">
+                    <div id="close">
+                        <span>&#43;</span>
                     </div>
+                    <div class="content">
+                        <h2 id="alert-refresh">Alert</h2>
+                        <p id="alert-text"></p>
+                    </div>
+                    <button id="button-refresh">Refresh Session</button>
+                    <button id="button-login-page">Goto Login Page</button>
                 </div>
             </div>
         </div>

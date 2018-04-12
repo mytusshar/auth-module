@@ -32,6 +32,14 @@ function initializeClock() {
     seconds = parseInt(value) - parseInt(minutes)*60;
     minElement = document.getElementById('minutes');
     secElement = document.getElementById('seconds');
+    
+    if(minutes < 10) {
+        minutes = "0" + minutes;
+    }
+
+    if(seconds < 10) {        
+        seconds = "0" + seconds;
+    }
     minElement.innerHTML = minutes;
     secElement.innerHTML = seconds;
 
@@ -66,6 +74,13 @@ function counter() {
         openModal(messageExpire, buttonLoginPage);
     }
     
+    if(minutes < 10) {
+        minutes = "0" + minutes;
+    }
+
+    if(seconds < 10) {        
+        seconds = "0" + seconds;
+    }
     minElement.innerHTML = minutes;
     secElement.innerHTML = seconds;
 };

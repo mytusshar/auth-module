@@ -4,6 +4,7 @@
     <head>
         <title>Generalized Login Module</title>
         <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/modal.css">
         <script src="js/index.js"></script>
         <script src="js/constants.js"></script>
         <script src="js/clientUtils.js"></script>
@@ -13,54 +14,46 @@
 
     <body>            
         <div class="logo">AWS Based User Authentication Module</div>
-        
-        <div class="box">
-            <div class="register">
-                <!-- <button class="reg-buttons" id="b-login">Login</button>
-                <button class="reg-buttons" id="b-register">Register</button> -->
+
+        <div class="block" id="login-block">
+            <h1>Login</h1>
+            <input class="input" id="user-name" placeholder="User name">
+            <span id="error-username" class="error">error</span>
+            <a href="#" class="fa fa-facebook" id="facebook"></a>
+            <a href="#" class="fa fa-amazon" id="amazon"></a>
+            <a href="#" class="fa fa-google" id="google"></a>
+            <a href="#" id="b-register">Not a member? <b>Register</b></a>
+        </div>
+
+        <div class="block" id="register-block">
+            <h1>Register</h1>
+            <input class="input" id="username" placeholder="User name">
+            <span id="errorusername" class="error">error</span>
+            <input class="input" id="name" placeholder="Full Name">
+            <span id="errorname" class="error">error</span>
+            <input class="input" id="email" placeholder="Email ID">
+            <span id="erroremail" class="error"></span>
+            <input class="input" id="city" placeholder="City">
+            <span id="errorcity" class="error"></span>
+
+            <a href="#" class="fa fa-facebook" id="reg-facebook"></a>
+            <a href="#" class="fa fa-amazon" id="reg-amazon"></a>
+            <a href="#" class="fa fa-google" id="reg-google"></a>
+            <a href="#" id="b-login">Already a member? <b>Login</b></a>
+        </div>
+
+        <div id="modal-container">
+            <div class="flex">
+                <div id="modal">
+                    <div id="close">
+                        <span>&#43;</span>
+                    </div>
+                    <div class="content">
+                        <h2 id="alert-refresh">Alert</h2>
+                        <p id="alert-text"></p>                            
+                    </div>
+                </div>
             </div>
-
-            <div class="block" id="login-block">
-                <h1>Login</h1>
-
-                <input class="input" id="user-name" placeholder="User name*">
-                <span id="error-username" class="error">error</span>
-
-                <a href="#" class="fa fa-facebook" id="facebook"></a>
-                <a href="#" class="fa fa-amazon" id="amazon"></a>
-                <a href="#" class="fa fa-google" id="google"></a>
-
-                <a href="#" id="b-register">Not Registred? Click here to Register.</a>
-
-            </div>
-    
-            <div class="block" id="register-block">
-                <h1>Register</h1>
-
-                <input class="input" id="username" placeholder="User name*">
-                <span id="errorusername" class="error">error</span>
-
-                <input class="input" id="name" placeholder="Full Name*">
-                <span id="errorname" class="error">error</span>
-
-                <input class="input" id="email" placeholder="Email ID*">
-                <span id="erroremail" class="error"></span>
-
-                <input class="input" id="city" placeholder="City*">
-                <span id="errorcity" class="error"></span>
-
-                <a href="#" class="fa fa-facebook" id="reg-facebook"></a>
-                <a href="#" class="fa fa-amazon" id="reg-amazon"></a>
-                <a href="#" class="fa fa-google" id="reg-google"></a>
-
-                <a href="#" id="b-login">Have an account? Click to Login</a>
-
-            </div>
-
-            <div class="block" id="result-block">
-                <p id="output"> Response from server </p>            
-            </div>
-
         </div>
 
     </body>

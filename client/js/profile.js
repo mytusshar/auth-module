@@ -8,22 +8,55 @@ var buttonDynamodbRead;
 var buttonRefresh;
 var buttonLogout;
 var buttonLoginPage;
+var navButtonHome;
+var navButtonDevTools;
 var modalContainer;
 var modal;
 var closeButton;
 var alertText;
+var homePage;
+var devToolsPage;
 
-window.onload = function() {    
+window.onload = function() {
     /******* dynamodb read operation ******/
     buttonDynamodbRead = document.getElementById("dynamodb-button");
     buttonDynamodbRead.addEventListener("click", dynamodbReadOperation);
     buttonLogout = document.getElementById("button-logout");
     buttonLogout.addEventListener("click", logoutUser);
 
-    initializeClock();
-    initializeProfile();
+    navButtonDevTools = document.getElementById("developer-tools");
+    navButtonDevTools.addEventListener("click", showDevTools);
+
+    navButtonHome = document.getElementById("home");
+    navButtonHome.addEventListener("click", showHomePage);
+
+    homePage = document.getElementById("main-home");
+    devToolsPage = document.getElementById("dev-tools");
+
     initModal();
+
+    if(!sessionStorage.getItem("user")) {
+        modalContainer.style.display = "block";
+        modal.style.display = "block";
+        closeButton.style.display = "none";
+        buttonLoginPage.style.display = "block";
+        alertText.innerHTML = "You are not logged in. Please login first.";
+    } else {
+        initializeClock();
+        initializeProfile();
+    }
 }
+
+function showDevTools() {
+    homePage.style.display = "none";
+    devToolsPage.style.display = "block";
+}
+
+function showHomePage() {
+    homePage.style.display = "block";
+    devToolsPage.style.display = "none";
+}
+
 
 function initializeProfile() {
     var userData = JSON.parse(sessionStorage.user);

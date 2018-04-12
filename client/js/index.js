@@ -70,7 +70,6 @@ function browserStorage(data) {
     return;
 }
 
-
 window.onload = function() {
     /******* facebook buttons *******/
     buttonLoginFacebook = document.getElementById("facebook");
@@ -95,6 +94,8 @@ window.onload = function() {
     buttonLoginBlock.addEventListener("click", showLoginBlock);
     buttonRegBlock = document.getElementById("b-register");
     buttonRegBlock.addEventListener("click", showRegBlock);
+
+    initModalIndex();
 }
 
 function openIdentityProvider(requestType, authProvider) {
@@ -143,7 +144,6 @@ function openIdentityProvider(requestType, authProvider) {
     // Listen to message from child window
     eventer(messageEvent, recievedDataOperation, false);
 }
-
 
 function handleErrorStyles(code, show, hide1, hide2, hide3) {
     if(code == 0) {
@@ -207,4 +207,25 @@ function appendURL(data, url) {
         }        
     }
     return url;
+}
+
+function initModalIndex() {
+    /********* modal close button ******/
+    closeButton = document.getElementById("close");    
+    closeButton.addEventListener("click", closeModalIndex);
+
+    modalContainer = document.getElementById("modal-container");
+    modal = document.getElementById("modal");
+    alertText = document.getElementById("alert-text");    
+}
+
+function openModalIndex(message) {
+    modalContainer.style.display = "block";
+    modal.style.display = "block";
+    alertText.innerHTML = message;
+}
+
+function closeModalIndex() {
+    modalContainer.style.display = "none";
+    modal.style.display = "none";
 }
