@@ -11,7 +11,7 @@ const AWS_ENDPOINT = "http://dynamodb.us-east-1.amazonaws.com";
 const TABLE_NAME = "users";
 
 // const SERVER_ADDRESS = "http://localhost:8081";
-const SERVER_ADDRESS = "https://sampleapplicationna-env.us-east-1.elasticbeanstalk.com";
+const SERVER_ADDRESS = "https://iamauthmodule-env.us-east-1.elasticbeanstalk.com";
 
 const URL_AUTHENTICATION = SERVER_ADDRESS + "/auth";
 const REFRESH_URL = SERVER_ADDRESS + "/refresh";
