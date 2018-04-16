@@ -1,4 +1,4 @@
-# Independent Authentication Module (I-Auth)
+# Independent Authentication Module (IAM-Auth)
 
 Nowadays, security of any application has become very important role in developing 
 application and more than it maintaining users in the application is critical. 
@@ -7,7 +7,7 @@ So instead of creating new users in your application and maintaining its securit
 this library helps you to authenticate users from their existing Google/Facebook/Amazon
 accounts and gives you authenticated user directly.
 
-## Features provided by I-Auth Module
+## Features provided by IAM-Auth Module
 - #### Provides authenticated users from:
 
    ##### 1. Google
@@ -26,14 +26,14 @@ accounts and gives you authenticated user directly.
   Developer can choose any one use-case according to project requirement.
 
    ##### 1. Only Login feature:    
-   In this use-case devloper can directly use I-Auth module to Login users 
+   In this use-case devloper can directly use IAM-Auth module to Login users 
       into devloper's project. 
       It does not require registration flow. It internally handles it.
 
    ##### 2. Registration-Login feature without Unique Username in the System:    
    In this use-case developer can provide set of registration fields 
       during registration. 
-      I-Auth module will not check for uniqueness of Username in this use- 
+      IAM-Auth module will not check for uniqueness of Username in this use- 
       case.
       User need to be registered before logging in. 
       During login user does not have to provide usename.
@@ -41,7 +41,7 @@ accounts and gives you authenticated user directly.
    ##### 3. Registration-Login feature with Unique Username in the System:   
      In this use-case developer can provide set of registration fields during 
      registration. 
-     I-Auth module will explicitly check for uniqueness of Username in this 
+     IAM-Auth module will explicitly check for uniqueness of Username in this 
      use-case.
      User need to be registered before logging in. 
      Username is mandatory during login.
@@ -51,11 +51,11 @@ accounts and gives you authenticated user directly.
 
 
 
-## Follow below steps to use I-Auth module in your existing project.
+## Follow below steps to use IAM-Auth module in your existing project.
 
 #### 1. Clone this repository on your system
 
-#### 2. Check for the `config.json` file in I-Auth
+#### 2. Check for the `config.json` file in IAM-Auth
 
    ##### Based on devloper's requirement, choose one of the use-cases and add the following details in it.
 
@@ -98,7 +98,7 @@ accounts and gives you authenticated user directly.
        Make sure that partition key column should be present in table.
 
   * ##### Now you have to provide which third party identity providers that you want in your application to support.
-      Presently I-Auth module supports for:
+      Presently IAM-Auth module supports for:
       * Google
       * Facebook
       * Amazon
@@ -106,7 +106,7 @@ accounts and gives you authenticated user directly.
        You have to create developer account for those providers on their provided sites, and there you will get 
     `clientID`, `clientSecret`.
     You have to provide `callback URL` on which third party authentication provider will redirect after successfull authentication.
-    You can provide which profile fields you want to read from users's third party account. By default I-Auth fetches `username, name, email` information.
+    You can provide which profile fields you want to read from users's third party account. By default IAM-Auth fetches `username, name, email` information.
 
 
 ``` 
@@ -157,7 +157,7 @@ accounts and gives you authenticated user directly.
 }
 
 ````
-   * ##### Your I-Auth Module is ready to use.
+   * ##### Your IAM-Auth Module is ready to use.
 
 
 #### 3. Running Server
@@ -174,7 +174,7 @@ accounts and gives you authenticated user directly.
 
     `$ node server.js`
 
-## We have provided sample client application which demonstrates how to use I-Auth Module in your application. 
+## We have provided sample client application which demonstrates how to use IAM-Auth Module in your application. 
 
 ### Runnig Client application using Tomcat server [ OPTIONAL ]
 
@@ -193,8 +193,8 @@ accounts and gives you authenticated user directly.
 * #### You are good to go.
 
 
-## Routes provided by I-Auth Module
- Following are the routes that are provided by I-Auth module which client application should use to get required response.
+## Routes provided by IAM-Auth Module
+ Following are the routes that are provided by IAM-Auth module which client application should use to get required response.
 
 ### 1. "Server_address"/auth:
    Whenever the user wants to login/register then request should be made to this route.
@@ -237,9 +237,9 @@ accounts and gives you authenticated user directly.
 
 
 
-## STATUS CODES Returned by I-Auth Module
+## STATUS CODES Returned by IAM-Auth Module
 
-When any kind of request is sent to I-Auth Module then it responds client application with following `STATUS_CODES`.
+When any kind of request is sent to IAM-Auth Module then it responds client application with following `STATUS_CODES`.
 These `STATUS_CODES` can be used in client application.
 
 #### `[STATUS CODES]`
@@ -289,7 +289,7 @@ or username and identity provider account mismatch.
 # CASE-1: Login-register with unique Username in the system.
 
    If your requirement is Registration-login flow along with unique username for each user
-   then you will have to do the following steps to configure I-Auth module.
+   then you will have to do the following steps to configure IAM-Auth module.
 
    - First, modify `config.json` file as shown below for your requirement.
      You can add any registration fields that you want. 
@@ -704,7 +704,7 @@ or username and identity provider account mismatch.
 
 
 
-## 6. Deploying configured I-Auth module on AWS Beanstalk.
+## 6. Deploying configured IAM-Auth module on AWS Beanstalk.
   - GO to `i-auth` folder on your computer.
   - You will see following directories/files in it.
      * modules
@@ -730,7 +730,7 @@ or username and identity provider account mismatch.
 
     ![04-edit](https://user-images.githubusercontent.com/18484641/38293401-f8e820f0-3804-11e8-8f24-785a8308365a.png)
 
-# Accessing I-Auth Module from the client application.
+# Accessing IAM-Auth Module from the client application.
 You can refer sample client application that we have provided.
 In client application we have provided some functions that you can directly use in your application.
 In this client appplication we have created functions for:
