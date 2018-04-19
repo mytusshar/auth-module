@@ -21,6 +21,9 @@
     "start": "node server.js"
   },
   "author": "Tushar Bochare",
-  "email": ["mytusshar@gmail.com", "tushar.bochare@sarvaha.com"],
+  "email": [
+    "mytusshar@gmail.com",
+    "tushar.bochare@sarvaha.com"
+  ],
   "license": "ISC"
 }
