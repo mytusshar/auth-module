@@ -16,29 +16,29 @@
     "indexKey": "username",
 
     "aws": {
-        "accountId": "AWS-ACCOUNT-ID",
-        "awsRegion":  "AWS-REGION",
-        "cognitoIdentityPoolId": "COGNITO-IDENTITY-POOL-ID",
-        "iamRoleArn": "IAM-ROLE-ARN"
+        "accountId": "719697336829",
+        "awsRegion":  "us-east-1",
+        "cognitoIdentityPoolId": "us-east-1:a2f076db-c654-4a18-87b1-6baec2752c4b",
+        "iamRoleArn": "arn:aws:iam::719697336829:role/Cognito_aws_cognitoAuth_Role"
     },
 
     "facebook": {
-        "clientID" : "FACEBOOK CLIENT ID",
-        "clientSecret" : "FACEBOOK CLIENT SECRET",
+        "clientID" : "158449238124791",
+        "clientSecret" : "d66db07cfd121522b6e3e6a7cd7e224a",
         "callbackURL" : "http://localhost:8081/auth/facebook/callback",
         "profileFields" : ["displayName", "email", "id"]
     },
     
     "google": {
-        "clientID" : "GOOGLE CLIENT ID",
-        "clientSecret" : "GOOGLE CLIENT SECRET",
+        "clientID" : "662176785730-pettrjm3iljsr98scng9nc546q684b0f.apps.googleusercontent.com",
+        "clientSecret" : "Ce3zfAEbMYZBoEk6inLdZm5i",
         "callbackURL" : "http://localhost:8081/auth/google/callback",
         "profileFields" : ["displayName", "email", "id"]
     },
 
     "amazon": {
-        "clientID" : "AMAZON CLIENT ID",
-        "clientSecret" : "AMAZON CLIENT SECRET",
+        "clientID" : "amzn1.application-oa2-client.3e40b491e5154580bca3c9872aef3a8c",
+        "clientSecret" : "01ed7fafdd55c0c10e2ffd1d283d11a7cf74efa4a60f54ed19da1b34b4de75b9",
         "callbackURL" : "http://localhost:8081/auth/amazon/callback",
         "profileFields" : ["displayName", "email", "id"]
     }

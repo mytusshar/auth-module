@@ -327,18 +327,18 @@ or username and identity provider account mismatch.
         "iamRoleArn": "IAM-ROLE-ARN"
     },
    ````
-  ![1-select region](https://user-images.githubusercontent.com/18484641/38243948-bf575dd2-3756-11e8-90b8-3dc6b50d9935.png)
+  ![1-select region](https://user-images.githubusercontent.com/18484641/40612109-c78f78fc-6296-11e8-8f0d-4d17a0f541b1.jpg)
 
 
 
 * ### Getting `aws account ID`:
   - #### Click on `Support` and select `Support Center`.
 
-    ![1- account id](https://user-images.githubusercontent.com/18484641/38243644-cd046232-3755-11e8-8444-fc1677e3ee41.png)
+    ![1- account id](https://user-images.githubusercontent.com/18484641/40612162-050b5ab6-6297-11e8-9b97-6bdd27a44611.jpg)
 
   - #### Then on next page you will see `account number` that is your `aws account ID`.
 
-    ![2-aws_acc_id](https://user-images.githubusercontent.com/18484641/38243645-cd3499ac-3755-11e8-83e1-39ea9bab63d6.png)
+    ![2-aws_acc_id](https://user-images.githubusercontent.com/18484641/40612167-0ae0a64e-6297-11e8-9ce8-21c5d91b008a.jpg)
 
      #### Paste `aws account ID` in `accountId` field in `config.json` file
 
@@ -368,7 +368,7 @@ or username and identity provider account mismatch.
 
   - #### On next page, you can see `Overview` and your table content in `Items`.
 
-    ![04-edit](https://user-images.githubusercontent.com/18484641/38244622-e5451adc-3758-11e8-94a2-46f70e3cff6b.png)
+    ![04-edit](https://user-images.githubusercontent.com/18484641/40612437-1c17f9e8-6298-11e8-947b-c8ca3d6fff83.jpg)
   
 
 
@@ -418,11 +418,11 @@ or username and identity provider account mismatch.
 
   - #### On next page click on `Allow` button.
     
-    ![05-edit](https://user-images.githubusercontent.com/18484641/38246660-23317c30-3760-11e8-87e4-8aabdf5169bf.png)
+    ![05-edit](https://user-images.githubusercontent.com/18484641/40612486-639e9af6-6298-11e8-92a2-c0ba08ef97d7.jpg)
 
   - #### Cognito identity pool is created now. Click on `edit identity pool`.
     
-    ![06-edit](https://user-images.githubusercontent.com/18484641/38246662-2479d290-3760-11e8-93ca-b237d08b8575.png)
+    ![06-edit](https://user-images.githubusercontent.com/18484641/40612538-9fd3a700-6298-11e8-8f04-e7a59f8779f7.jpg)
 
   - #### On next page copy the `Identity pool ID` and paste it into the following `cognitoIdentityPoolId` field.
 
@@ -435,7 +435,7 @@ or username and identity provider account mismatch.
     },
   ````
     
-    ![07-edit](https://user-images.githubusercontent.com/18484641/38246664-26754124-3760-11e8-839d-d364d0913d4d.png)
+    ![07-edit](https://user-images.githubusercontent.com/18484641/40612599-d6bc6d38-6298-11e8-9488-dca16c5d5f96.jpg)
 
 
 
@@ -446,7 +446,7 @@ or username and identity provider account mismatch.
 
   - #### Click on `Roles`.
 
-    ![02-edit](https://user-images.githubusercontent.com/18484641/38247807-1f222b7c-3764-11e8-8c83-ebae1b1656ea.png)
+    ![02-edit](https://user-images.githubusercontent.com/18484641/40612640-12481122-6299-11e8-90fe-bb8f2e8e4ef7.jpg)
 
   - #### You will see `Cognito_[Your Cognito Pool Name]_Auth_Role` under `Role name` column.   Click on it.
   
@@ -458,11 +458,11 @@ or username and identity provider account mismatch.
 
   - #### Then click on JSON button and modify the JSON as shown in the picture.
 
-     ![05-edit](https://user-images.githubusercontent.com/18484641/38247815-241e17f8-3764-11e8-9d13-70f98231a28d.png)
+     ![05-edit](https://user-images.githubusercontent.com/18484641/40612694-3d069f8c-6299-11e8-8e16-af2442855aec.jpg)
 
   - #### To get the fields in `Resource`, go to DynamoDB as shown below and copy the `Amazon Resource Name (ARN)` and paste it. Also, copy the index name and modify the second field in `Resource`.
   
-     ![06-edit](https://user-images.githubusercontent.com/18484641/38247825-2a19f4a6-3764-11e8-9a38-381654eb4a39.png)
+     ![06-edit](https://user-images.githubusercontent.com/18484641/40612743-63697820-6299-11e8-8879-965422a53378.jpg)
 
   - #### Then click on `Review Policy`. 
 
@@ -481,7 +481,7 @@ or username and identity provider account mismatch.
        },
    ````
 
-     ![08-edit](https://user-images.githubusercontent.com/18484641/38247838-31a09a2c-3764-11e8-832b-8f80bb97d1c2.png)
+     ![08-edit](https://user-images.githubusercontent.com/18484641/40612797-96240a00-6299-11e8-936d-a85a45f7ad54.jpg)
 
 
 
@@ -492,7 +492,7 @@ or username and identity provider account mismatch.
 
   - #### On next page, click on `Create New Application`.
 
-     ![02-edit](https://user-images.githubusercontent.com/18484641/38290402-b549512c-37f8-11e8-8455-828b692b28eb.png)
+     ![02-edit](https://user-images.githubusercontent.com/18484641/40612850-c5469136-6299-11e8-93cb-138008f4a4a9.jpg)
 
   - #### Then, enter the `application name` and its `description`. And click `Next` button.
 
@@ -532,7 +532,7 @@ or username and identity provider account mismatch.
 
   - #### On the next screen click `Launch`.
   
-     ![13-edit](https://user-images.githubusercontent.com/18484641/38290387-b31402f8-37f8-11e8-8e53-2ef3b772aa1f.png)
+     ![13-edit](https://user-images.githubusercontent.com/18484641/40612919-0c5e8150-629a-11e8-8bb6-6e73f4554ad0.jpg)
 
   - #### It will take some time to complete creation of the instance.
   - #### Once completed copy `URL` of this instance for future process and paste it in `config.json` file as shown below. 
@@ -541,7 +541,7 @@ or username and identity provider account mismatch.
      "serverAddress": "http://[ Paste URL Here ]",
   ````
   
-   ![14-edit](https://user-images.githubusercontent.com/18484641/38290386-b2e012cc-37f8-11e8-869e-b1bcc64fc273.png)
+   ![14-edit](https://user-images.githubusercontent.com/18484641/40612920-0c8e958e-629a-11e8-8641-cf72f69a3125.jpg)
 
 
 
@@ -553,7 +553,7 @@ or username and identity provider account mismatch.
       ![01](https://user-images.githubusercontent.com/18484641/38290947-2e6f0f2c-37fb-11e8-8bde-a846a625596b.png)
 
   - #### After that click on `My Apps` and then select `Add New App`.
-      ![02](https://user-images.githubusercontent.com/18484641/38290982-4ee33bc0-37fb-11e8-9baf-eaa4499065e4.png)
+      ![02](https://user-images.githubusercontent.com/18484641/40613008-6ad11b4e-629a-11e8-8984-d752c8ee054a.jpg)
 
   - #### Then enter `Display name`, email and then click on `Create APp Id` button. 
 
@@ -561,7 +561,7 @@ or username and identity provider account mismatch.
 
   - #### Then click on `settings` and choose `basic`. On next page copy the `App Id` and Client Secret` and add them to `config.json`` file as shown below..
   
-      ![04](https://user-images.githubusercontent.com/18484641/38291011-77f3dce0-37fb-11e8-8e5e-55e1619dcf85.png)
+      ![04](https://user-images.githubusercontent.com/18484641/40613010-6b318088-629a-11e8-844e-21ca6143f026.jpg)
 
   - #### Also, add the `Elastic Beanstalk` URL at the mentioned place below. 
  
@@ -579,23 +579,23 @@ or username and identity provider account mismatch.
 
   - ####  Enter your website url in `app domains` field and `site url` field and click `save changes`.
   
-    ![06](https://user-images.githubusercontent.com/18484641/38291022-7dd1e1de-37fb-11e8-85fa-96c8c5602480.png)
+    ![06](https://user-images.githubusercontent.com/18484641/40613014-6bc6c7ce-629a-11e8-869e-d10facb9829a.jpg)
 
   - #### Then click `Products` and click `set Up` button in `Facebook Login` product.
   
-     ![004](https://user-images.githubusercontent.com/18484641/38291017-7a66f804-37fb-11e8-9216-6cfc0b5f4e12.png)
+     ![004](https://user-images.githubusercontent.com/18484641/40613012-6b65b380-629a-11e8-8ed7-da887c5d067d.jpg)
 
   - #### Then choose `settings`.
   
-     ![07](https://user-images.githubusercontent.com/18484641/38291025-7f0eee48-37fb-11e8-8eef-67d10997d55e.png)
+     ![07](https://user-images.githubusercontent.com/18484641/40613015-6bf7a538-629a-11e8-8ff6-ee18567a66df.jpg)
 
   - #### Then copy the callbackURL from above facebook `callbackURL` field and paste it in `Valid OAuth Redirect URIs`. And click `Save changes` button.
   
-     ![09](https://user-images.githubusercontent.com/18484641/38291029-81e46576-37fb-11e8-87c1-009c7207b4bf.png)
+     ![09](https://user-images.githubusercontent.com/18484641/40613018-6c5dcc96-629a-11e8-96cb-da8e9c0c3843.jpg)
 
   - #### Click following button to let users use your application.
   
-    ![09](https://user-images.githubusercontent.com/18484641/38291029-81e46576-37fb-11e8-87c1-009c7207b4bf.png)
+    ![09](https://user-images.githubusercontent.com/18484641/40613018-6c5dcc96-629a-11e8-96cb-da8e9c0c3843.jpg)
 
 
 
@@ -618,15 +618,15 @@ or username and identity provider account mismatch.
 
 - #### Enter `Project name` and then click `Create`.
 
-  ![02-edit](https://user-images.githubusercontent.com/18484641/38291785-e47249ee-37fe-11e8-88f4-eea456e9084a.png)
+  ![02-edit](https://user-images.githubusercontent.com/18484641/40613281-91c816c0-629b-11e8-8bfc-03adb30c70d9.jpg)
 
 - #### Then click on `Credentials`.
 
-  ![03-edit](https://user-images.githubusercontent.com/18484641/38291782-e42aaa8a-37fe-11e8-9e2b-b0011cfa1584.png)
+  ![03-edit](https://user-images.githubusercontent.com/18484641/40613282-91f6c042-629b-11e8-9033-d824a6a0675a.jpg)
 
 - #### Then click `Create Credentials` and select `OAuth Client Id`.
 
-  ![04-edit](https://user-images.githubusercontent.com/18484641/38291781-e3fb89a8-37fe-11e8-90c9-8f985234444e.png)
+  ![04-edit](https://user-images.githubusercontent.com/18484641/40613283-922b13d8-629b-11e8-8a94-4dde5336afae.jpg)
 
 - #### On next screen click on `COnfigure Consent Screen`.
 
@@ -634,21 +634,21 @@ or username and identity provider account mismatch.
 
 - #### Then on next page enter `Product name` and other fields if you want. And then click on `Save` button.
 
-  ![06-edit](https://user-images.githubusercontent.com/18484641/38291779-e39c9b0a-37fe-11e8-9133-c8a0a9064c60.png)
+  ![06-edit](https://user-images.githubusercontent.com/18484641/40613285-928d7956-629b-11e8-9445-b53fb7b1c332.jpg)
 
 - #### Then select `Web Application` and enter the `Name`.
 
-  ![07-edit](https://user-images.githubusercontent.com/18484641/38291778-e36c4d10-37fe-11e8-902c-af2987023bbf.png)
+  ![07-edit](https://user-images.githubusercontent.com/18484641/40613286-92ce56a6-629b-11e8-89c9-f058a36dbe52.jpg)
 
 - #### In `Authorized JavaScript origins` paste the `Elastic Beanstalk URL`.
 - #### In `Authorized redirect URIs` paste the callback URL obtained for google after adding `Elastic Beanstalk URL` in it.
 - #### Then click `Create`.
 
-  ![08-edit](https://user-images.githubusercontent.com/18484641/38291776-e33c97a0-37fe-11e8-809d-172db335e9da.png)
+  ![08-edit](https://user-images.githubusercontent.com/18484641/40613287-930ee400-629b-11e8-8703-b7bd9dffd087.jpg)
 
 - #### You will see a dialogue with Client ID and `Client Secret`. Copy them and paste them in `config.json` file for google.
 
-  ![09-edit](https://user-images.githubusercontent.com/18484641/38291775-e30cca34-37fe-11e8-8beb-b9686e88e5b0.png)
+  ![09-edit](https://user-images.githubusercontent.com/18484641/40613288-9341935a-629b-11e8-9be6-215a54a4e114.jpg)
 
 
 
@@ -660,27 +660,27 @@ or username and identity provider account mismatch.
 
  - #### Then enter your credentials and log in.
    
-   ![02](https://user-images.githubusercontent.com/18484641/38292200-7abb020a-3800-11e8-9dcb-ace947a15b4c.png)
+   ![02](https://user-images.githubusercontent.com/18484641/40613494-5d1fb684-629c-11e8-84c9-f0bb53239d9d.jpg)
 
  - #### Then select `Apps and Services`.
  
-   ![03](https://user-images.githubusercontent.com/18484641/38292199-7a822980-3800-11e8-9ec2-811752d684ca.png)
+   ![03](https://user-images.githubusercontent.com/18484641/40613495-5d576732-629c-11e8-8ce9-ed7b7cfbd9a7.jpg)
 
  - #### Then select `Security Profiles`.
  
-   ![04](https://user-images.githubusercontent.com/18484641/38292198-7a4eb578-3800-11e8-9daa-501235a15a9e.png)
+   ![04](https://user-images.githubusercontent.com/18484641/40613497-5d896570-629c-11e8-8d2e-217e622368d5.jpg)
 
  - #### On next page click on `Create a New Security Profile`.
 
-   ![05](https://user-images.githubusercontent.com/18484641/38292192-794f8314-3800-11e8-972b-05363c9c7906.png)
+   ![05](https://user-images.githubusercontent.com/18484641/40613625-ea504f78-629c-11e8-8029-e68307f44224.jpg)
 
  - #### On next page enter `Security Profile Name` and `Security Profile Description` and click `Save` button.
 
-   ![06](https://user-images.githubusercontent.com/18484641/38292197-7a1e4488-3800-11e8-818c-70ab3d1e7e4a.png)
+   ![06](https://user-images.githubusercontent.com/18484641/40613499-5def7324-629c-11e8-9f62-f4aaddbc8172.jpg)
 
  - #### on next screen, copy the `Client ID` and `Client Secret` and paste it in `config.json` file as shown below.
  
-   ![07](https://user-images.githubusercontent.com/18484641/38292196-79ec51d0-3800-11e8-9eb2-4ea88ce2c5e8.png)
+   ![07](https://user-images.githubusercontent.com/18484641/40613500-5e34232a-629c-11e8-9398-774631b8e003.jpg)
 
  - #### Also paste the `Elastic Beanstalk URL` in `callbackURL` as shown below in `config.json`.
  
@@ -716,11 +716,11 @@ or username and identity provider account mismatch.
   - Now, open `Elastic Beanstalk` from AWS console.
   - You will see your previously created instance. Click on it.
 
-    ![01-edit](https://user-images.githubusercontent.com/18484641/38293404-f99029bc-3804-11e8-8e4e-a9d4e9e2e0c5.png)
+    ![01-edit](https://user-images.githubusercontent.com/18484641/40613717-52f411c2-629d-11e8-92a6-e5e0979fb168.jpg)
 
   - Click on Upload and Deploy.
 
-    ![02-edit](https://user-images.githubusercontent.com/18484641/38293403-f958e43e-3804-11e8-9ac5-02c85363956d.png)
+    ![02-edit](https://user-images.githubusercontent.com/18484641/40613718-532c297c-629d-11e8-927a-5f9c62d711e3.jpg)
 
   - Select the ZIP file created and add label version. Then click on `Deploy`. It will take some time.
 
@@ -728,7 +728,7 @@ or username and identity provider account mismatch.
 
   - If you see the following screen then your deployment is successful.
 
-    ![04-edit](https://user-images.githubusercontent.com/18484641/38293401-f8e820f0-3804-11e8-8f24-785a8308365a.png)
+    ![04-edit](https://user-images.githubusercontent.com/18484641/40613721-5396f108-629d-11e8-93ea-ce83e18ef21b.jpg)
 
 # Accessing IAM-Auth Module from the client application.
 You can refer sample client application that we have provided.
