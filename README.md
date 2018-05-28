@@ -362,7 +362,7 @@ or username and identity provider account mismatch.
 
     ![02-edit](https://user-images.githubusercontent.com/18484641/38244396-25bfadf8-3758-11e8-9b5a-d18db8fa13e1.png)
 
-  - #### Enter `TableName` and `PrimaryKey` and take a note both fields. You will need them in future. After that click `create` button. Your table will be created. 
+  - #### Enter `TableName` and `PrimaryKey` and take a note of both the fields. You will need them in future. After that click `create` button. Your table will be created. 
 
     ![03-edit](https://user-images.githubusercontent.com/18484641/38244481-74706352-3758-11e8-9b8d-e7732dfcd063.png)
 
@@ -458,7 +458,7 @@ or username and identity provider account mismatch.
 
   - #### Then click on JSON button and modify the JSON as shown in the picture.
 
-     ![05-edit](https://user-images.githubusercontent.com/18484641/40612694-3d069f8c-6299-11e8-8e16-af2442855aec.jpg)
+     ![05-edit](https://user-images.githubusercontent.com/18484641/40614552-e0370730-62a0-11e8-8234-44564d86d38a.jpg)
 
   - #### To get the fields in `Resource`, go to DynamoDB as shown below and copy the `Amazon Resource Name (ARN)` and paste it. Also, copy the index name and modify the second field in `Resource`.
   
@@ -559,7 +559,7 @@ or username and identity provider account mismatch.
 
       ![03](https://user-images.githubusercontent.com/18484641/38290998-66bcf1aa-37fb-11e8-8f02-d21a6420b7b4.png)
 
-  - #### Then click on `settings` and choose `basic`. On next page copy the `App Id` and Client Secret` and add them to `config.json`` file as shown below..
+  - #### Then click on `settings` and choose `basic`. On next page copy the `App Id` and `Client Secret` and add them to `config.json` file as shown below.
   
       ![04](https://user-images.githubusercontent.com/18484641/40613010-6b318088-629a-11e8-844e-21ca6143f026.jpg)
 
@@ -585,7 +585,7 @@ or username and identity provider account mismatch.
   
      ![004](https://user-images.githubusercontent.com/18484641/40613012-6b65b380-629a-11e8-8ed7-da887c5d067d.jpg)
 
-  - #### Then choose `settings`.
+  - #### Then choose `settings` in `products` -> `Facebook Login` (NOt one shown below the `dashboard`).
   
      ![07](https://user-images.githubusercontent.com/18484641/40613015-6bf7a538-629a-11e8-8ff6-ee18567a66df.jpg)
 
@@ -593,7 +593,7 @@ or username and identity provider account mismatch.
   
      ![09](https://user-images.githubusercontent.com/18484641/40613018-6c5dcc96-629a-11e8-96cb-da8e9c0c3843.jpg)
 
-  - #### Click following button to let users use your application.
+  - #### Click following `off` button beside the `status` to let users use your application.
   
     ![09](https://user-images.githubusercontent.com/18484641/40613018-6c5dcc96-629a-11e8-96cb-da8e9c0c3843.jpg)
 
